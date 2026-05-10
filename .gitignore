@@ -1,0 +1,20 @@
+# OS files
+.DS_Store
+
+# Dependencies and build outputs
+node_modules/
+dist/
+build/
+.output/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Archives and exports
+*.zip
+exports/
+
+# Logs
+*.log
