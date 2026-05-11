@@ -199,6 +199,32 @@
         display: inline-block;
       }
 
+      .save-toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--surface2, #1e2130);
+        color: var(--text-muted, #8b95b0);
+        font-size: 12px;
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: 1px solid var(--border, #2a2f45);
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 200ms ease, transform 200ms ease;
+        pointer-events: none;
+        z-index: 9999;
+      }
+
+      .save-toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .save-toast { transition: none; }
+      }
+
       .search-zone {
         display: flex;
         gap: 8px;
@@ -1001,6 +1027,7 @@
 
         <div class="banner" id="banner"></div>
         <div class="drag-hint" id="drag-hint"></div>
+        <div class="save-toast" id="save-toast">Saved</div>
 
         <section class="board">
           <table>
@@ -1165,6 +1192,7 @@
         undo: document.getElementById("undo-btn"),
         redo: document.getElementById("redo-btn"),
         dirtyIndicator: document.getElementById("dirty-indicator"),
+        saveToast: document.getElementById("save-toast"),
         modalBackdrop: document.getElementById("modal-backdrop"),
         modalTitle: document.getElementById("modal-title"),
         modalContent: document.getElementById("modal-content"),
@@ -1321,6 +1349,9 @@
             APP_STATE.history.undo = [];
             APP_STATE.history.redo = [];
             updateDirtyFlag(true);
+            try {
+              localStorage.setItem("bb_saved_players", JSON.stringify(APP_STATE.players));
+            } catch (e) {}
             break;
           case "OPEN_MODAL":
             APP_STATE.ui.modal = action.payload;
@@ -1343,6 +1374,9 @@
 
         if (MUTATING_ACTIONS.has(action.type) || isUndo || isRedo) {
           updateDirtyFlag(false);
+          try {
+            localStorage.setItem("bb_saved_players", JSON.stringify(APP_STATE.players));
+          } catch (e) {}
         }
 
         APP_EVENTS.dispatchEvent(
@@ -1947,6 +1981,7 @@
               searchQuery: "",
             },
           });
+          dispatch({ type: "SET_SORT", payload: { key: null, direction: "asc" } });
         });
 
         document.querySelectorAll("thead th.sortable").forEach((th) => {
@@ -2445,6 +2480,15 @@
       }
 
       function initializeApp() {
+        try {
+          const saved = localStorage.getItem("bb_saved_players");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              APP_STATE.players = parsed;
+            }
+          }
+        } catch (e) {}
         updateDirtyFlag(false);
         renderApp();
         renderModal();
@@ -2460,7 +2504,25 @@
         attachGlobalRenders();
       }
 
+      let _toastTimer = null;
+      function showSaveToast() {
+        dom.saveToast.classList.add("visible");
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(() => dom.saveToast.classList.remove("visible"), 2000);
+      }
+
+      function autoSave() {
+        if (!APP_STATE.isDirty) return;
+        try {
+          localStorage.setItem("bb_saved_players", JSON.stringify(APP_STATE.players));
+          updateDirtyFlag(true);
+          dom.dirtyIndicator.classList.remove("active");
+          showSaveToast();
+        } catch (e) {}
+      }
+
       initializeApp();
+      setInterval(autoSave, 30000);
     </script>
 
     <!--
