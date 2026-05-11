@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<!-- // AD PLACEMENTS: See .ad-placeholder divs — replace inner content with your ad network tags. -->
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Big Board 2026</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
+    />
+    <style>
+      /* === DESIGN TOKENS === */
+      [data-theme="dark"] {
+        --bg: #0d1017;
+        --bg-soft: #111620;
+        --panel: #141923;
+        --panel-strong: #1a2030;
+        --text: #edf1f7;
+        --muted: #8a96b0;
+        --accent: #38bdf8;
+        --accent-strong: #0ea5e9;
+        --accent-tint: rgba(56, 189, 248, 0.12);
+        --border: #2e3d58;
+        --shadow: rgba(0, 0, 0, 0.4);
+        --glow: rgba(251, 191, 36, 0.3);
+        --danger: #f87171;
+        --success: #34d399;
+        --warning: #fbbf24;
+        --amber: #f59e0b;
+        --amber-tint: rgba(245, 158, 11, 0.15);
+        --qb-full: #f87171; --qb-tint: rgba(248, 113, 113, 0.14);
+        --rb-full: #34d399; --rb-tint: rgba(52, 211, 153, 0.14);
+        --wr-full: #60a5fa; --wr-tint: rgba(96, 165, 250, 0.14);
+        --te-full: #fb923c; --te-tint: rgba(251, 146, 60, 0.14);
+        --dst-full: #a78bfa; --dst-tint: rgba(167, 139, 250, 0.14);
+        --k-full: #f472b6;  --k-tint: rgba(244, 114, 182, 0.14);
+        --unk-full: #94a3b8; --unk-tint: rgba(148, 163, 184, 0.14);
+        --r-sm: 6px;
+        --r-lg: 12px;
+      }
+
+      [data-theme="light"] {
+        --bg: #f0f4f8;
+        --bg-soft: #e8edf3;
+        --panel: #ffffff;
+        --panel-strong: #f5f8fb;
+        --text: #1a2233;
+        --muted: #5a6780;
+        --accent: #0284c7;
+        --accent-strong: #0369a1;
+        --accent-tint: rgba(2, 132, 199, 0.10);
+        --border: #d1d9e6;
+        --shadow: rgba(0, 0, 0, 0.12);
+        --glow: rgba(217, 119, 6, 0.2);
+        --danger: #dc2626;
+        --success: #059669;
+        --warning: #d97706;
+        --amber: #d97706;
+        --amber-tint: rgba(217, 119, 6, 0.12);
+        --qb-full: #dc2626; --qb-tint: rgba(220, 38, 38, 0.10);
+        --rb-full: #059669; --rb-tint: rgba(5, 150, 105, 0.10);
+        --wr-full: #2563eb; --wr-tint: rgba(37, 99, 235, 0.10);
+        --te-full: #ea580c; --te-tint: rgba(234, 88, 12, 0.10);
+        --dst-full: #7c3aed; --dst-tint: rgba(124, 58, 237, 0.10);
+        --k-full: #db2777;  --k-tint: rgba(219, 39, 119, 0.10);
+        --unk-full: #64748b; --unk-tint: rgba(100, 116, 139, 0.10);
+        --r-sm: 6px;
+        --r-lg: 12px;
+      }
+
+      /* === RESET === */
+      * {
+        box-sizing: border-box;
+      }
+
+      /* === BODY === */
+      body {
+        margin: 0;
+        font-family: "DM Sans", sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        min-height: 100vh;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      [data-theme="dark"] body {
+        background: radial-gradient(
+            1200px 500px at 15% -10%,
+            rgba(56, 189, 248, 0.14),
+            transparent 60%
+          ),
+          radial-gradient(
+            900px 400px at 100% 0%,
+            rgba(52, 211, 153, 0.09),
+            transparent 55%
+          ),
+          linear-gradient(160deg, #0b0e14 0%, #0d1017 60%, #0f1220 100%);
+      }
+
+      /* === PAGE LAYOUT === */
+      .page {
+        display: grid;
+        grid-template-columns: 160px minmax(0, 1fr) 160px;
+        gap: 20px;
+        padding: 24px;
+        align-items: start;
+      }
+
+      .ad-column {
+        position: sticky;
+        top: 20px;
+      }
+
+      .ad-placeholder {
+        border: 1px dashed var(--border);
+        background: var(--panel);
+        color: var(--muted);
+        height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-align: center;
+        border-radius: var(--r-lg);
+        opacity: 0.7;
+      }
+
+      .ad-placeholder.ad-banner {
+        display: none;
+        position: sticky;
+        bottom: 0;
+        height: 52px;
+        width: 100%;
+        z-index: 20;
+        border-radius: 0;
+        opacity: 1;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* === TOOLBAR === */
+      .toolbar {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 14px 16px;
+        box-shadow: 0 4px 16px var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .toolbar-top {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .toolbar-bottom {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .identity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 0 0 auto;
+      }
+
+      .title-area {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+
+      .dirty-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        display: none;
+        flex-shrink: 0;
+      }
+
+      .dirty-indicator.active {
+        display: inline-block;
+      }
+
+      .search-zone {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex: 1 1 240px;
+        min-width: 0;
+      }
+
+      .search-input {
+        flex: 1 1 180px;
+        min-width: 120px;
+      }
+
+      .mode-badge {
+        white-space: nowrap;
+        flex-shrink: 0;
+        background: var(--accent-tint);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: none;
+        font-family: "DM Sans", sans-serif;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .mode-badge.visible {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .mode-badge.filters-active {
+        background: var(--amber-tint);
+        color: var(--amber);
+        border-color: var(--amber);
+      }
+
+      .actions-zone {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-left: auto;
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: var(--r-sm);
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 15px;
+        transition: border-color 0.15s ease, color 0.15s ease;
+        flex-shrink: 0;
+        font-family: "DM Sans", sans-serif;
+      }
+
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* === FORM ELEMENTS === */
+      input,
+      select,
+      textarea,
+      button,
+      summary {
+        font-family: "DM Sans", sans-serif;
+      }
+
+      input,
+      select,
+      textarea {
+        background: var(--bg-soft);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        padding: 7px 10px;
+        font-size: 14px;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus,
+      button:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      /* === BUTTONS === */
+      .btn {
+        background: var(--panel-strong);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.15s ease, background 0.15s ease;
+        white-space: nowrap;
+      }
+
+      .btn:hover {
+        border-color: var(--accent);
+      }
+
+      .btn.primary {
+        background: var(--accent);
+        color: #04121c;
+        border-color: transparent;
+      }
+
+      .btn.primary:hover {
+        background: var(--accent-strong);
+      }
+
+      .btn.subtle {
+        background: transparent;
+        border-color: transparent;
+      }
+
+      .btn.subtle:hover {
+        border-color: var(--border);
+      }
+
+      .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .btn:disabled:hover {
+        border-color: var(--border);
+        background: var(--panel-strong);
+      }
+
+      /* === FILTERS === */
+      .filters {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .position-filters {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+
+      .position-btn {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+      }
+
+      .position-btn[data-position="ALL"].active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-tint);
+      }
+
+      .position-btn[data-position="QB"] { color: var(--qb-full); }
+      .position-btn[data-position="RB"] { color: var(--rb-full); }
+      .position-btn[data-position="WR"] { color: var(--wr-full); }
+      .position-btn[data-position="TE"] { color: var(--te-full); }
+      .position-btn[data-position="D/ST"] { color: var(--dst-full); }
+      .position-btn[data-position="K"] { color: var(--k-full); }
+      .position-btn[data-position="UNK"] { color: var(--unk-full); }
+
+      .position-btn.active { border-color: currentColor; background: rgba(255,255,255,0.06); }
+      .position-btn[data-position="QB"].active { background: var(--qb-tint); }
+      .position-btn[data-position="RB"].active { background: var(--rb-tint); }
+      .position-btn[data-position="WR"].active { background: var(--wr-tint); }
+      .position-btn[data-position="TE"].active { background: var(--te-tint); }
+      .position-btn[data-position="D/ST"].active { background: var(--dst-tint); }
+      .position-btn[data-position="K"].active { background: var(--k-tint); }
+
+      .filter-group {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .team-filter {
+        position: relative;
+      }
+
+      .team-filter summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 7px 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--r-sm);
+        background: var(--bg-soft);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .team-filter summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .team-options {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        background: var(--panel-strong);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 10px;
+        min-width: 200px;
+        max-height: 220px;
+        overflow: auto;
+        z-index: 10;
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+
+      .team-chip {
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: var(--accent-tint);
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      /* === BANNER === */
+      .banner {
+        display: none;
+        padding: 10px 14px;
+        border-radius: var(--r-sm);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        background: rgba(248, 113, 113, 0.10);
+        color: var(--danger);
+        font-size: 13px;
+      }
+
+      .banner.active {
+        display: block;
+      }
+
+      /* === BOARD === */
+      .board {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 0;
+        overflow: hidden;
+        box-shadow: 0 4px 16px var(--shadow);
+        animation: boardEnter 0.3s ease both;
+      }
+
+      /* === TABLE === */
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      thead th {
+        text-align: left;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        padding: 12px 8px 10px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+        background: var(--panel);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
+      thead th.sortable {
+        cursor: pointer;
+        user-select: none;
+      }
+
+      thead th.sortable:hover {
+        color: var(--text);
+      }
+
+      thead th.sortable span {
+        margin-left: 4px;
+        font-size: 10px;
+        color: var(--accent);
+      }
+
+      .col-handle {
+        width: 40px;
+        padding-left: 8px !important;
+      }
+
+      .col-rank,
+      .col-pos-rank {
+        font-family: "DM Mono", monospace;
+        width: 52px;
+      }
+
+      tbody td.col-pos-rank {
+        padding: 0 !important;
+        text-align: center;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      td.pos-cell-qb  { background: var(--qb-tint);  color: var(--qb-full); }
+      td.pos-cell-rb  { background: var(--rb-tint);  color: var(--rb-full); }
+      td.pos-cell-wr  { background: var(--wr-tint);  color: var(--wr-full); }
+      td.pos-cell-te  { background: var(--te-tint);  color: var(--te-full); }
+      td.pos-cell-dst { background: var(--dst-tint); color: var(--dst-full); }
+      td.pos-cell-k   { background: var(--k-tint);   color: var(--k-full); }
+      td.pos-cell-unk { background: var(--unk-tint); color: var(--unk-full); }
+
+      .col-name {
+        min-width: 160px;
+      }
+
+      tbody tr {
+        transition: background 0.12s ease;
+      }
+
+      tbody tr.player-row {
+        height: 44px;
+      }
+
+      tbody tr.player-row:hover {
+        background: var(--accent-tint);
+      }
+
+      tbody tr.player-row.starred {
+        box-shadow: inset 2px 0 0 var(--warning), inset 0 0 0 1px rgba(251, 191, 36, 0.15);
+      }
+
+      tbody td {
+        padding: 8px 8px;
+        border-bottom: 1px solid var(--border);
+        font-size: 15px;
+        vertical-align: middle;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* === HANDLE CELL === */
+      .handle-cell {
+        width: 40px;
+        padding: 2px 4px 2px 8px !important;
+        vertical-align: middle;
+        text-align: center;
+      }
+
+      .drag-handle {
+        display: block;
+        color: var(--muted);
+        cursor: grab;
+        font-size: 13px;
+        user-select: none;
+        opacity: 0.35;
+        transition: opacity 0.12s ease;
+        padding: 2px 0;
+      }
+
+      tbody tr.player-row:hover .drag-handle {
+        opacity: 0.8;
+      }
+
+      tbody tr.player-row.drag-disabled .drag-handle {
+        cursor: not-allowed;
+        opacity: 0.12;
+      }
+
+      .tier-btn {
+        display: block;
+        width: 100%;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 2px 4px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        transition: opacity 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+        line-height: 1.4;
+        box-sizing: border-box;
+      }
+
+      .tier-add {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        opacity: 0;
+      }
+
+      tbody tr.player-row:hover .tier-add {
+        opacity: 0.7;
+      }
+
+      tbody tr.player-row:hover .tier-add:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        opacity: 1;
+      }
+
+      .tier-remove {
+        border: 1px solid var(--accent);
+        background: var(--accent-tint);
+        color: var(--accent);
+        opacity: 0.5;
+      }
+
+      tbody tr.player-row:hover .tier-remove {
+        opacity: 1;
+      }
+
+      /* Tier line — replaces tier-break rows */
+      tbody tr.player-row.has-tier-above td {
+        border-top: 2px solid var(--accent);
+      }
+
+      tbody tr.player-row.pre-tier td {
+        border-bottom: none;
+      }
+
+      /* === POSITION BADGE === */
+      .pos-badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 5px;
+        border-radius: var(--r-sm);
+        vertical-align: middle;
+        margin-left: 6px;
+        font-family: "DM Mono", monospace;
+        letter-spacing: 0.03em;
+        line-height: 1.4;
+      }
+
+      .pos-badge.qb  { background: var(--qb-tint);  color: var(--qb-full); }
+      .pos-badge.rb  { background: var(--rb-tint);  color: var(--rb-full); }
+      .pos-badge.wr  { background: var(--wr-tint);  color: var(--wr-full); }
+      .pos-badge.te  { background: var(--te-tint);  color: var(--te-full); }
+      .pos-badge.dst { background: var(--dst-tint); color: var(--dst-full); }
+      .pos-badge.k   { background: var(--k-tint);   color: var(--k-full); }
+      .pos-badge.unk { background: var(--unk-tint); color: var(--unk-full); }
+
+      /* === DRAFTED === */
+      tbody tr.player-row.drafted {
+        opacity: 0.38;
+      }
+
+      tbody tr.player-row.drafted:hover {
+        opacity: 0.55;
+      }
+
+      .draft-btn {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 7px;
+        border-radius: var(--r-sm);
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: border-color 0.12s ease, color 0.12s ease;
+        white-space: nowrap;
+        font-family: "DM Sans", sans-serif;
+      }
+
+      .draft-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      tbody tr.player-row.drafted .draft-btn {
+        border-color: var(--success);
+        color: var(--success);
+        background: rgba(52, 211, 153, 0.1);
+      }
+
+      /* === CELLS === */
+      .cell-muted {
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        font-size: 14px;
+      }
+
+      .name-cell {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 700;
+      }
+
+      .team-cell {
+        font-weight: 700;
+      }
+
+      .note-cell {
+        color: var(--muted);
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-size: 15px;
+        padding: 2px 5px;
+        border-radius: var(--r-sm);
+        line-height: 1;
+      }
+
+      .icon-btn:hover {
+        color: var(--text);
+      }
+
+      .icon-btn.note-empty {
+        opacity: 0.35;
+      }
+
+      .delete-btn {
+        opacity: 0;
+        transition: opacity 0.12s ease;
+        color: var(--danger);
+      }
+
+      tbody tr.player-row:hover .delete-btn {
+        opacity: 0.7;
+      }
+
+      tbody tr.player-row:hover .delete-btn:hover {
+        opacity: 1;
+      }
+
+      .drag-disabled {
+        opacity: 0.6;
+      }
+
+      .drag-hint {
+        font-size: 12px;
+        color: var(--muted);
+        padding: 4px 8px;
+      }
+
+      .drop-before td {
+        box-shadow: inset 0 2px 0 var(--accent);
+      }
+
+      .drop-after td {
+        box-shadow: inset 0 -2px 0 var(--accent);
+      }
+
+      /* === EMPTY STATE === */
+      .empty-state {
+        padding: 48px 16px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      /* === MODALS === */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(9, 12, 18, 0.72);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+      }
+
+      @supports (backdrop-filter: blur(1px)) {
+        .modal-backdrop {
+          backdrop-filter: blur(6px);
+          background: rgba(9, 12, 18, 0.52);
+        }
+      }
+
+      .modal-backdrop.open {
+        display: flex;
+      }
+
+      .modal {
+        width: min(520px, 92vw);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 20px;
+        box-shadow: 0 20px 48px var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-title {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-actions-end {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* Add player 2-col grid */
+      #add-player-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      #add-player-form .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      #add-player-form label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+
+      #add-player-form label .field-name {
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      #add-player-form input,
+      #add-player-form select {
+        width: 100%;
+      }
+
+      /* === ANIMATIONS === */
+      @keyframes boardEnter {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: none; }
+      }
+
+      @keyframes rowEnter {
+        from { opacity: 0; transform: translateX(-6px); }
+        to   { opacity: 1; transform: none; }
+      }
+
+      .row-enter {
+        animation: rowEnter 0.2s ease both;
+      }
+
+      /* === RESPONSIVE === */
+      @media (max-width: 980px) {
+        .page {
+          grid-template-columns: 1fr;
+        }
+
+        .ad-column {
+          display: none;
+        }
+
+        .ad-placeholder.ad-banner {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .toolbar-top {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .actions-zone {
+          margin-left: 0;
+        }
+
+        .toolbar-bottom {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .position-filters {
+          overflow-x: auto;
+          white-space: nowrap;
+          flex-wrap: nowrap;
+        }
+
+        .col-handle {
+          display: none;
+        }
+
+        #add-player-form .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <aside class="ad-column ad-left">
+        <div class="ad-placeholder">
+          <!-- INSERT AD TAG HERE -->
+          Advertisement
+        </div>
+      </aside>
+      <main class="app">
+        <header class="toolbar">
+          <div class="toolbar-top">
+            <!-- Zone 1: Identity -->
+            <div class="identity">
+              <span id="page-title" class="title-area">Big Board 2026</span>
+              <span class="dirty-indicator" id="dirty-indicator"></span>
+            </div>
+            <!-- Zone 2: Search + Mode -->
+            <div class="search-zone">
+              <input
+                class="search-input"
+                id="search-input"
+                type="search"
+                placeholder="Search players…"
+                aria-label="Search player name"
+              />
+              <button class="mode-badge" id="clear-filters-btn" aria-label="Clear filters and reorder">&#8651; Reorder</button>
+            </div>
+            <!-- Zone 3: Actions -->
+            <div class="actions-zone">
+              <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">&#9788;</button>
+              <button class="btn" id="add-player-btn">+ Add</button>
+              <button class="btn" id="import-csv-btn">Import</button>
+              <button class="btn primary" id="export-csv-btn">Export CSV</button>
+              <button class="btn" id="undo-btn">Undo</button>
+              <button class="btn" id="redo-btn">Redo</button>
+            </div>
+          </div>
+          <div class="toolbar-bottom filters">
+            <div class="position-filters" id="position-filters"></div>
+            <div class="filter-group">
+              <details class="team-filter" id="team-filter">
+                <summary>Teams</summary>
+                <div class="team-options" id="team-options"></div>
+              </details>
+              <div class="team-chips" id="team-chips"></div>
+            </div>
+            <div class="filter-group">
+              <label>Age <input id="age-min" type="number" placeholder="Min" min="0" /></label>
+              <label><input id="age-max" type="number" placeholder="Max" min="0" /></label>
+            </div>
+            <div class="filter-group">
+              <label>Bye <input id="bye-min" type="number" placeholder="Min" min="0" /></label>
+              <label><input id="bye-max" type="number" placeholder="Max" min="0" /></label>
+            </div>
+          </div>
+        </header>
+
+        <div class="banner" id="banner"></div>
+        <div class="drag-hint" id="drag-hint"></div>
+
+        <section class="board">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-handle" aria-label="Drag to reorder"></th>
+                <th class="col-rank">Rank</th>
+                <th class="col-pos-rank">Pos</th>
+                <th>&#9733;</th>
+                <th class="col-name sortable" data-sort-key="name">Name <span></span></th>
+                <th class="sortable" data-sort-key="team">Team <span></span></th>
+                <th class="sortable" data-sort-key="age">Age <span></span></th>
+                <th class="sortable" data-sort-key="byeWeek">Bye <span></span></th>
+                <th>Draft</th>
+                <th>Note</th>
+              </tr>
+            </thead>
+            <tbody id="player-table-body"></tbody>
+          </table>
+        </section>
+      </main>
+      <aside class="ad-column ad-right">
+        <div class="ad-placeholder">
+          <!-- INSERT AD TAG HERE -->
+          Advertisement
+        </div>
+      </aside>
+    </div>
+
+    <div class="ad-placeholder ad-banner">
+      <!-- INSERT AD TAG HERE -->
+      Advertisement
+    </div>
+
+    <div class="modal-backdrop" id="modal-backdrop" aria-hidden="true">
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        <div class="modal-header">
+          <div class="modal-title" id="modal-title"></div>
+          <button class="icon-btn" data-action="close-modal" aria-label="Close">
+            ×
+          </button>
+        </div>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <input id="csv-input" type="file" accept=".csv" hidden />
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script>
+      const APP_EVENTS = new EventTarget();
+
+      const POSITIONS = ["QB", "RB", "WR", "TE", "D/ST", "K", "UNK"];
+
+      // === DEFAULT PLAYERS — EDIT THIS BEFORE PUBLISHING ===
+      const DEFAULT_PLAYERS = [
+        {id:"p1",rank:1,name:"Jahmyr Gibbs",team:"DET",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p2",rank:2,name:"Bijan Robinson",team:"ATL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p3",rank:3,name:"Ja'Marr Chase",team:"CIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p4",rank:4,name:"Puka Nacua",team:"LAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p5",rank:5,name:"Jaxon Smith-Njigba",team:"SEA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p6",rank:6,name:"Jonathan Taylor",team:"IND",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p7",rank:7,name:"Amon-Ra St. Brown",team:"DET",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p8",rank:8,name:"Christian McCaffrey",team:"SF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p9",rank:9,name:"CeeDee Lamb",team:"DAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p10",rank:10,name:"James Cook III",team:"BUF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p11",rank:11,name:"Drake London",team:"ATL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p12",rank:12,name:"Justin Jefferson",team:"MIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p13",rank:13,name:"Malik Nabers",team:"NYG",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p14",rank:14,name:"Nico Collins",team:"HOU",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p15",rank:15,name:"Saquon Barkley",team:"PHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p16",rank:16,name:"Ashton Jeanty",team:"LV",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p17",rank:17,name:"Derrick Henry",team:"BAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p18",rank:18,name:"De'Von Achane",team:"MIA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p19",rank:19,name:"George Pickens",team:"DAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p20",rank:20,name:"Rashee Rice",team:"KC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p21",rank:21,name:"Trey McBride",team:"ARI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p22",rank:22,name:"Brock Bowers",team:"LV",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p23",rank:23,name:"Josh Allen",team:"BUF",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p24",rank:24,name:"A.J. Brown",team:"PHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p25",rank:25,name:"Omarion Hampton",team:"LAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p26",rank:26,name:"Chris Olave",team:"NO",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p27",rank:27,name:"Lamar Jackson",team:"BAL",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p28",rank:28,name:"Kenneth Walker III",team:"KC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p29",rank:29,name:"Chase Brown",team:"CIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p30",rank:30,name:"Josh Jacobs",team:"GB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p31",rank:31,name:"Tee Higgins",team:"CIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p32",rank:32,name:"Jeremiyah Love",team:"ARI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p33",rank:33,name:"Tetairoa McMillan",team:"CAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p34",rank:34,name:"Drake Maye",team:"NE",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p35",rank:35,name:"Tucker Kraft",team:"GB",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p36",rank:36,name:"Davante Adams",team:"LAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p37",rank:37,name:"Kyren Williams",team:"LAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p38",rank:38,name:"Javonte Williams",team:"DAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p39",rank:39,name:"Joe Burrow",team:"CIN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p40",rank:40,name:"Breece Hall",team:"NYJ",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p41",rank:41,name:"Travis Etienne Jr.",team:"NO",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p42",rank:42,name:"Zay Flowers",team:"BAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p43",rank:43,name:"DeVonta Smith",team:"PHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p44",rank:44,name:"Garrett Wilson",team:"NYJ",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p45",rank:45,name:"Jameson Williams",team:"DET",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p46",rank:46,name:"Terry McLaurin",team:"WAS",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p47",rank:47,name:"Colston Loveland",team:"CHI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p48",rank:48,name:"Emeka Egbuka",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p49",rank:49,name:"Bucky Irving",team:"TB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p50",rank:50,name:"Jaylen Waddle",team:"DEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p51",rank:51,name:"Jayden Daniels",team:"WAS",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p52",rank:52,name:"Ladd McConkey",team:"LAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p53",rank:53,name:"Christian Watson",team:"GB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p54",rank:54,name:"Luther Burden III",team:"CHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p55",rank:55,name:"Jalen Hurts",team:"PHI",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p56",rank:56,name:"Cam Skattebo",team:"NYG",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p57",rank:57,name:"TreVeyon Henderson",team:"NE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p58",rank:58,name:"Mike Evans",team:"SF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p59",rank:59,name:"Quinshon Judkins",team:"CLE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p60",rank:60,name:"D'Andre Swift",team:"CHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p61",rank:61,name:"David Montgomery",team:"HOU",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p62",rank:62,name:"Rome Odunze",team:"CHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p63",rank:63,name:"Carnell Tate",team:"TEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p64",rank:64,name:"DJ Moore",team:"BUF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p65",rank:65,name:"Bhayshul Tuten",team:"JAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p66",rank:66,name:"Tyler Warren",team:"IND",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p67",rank:67,name:"Jadarian Price",team:"SEA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p68",rank:68,name:"Justin Herbert",team:"LAC",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p69",rank:69,name:"Jordyn Tyson",team:"NO",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p70",rank:70,name:"Alec Pierce",team:"IND",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p71",rank:71,name:"Jaxson Dart",team:"NYG",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p72",rank:72,name:"Caleb Williams",team:"CHI",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p73",rank:73,name:"DK Metcalf",team:"PIT",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p74",rank:74,name:"Makai Lemon",team:"PHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p75",rank:75,name:"Jaylen Warren",team:"PIT",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p76",rank:76,name:"Marvin Harrison Jr.",team:"ARI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p77",rank:77,name:"Trevor Lawrence",team:"JAC",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p78",rank:78,name:"Courtland Sutton",team:"DEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p79",rank:79,name:"Chuba Hubbard",team:"CAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p80",rank:80,name:"Harold Fannin Jr.",team:"CLE",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p81",rank:81,name:"Rico Dowdle",team:"PIT",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p82",rank:82,name:"Blake Corum",team:"LAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p83",rank:83,name:"Sam LaPorta",team:"DET",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p84",rank:84,name:"Dak Prescott",team:"DAL",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p85",rank:85,name:"Kyle Monangai",team:"CHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p86",rank:86,name:"Rhamondre Stevenson",team:"NE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p87",rank:87,name:"RJ Harvey",team:"DEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p88",rank:88,name:"Brian Thomas Jr.",team:"JAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p89",rank:89,name:"Tony Pollard",team:"TEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p90",rank:90,name:"Kyle Pitts Sr.",team:"ATL",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p91",rank:91,name:"Michael Wilson",team:"ARI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p92",rank:92,name:"J.K. Dobbins",team:"DEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p93",rank:93,name:"Brock Purdy",team:"SF",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p94",rank:94,name:"Chris Godwin Jr.",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p95",rank:95,name:"Jordan Addison",team:"MIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p96",rank:96,name:"Jacory Croskey-Merritt",team:"WAS",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p97",rank:97,name:"Dalton Kincaid",team:"BUF",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p98",rank:98,name:"Parker Washington",team:"JAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p99",rank:99,name:"Patrick Mahomes II",team:"KC",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p100",rank:100,name:"Oronde Gadsden II",team:"LAC",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p101",rank:101,name:"Matthew Stafford",team:"LAR",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p102",rank:102,name:"Bo Nix",team:"DEN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p103",rank:103,name:"Ricky Pearsall",team:"SF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p104",rank:104,name:"Jakobi Meyers",team:"JAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p105",rank:105,name:"Quentin Johnston",team:"LAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p106",rank:106,name:"Aaron Jones Sr.",team:"MIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p107",rank:107,name:"Jared Goff",team:"DET",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p108",rank:108,name:"Dallas Goedert",team:"PHI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p109",rank:109,name:"Jordan Mason",team:"MIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p110",rank:110,name:"Zach Charbonnet",team:"SEA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p111",rank:111,name:"Kyler Murray",team:"MIN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p112",rank:112,name:"George Kittle",team:"SF",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p113",rank:113,name:"Michael Pittman Jr.",team:"PIT",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p114",rank:114,name:"Jayden Reed",team:"GB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p115",rank:115,name:"Jordan Love",team:"GB",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p116",rank:116,name:"Tyler Allgeier",team:"ARI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p117",rank:117,name:"Jayden Higgins",team:"HOU",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p118",rank:118,name:"Travis Kelce",team:"KC",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p119",rank:119,name:"Tyler Shough",team:"NO",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p120",rank:120,name:"Woody Marks",team:"HOU",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p121",rank:121,name:"Baker Mayfield",team:"TB",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p122",rank:122,name:"Malik Willis",team:"MIA",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p123",rank:123,name:"Chris Rodriguez Jr.",team:"JAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p124",rank:124,name:"Jake Ferguson",team:"DAL",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p125",rank:125,name:"Wan'Dale Robinson",team:"TEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p126",rank:126,name:"Kenneth Gainwell",team:"TB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p127",rank:127,name:"Rachaad White",team:"WAS",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p128",rank:128,name:"Tyrone Tracy Jr.",team:"NYG",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p129",rank:129,name:"Romeo Doubs",team:"NE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p130",rank:130,name:"Xavier Worthy",team:"KC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p131",rank:131,name:"KC Concepcion",team:"CLE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p132",rank:132,name:"Josh Downs",team:"IND",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p133",rank:133,name:"Isaiah Likely",team:"NYG",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p134",rank:134,name:"Mark Andrews",team:"BAL",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p135",rank:135,name:"C.J. Stroud",team:"HOU",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p136",rank:136,name:"Jonathon Brooks",team:"CAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p137",rank:137,name:"Khalil Shakir",team:"BUF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p138",rank:138,name:"Hunter Henry",team:"NE",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p139",rank:139,name:"Sam Darnold",team:"SEA",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p140",rank:140,name:"Jonah Coleman",team:"DEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p141",rank:141,name:"Jalen Coker",team:"CAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p142",rank:142,name:"Isiah Pacheco",team:"DET",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p143",rank:143,name:"Brenton Strange",team:"JAC",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p144",rank:144,name:"Braelon Allen",team:"NYJ",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p145",rank:145,name:"Brandon Aiyuk",team:"SF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p146",rank:146,name:"Juwan Johnson",team:"NO",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p147",rank:147,name:"James Conner",team:"ARI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p148",rank:148,name:"Denzel Boston",team:"CLE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p149",rank:149,name:"Matthew Golden",team:"GB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p150",rank:150,name:"Keaton Mitchell",team:"LAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p151",rank:151,name:"Tank Bigsby",team:"PHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p152",rank:152,name:"Brian Robinson Jr.",team:"ATL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p153",rank:153,name:"Alvin Kamara",team:"NO",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p154",rank:154,name:"Rashid Shaheed",team:"SEA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p155",rank:155,name:"Bryce Young",team:"CAR",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p156",rank:156,name:"Tyjae Spears",team:"TEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p157",rank:157,name:"Omar Cooper Jr.",team:"NYJ",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p158",rank:158,name:"Kenyon Sadiq",team:"NYJ",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p159",rank:159,name:"Dylan Sampson",team:"CLE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p160",rank:160,name:"Cam Ward",team:"TEN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p161",rank:161,name:"Jauan Jennings",team:"MIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p162",rank:162,name:"Houston Texans",team:"HOU",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p163",rank:163,name:"Mike Washington Jr.",team:"LV",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p164",rank:164,name:"Emanuel Wilson",team:"SEA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p165",rank:165,name:"Deebo Samuel Sr.",team:"FA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p166",rank:166,name:"Stefon Diggs",team:"FA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p167",rank:167,name:"Kayshon Boutte",team:"NE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p168",rank:168,name:"Emmett Johnson",team:"KC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p169",rank:169,name:"Adonai Mitchell",team:"NYJ",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p170",rank:170,name:"Denver Broncos",team:"DEN",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p171",rank:171,name:"Jerry Jeudy",team:"CLE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p172",rank:172,name:"Seattle Seahawks",team:"SEA",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p173",rank:173,name:"Nick Singleton",team:"TEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p174",rank:174,name:"Travis Hunter",team:"JAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p175",rank:175,name:"Daniel Jones",team:"IND",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p176",rank:176,name:"Philadelphia Eagles",team:"PHI",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p177",rank:177,name:"Kaytron Allen",team:"WAS",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p178",rank:178,name:"Los Angeles Rams",team:"LAR",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p179",rank:179,name:"Kimani Vidal",team:"LAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p180",rank:180,name:"Antonio Williams",team:"WAS",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p181",rank:181,name:"Jalen McMillan",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p182",rank:182,name:"Dalton Schultz",team:"HOU",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p183",rank:183,name:"Jacksonville Jaguars",team:"JAC",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p184",rank:184,name:"Pittsburgh Steelers",team:"PIT",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p185",rank:185,name:"Tyreek Hill",team:"FA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p186",rank:186,name:"Jaylen Wright",team:"MIA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p187",rank:187,name:"New England Patriots",team:"NE",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p188",rank:188,name:"Minnesota Vikings",team:"MIN",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p189",rank:189,name:"Troy Franklin",team:"DEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p190",rank:190,name:"Ka'imi Fairbairn",team:"HOU",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p191",rank:191,name:"Brandon Aubrey",team:"DAL",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p192",rank:192,name:"Cleveland Browns",team:"CLE",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p193",rank:193,name:"Terrance Ferguson",team:"LAR",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p194",rank:194,name:"Cameron Dicker",team:"LAC",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p195",rank:195,name:"Ray Davis",team:"BUF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p196",rank:196,name:"Jacoby Brissett",team:"ARI",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p197",rank:197,name:"Los Angeles Chargers",team:"LAC",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p198",rank:198,name:"Cam Little",team:"JAC",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p199",rank:199,name:"Isaac TeSlaa",team:"DET",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p200",rank:200,name:"AJ Barner",team:"SEA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p201",rank:201,name:"Chig Okonkwo",team:"WAS",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p202",rank:202,name:"Sean Tucker",team:"TB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p203",rank:203,name:"Jason Myers",team:"SEA",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p204",rank:204,name:"Green Bay Packers",team:"GB",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p205",rank:205,name:"Tre Tucker",team:"LV",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p206",rank:206,name:"Tre Harris",team:"LAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p207",rank:207,name:"Calvin Ridley",team:"TEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p208",rank:208,name:"T.J. Hockenson",team:"MIN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p209",rank:209,name:"Kansas City Chiefs",team:"KC",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p210",rank:210,name:"Eli Stowers",team:"PHI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p211",rank:211,name:"Eddy Pineiro",team:"SF",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p212",rank:212,name:"Jaylin Noel",team:"HOU",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p213",rank:213,name:"Evan McPherson",team:"CIN",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p214",rank:214,name:"Tyler Loop",team:"BAL",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p215",rank:215,name:"Demond Claiborne",team:"MIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p216",rank:216,name:"Chimere Dike",team:"TEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p217",rank:217,name:"Germie Bernard",team:"PIT",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p218",rank:218,name:"Tank Dell",team:"HOU",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p219",rank:219,name:"Cairo Santos",team:"CHI",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p220",rank:220,name:"Andy Borregales",team:"NE",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p221",rank:221,name:"Baltimore Ravens",team:"BAL",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p222",rank:222,name:"Elic Ayomanor",team:"TEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p223",rank:223,name:"Ryan Flournoy",team:"DAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p224",rank:224,name:"Ollie Gordon II",team:"MIA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p225",rank:225,name:"Darnell Mooney",team:"NYG",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p226",rank:226,name:"Pat Bryant",team:"DEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p227",rank:227,name:"Chase McLaughlin",team:"TB",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p228",rank:228,name:"Kendre Miller",team:"NO",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p229",rank:229,name:"Kaleb Johnson",team:"PIT",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p230",rank:230,name:"Chris Bell",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p231",rank:231,name:"Elijah Sarratt",team:"BAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p232",rank:232,name:"Dontayvion Wicks",team:"PHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p233",rank:233,name:"Jake Bates",team:"DET",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p234",rank:234,name:"De'Zhaun Stribling",team:"SF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p235",rank:235,name:"Devin Neal",team:"NO",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p236",rank:236,name:"Buffalo Bills",team:"BUF",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p237",rank:237,name:"Fernando Mendoza",team:"LV",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p238",rank:238,name:"Zachariah Branch",team:"ATL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p239",rank:239,name:"Detroit Lions",team:"DET",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p240",rank:240,name:"Kyle Williams",team:"NE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p241",rank:241,name:"Ja'Kobi Lane",team:"BAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p242",rank:242,name:"David Njoku",team:"FA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p243",rank:243,name:"Harrison Butker",team:"KC",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p244",rank:244,name:"Chris Boswell",team:"PIT",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p245",rank:245,name:"Chris Brazzell II",team:"CAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p246",rank:246,name:"Gunnar Helm",team:"TEN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p247",rank:247,name:"Trey Benson",team:"ARI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p248",rank:248,name:"Rashod Bateman",team:"BAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p249",rank:249,name:"Adam Randall",team:"BAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p250",rank:250,name:"Colby Parkinson",team:"LAR",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p251",rank:251,name:"Pat Freiermuth",team:"PIT",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p252",rank:252,name:"Jalen Nailor",team:"LV",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p253",rank:253,name:"Skyler Bell",team:"BUF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p254",rank:254,name:"Theo Johnson",team:"NYG",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p255",rank:255,name:"Malachi Fields",team:"NYG",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p256",rank:256,name:"Najee Harris",team:"LAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p257",rank:257,name:"Tory Horton",team:"SEA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p258",rank:258,name:"Harrison Mevis",team:"LAR",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p259",rank:259,name:"Cade Otton",team:"TB",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p260",rank:260,name:"Geno Smith",team:"NYJ",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p261",rank:261,name:"Mason Taylor",team:"NYJ",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p262",rank:262,name:"Keon Coleman",team:"BUF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p263",rank:263,name:"Michael Penix Jr.",team:"ATL",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p264",rank:264,name:"Isaiah Davis",team:"NYJ",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p265",rank:265,name:"Ted Hurst",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p266",rank:266,name:"Marvin Mims Jr.",team:"DEN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p267",rank:267,name:"Atlanta Falcons",team:"ATL",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p268",rank:268,name:"Jaydon Blue",team:"DAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p269",rank:269,name:"Evan Engram",team:"DEN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p270",rank:270,name:"Malik Washington",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p271",rank:271,name:"Wil Lutz",team:"DEN",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p272",rank:272,name:"Cooper Kupp",team:"SEA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p273",rank:273,name:"Ty Johnson",team:"BUF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p274",rank:274,name:"Jordan James",team:"SF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p275",rank:275,name:"Devin Singletary",team:"NYG",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p276",rank:276,name:"Christian Kirk",team:"SF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p277",rank:277,name:"DJ Giddens",team:"IND",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p278",rank:278,name:"Shedeur Sanders",team:"CLE",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p279",rank:279,name:"Isaac Guerendo",team:"SF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p280",rank:280,name:"Keenan Allen",team:"LAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p281",rank:281,name:"Jake Tonges",team:"SF",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p282",rank:282,name:"Indianapolis Colts",team:"IND",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p283",rank:283,name:"Brashard Smith",team:"KC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p284",rank:284,name:"Mack Hollins",team:"NE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p285",rank:285,name:"San Francisco 49ers",team:"SF",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p286",rank:286,name:"Joe Mixon",team:"FA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p287",rank:287,name:"MarShawn Lloyd",team:"GB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p288",rank:288,name:"Malik Davis",team:"DAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p289",rank:289,name:"Max Klare",team:"LAR",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p290",rank:290,name:"Darius Slayton",team:"NYG",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p291",rank:291,name:"Charlie Smyth",team:"NO",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p292",rank:292,name:"Xavier Legette",team:"CAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p293",rank:293,name:"Jack Bech",team:"LV",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p294",rank:294,name:"Aaron Rodgers",team:"FA",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p295",rank:295,name:"George Holani",team:"SEA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p296",rank:296,name:"Will Reichard",team:"MIN",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p297",rank:297,name:"Chris Brooks",team:"GB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p298",rank:298,name:"Justice Hill",team:"BAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p299",rank:299,name:"Mike Gesicki",team:"CIN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p300",rank:300,name:"Emari Demercado",team:"KC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p301",rank:301,name:"Samaje Perine",team:"CIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p302",rank:302,name:"Tyquan Thornton",team:"KC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p303",rank:303,name:"Devaughn Vele",team:"NO",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p304",rank:304,name:"Seth McGowan",team:"IND",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p305",rank:305,name:"Tua Tagovailoa",team:"ATL",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p306",rank:306,name:"Jerome Ford",team:"WAS",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p307",rank:307,name:"Hollywood Brown",team:"PHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p308",rank:308,name:"Jaleel McLaughlin",team:"DEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p309",rank:309,name:"Isaiah Bond",team:"CLE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p310",rank:310,name:"LeQuint Allen Jr.",team:"JAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p311",rank:311,name:"Deshaun Watson",team:"CLE",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p312",rank:312,name:"Audric Estime",team:"NO",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p313",rank:313,name:"Greg Dulcich",team:"MIA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p314",rank:314,name:"Jarquez Hunter",team:"LAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p315",rank:315,name:"Trevor Etienne",team:"CAR",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p316",rank:316,name:"Kirk Cousins",team:"LV",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p317",rank:317,name:"Ty Simpson",team:"LAR",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p318",rank:318,name:"Kareem Hunt",team:"FA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p319",rank:319,name:"Andrei Iosivas",team:"CIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p320",rank:320,name:"J.J. McCarthy",team:"MIN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p321",rank:321,name:"Tahj Brooks",team:"CIN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p322",rank:322,name:"Cedric Tillman",team:"CLE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p323",rank:323,name:"Luke McCaffrey",team:"WAS",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p324",rank:324,name:"Konata Mumpfield",team:"LAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p325",rank:325,name:"Oscar Delp",team:"NO",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p326",rank:326,name:"Bam Knight",team:"ARI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p327",rank:327,name:"Calvin Austin III",team:"NYG",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p328",rank:328,name:"New Orleans Saints",team:"NO",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p329",rank:329,name:"Kaelon Black",team:"SF",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p330",rank:330,name:"Tez Johnson",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p331",rank:331,name:"Mac Jones",team:"SF",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p332",rank:332,name:"Carolina Panthers",team:"CAR",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p333",rank:333,name:"Chicago Bears",team:"CHI",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p334",rank:334,name:"Will Shipley",team:"PHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p335",rank:335,name:"Jalen Royals",team:"KC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p336",rank:336,name:"Jahan Dotson",team:"ATL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p337",rank:337,name:"Nick Chubb",team:"FA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p338",rank:338,name:"Tyler Higbee",team:"LAR",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p339",rank:339,name:"Dallas Cowboys",team:"DAL",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p340",rank:340,name:"Zane Gonzalez",team:"MIA",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p341",rank:341,name:"Darnell Washington",team:"PIT",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p342",rank:342,name:"Michael Carter",team:"TEN",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p343",rank:343,name:"Washington Commanders",team:"WAS",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p344",rank:344,name:"Austin Ekeler",team:"FA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p345",rank:345,name:"Noah Gray",team:"KC",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p346",rank:346,name:"Caleb Douglas",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p347",rank:347,name:"Dont'e Thornton Jr.",team:"LV",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p348",rank:348,name:"Eli Heidenreich",team:"PIT",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p349",rank:349,name:"Justin Joly",team:"DEN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p350",rank:350,name:"Blake Grupe",team:"IND",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p351",rank:351,name:"Elijah Arroyo",team:"SEA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p352",rank:352,name:"Tennessee Titans",team:"TEN",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p353",rank:353,name:"New York Giants",team:"NYG",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p354",rank:354,name:"Justin Fields",team:"KC",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p355",rank:355,name:"Bryce Lance",team:"NO",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p356",rank:356,name:"Tommy Myers",team:"FA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p357",rank:357,name:"Darren Waller",team:"FA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p358",rank:358,name:"Jake Elliott",team:"PHI",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p359",rank:359,name:"Brenen Thompson",team:"LAC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p360",rank:360,name:"Anthony Richardson Sr.",team:"IND",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p361",rank:361,name:"Joshua Palmer",team:"BUF",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p362",rank:362,name:"Xavier Hutchinson",team:"HOU",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p363",rank:363,name:"DeMario Douglas",team:"NE",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p364",rank:364,name:"Miami Dolphins",team:"MIA",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p365",rank:365,name:"Nick Folk",team:"ATL",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p366",rank:366,name:"Chad Ryland",team:"ARI",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p367",rank:367,name:"Jalen Tolbert",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p368",rank:368,name:"Treylon Burks",team:"WAS",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p369",rank:369,name:"Olamide Zaccheaus",team:"ATL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p370",rank:370,name:"Jaylin Lane",team:"WAS",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p371",rank:371,name:"Ryan Fitzgerald",team:"CAR",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p372",rank:372,name:"John Bates",team:"WAS",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p373",rank:373,name:"Tampa Bay Buccaneers",team:"TB",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p374",rank:374,name:"Ben Sauls",team:"NYG",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p375",rank:375,name:"John Metchie III",team:"CAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p376",rank:376,name:"Raheim Sanders",team:"CLE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p377",rank:377,name:"Tutu Atwell",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p378",rank:378,name:"Savion Williams",team:"GB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p379",rank:379,name:"Joey Slye",team:"TEN",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p380",rank:380,name:"Brandon McManus",team:"FA",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p381",rank:381,name:"Ben Sinnott",team:"WAS",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p382",rank:382,name:"Ja'Tavion Sanders",team:"CAR",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p383",rank:383,name:"Antonio Gibson",team:"FA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p384",rank:384,name:"Jawhar Jordan",team:"HOU",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p385",rank:385,name:"Dameon Pierce",team:"PHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p386",rank:386,name:"CJ Daniels",team:"LAR",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p387",rank:387,name:"Carson Beck",team:"ARI",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p388",rank:388,name:"KaVontae Turpin",team:"DAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p389",rank:389,name:"Michael Mayer",team:"LV",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p390",rank:390,name:"Kevin Coleman Jr.",team:"MIA",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p391",rank:391,name:"Terrell Jennings",team:"NE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p392",rank:392,name:"Kendrick Bourne",team:"ARI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p393",rank:393,name:"Cole Kmet",team:"CHI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p394",rank:394,name:"Zach Ertz",team:"FA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p395",rank:395,name:"Malik Benson",team:"LV",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p396",rank:396,name:"Joe Milton III",team:"DAL",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p397",rank:397,name:"Noah Fant",team:"NO",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p398",rank:398,name:"Tyler Bass",team:"BUF",position:"K",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p399",rank:399,name:"Cyrus Allen",team:"KC",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p400",rank:400,name:"Kalif Raymond",team:"CHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p401",rank:401,name:"Cincinnati Bengals",team:"CIN",position:"D/ST",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p402",rank:402,name:"Dawson Knox",team:"BUF",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p403",rank:403,name:"Damien Martinez",team:"GB",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p404",rank:404,name:"Tai Felton",team:"MIN",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p405",rank:405,name:"Zavion Thomas",team:"CHI",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p406",rank:406,name:"Luke Musgrave",team:"GB",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p407",rank:407,name:"Jameis Winston",team:"NYG",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p408",rank:408,name:"Eli Raridon",team:"NE",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p409",rank:409,name:"J'Mari Taylor",team:"JAC",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p410",rank:410,name:"Deion Burks",team:"IND",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p411",rank:411,name:"Daniel Bellinger",team:"TEN",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p412",rank:412,name:"Joe Flacco",team:"CIN",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p413",rank:413,name:"Jonnu Smith",team:"FA",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p414",rank:414,name:"Sam Roush",team:"CHI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p415",rank:415,name:"Le'Veon Moss",team:"MIA",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p416",rank:416,name:"Phil Mafah",team:"DAL",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p417",rank:417,name:"Roschon Johnson",team:"CHI",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p418",rank:418,name:"Marcus Mariota",team:"WAS",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p419",rank:419,name:"Jam Miller",team:"NE",position:"RB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p420",rank:420,name:"Marlin Klein",team:"HOU",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+        {id:"p421",rank:421,name:"Gardner Minshew II",team:"ARI",position:"QB",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p422",rank:422,name:"Devontez Walker",team:"BAL",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p423",rank:423,name:"Elijah Higgins",team:"ARI",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p424",rank:424,name:"Charlie Kolar",team:"LAC",position:"TE",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},{id:"p425",rank:425,name:"Tev Johnson",team:"TB",position:"WR",age:0,byeWeek:0,starred:false,note:"",tiersAbove:false},
+      ];
+
+      window.APP_STATE = {
+        players: DEFAULT_PLAYERS.map((player, index) => ({
+          ...player,
+          rank: index + 1,
+        })),
+        filters: {
+          positions: [],
+          teams: [],
+          ageMin: "",
+          ageMax: "",
+          byeMin: "",
+          byeMax: "",
+          searchQuery: "",
+        },
+        sort: {
+          key: null,
+          direction: "asc",
+        },
+        history: {
+          undo: [],
+          redo: [],
+        },
+        ui: {
+          modal: null,
+          banner: null,
+          modalReturnFocus: null,
+          drag: {
+            draggingId: null,
+            overId: null,
+            position: null,
+          },
+          draftedIds: new Set(),
+        },
+        tierLabels: {},
+        lastSavedSerialized: "",
+        isDirty: false,
+      };
+
+      const dom = {
+        tableBody: document.getElementById("player-table-body"),
+        positionFilters: document.getElementById("position-filters"),
+        teamOptions: document.getElementById("team-options"),
+        teamChips: document.getElementById("team-chips"),
+        banner: document.getElementById("banner"),
+        dragHint: document.getElementById("drag-hint"),
+        searchInput: document.getElementById("search-input"),
+        ageMin: document.getElementById("age-min"),
+        ageMax: document.getElementById("age-max"),
+        byeMin: document.getElementById("bye-min"),
+        byeMax: document.getElementById("bye-max"),
+        clearFilters: document.getElementById("clear-filters-btn"),
+        addPlayer: document.getElementById("add-player-btn"),
+        importCsv: document.getElementById("import-csv-btn"),
+        exportCsv: document.getElementById("export-csv-btn"),
+        undo: document.getElementById("undo-btn"),
+        redo: document.getElementById("redo-btn"),
+        dirtyIndicator: document.getElementById("dirty-indicator"),
+        modalBackdrop: document.getElementById("modal-backdrop"),
+        modalTitle: document.getElementById("modal-title"),
+        modalContent: document.getElementById("modal-content"),
+        csvInput: document.getElementById("csv-input"),
+      };
+
+      const MUTATING_ACTIONS = new Set([
+        "REORDER",
+        "TOGGLE_STAR",
+        "UPDATE_NOTE",
+        "CLEAR_NOTE",
+        "ADD_PLAYER",
+        "REMOVE_PLAYER",
+        "SET_TIER",
+        "REMOVE_TIER",
+      ]);
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function getPositionClass(position) {
+        return `position-${String(position).replace("/", "")}`;
+      }
+
+      function clonePlayers(players) {
+        return JSON.parse(JSON.stringify(players));
+      }
+
+      function normalizePlayers(players) {
+        return players.map((player, index) => ({
+          ...player,
+          rank: index + 1,
+        }));
+      }
+
+      function serializePlayers(players) {
+        return JSON.stringify(players);
+      }
+
+      function updateDirtyFlag(forceSaved) {
+        if (forceSaved) {
+          APP_STATE.lastSavedSerialized = serializePlayers(APP_STATE.players);
+          APP_STATE.isDirty = false;
+          return;
+        }
+        if (!APP_STATE.lastSavedSerialized) {
+          APP_STATE.lastSavedSerialized = serializePlayers(APP_STATE.players);
+        }
+        APP_STATE.isDirty =
+          serializePlayers(APP_STATE.players) !==
+          APP_STATE.lastSavedSerialized;
+      }
+
+      function dispatch(action) {
+        const isUndo = action.type === "UNDO";
+        const isRedo = action.type === "REDO";
+
+        if (MUTATING_ACTIONS.has(action.type)) {
+          APP_STATE.history.undo.push(clonePlayers(APP_STATE.players));
+          APP_STATE.history.redo = [];
+        }
+
+        switch (action.type) {
+          case "REORDER":
+            APP_STATE.players = normalizePlayers(action.payload);
+            break;
+          case "TOGGLE_STAR":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.map((player) =>
+                player.id === action.payload
+                  ? { ...player, starred: !player.starred }
+                  : player
+              )
+            );
+            break;
+          case "UPDATE_NOTE":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.map((player) =>
+                player.id === action.payload.id
+                  ? { ...player, note: action.payload.note }
+                  : player
+              )
+            );
+            break;
+          case "CLEAR_NOTE":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.map((player) =>
+                player.id === action.payload ? { ...player, note: "" } : player
+              )
+            );
+            break;
+          case "ADD_PLAYER":
+            APP_STATE.players = normalizePlayers([
+              ...APP_STATE.players,
+              action.payload,
+            ]);
+            break;
+          case "REMOVE_PLAYER":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.filter((player) => player.id !== action.payload)
+            );
+            break;
+          case "SET_TIER":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.map((player) =>
+                player.id === action.payload
+                  ? { ...player, tiersAbove: true }
+                  : player
+              )
+            );
+            break;
+          case "REMOVE_TIER":
+            APP_STATE.players = normalizePlayers(
+              APP_STATE.players.map((player) =>
+                player.id === action.payload
+                  ? { ...player, tiersAbove: false }
+                  : player
+              )
+            );
+            break;
+          case "SET_TIER_LABEL":
+            APP_STATE.tierLabels[action.payload.id] = action.payload.label;
+            break;
+          case "SET_FILTERS":
+            APP_STATE.filters = { ...APP_STATE.filters, ...action.payload };
+            break;
+          case "SET_SORT":
+            APP_STATE.sort = { ...APP_STATE.sort, ...action.payload };
+            break;
+          case "UNDO":
+            if (APP_STATE.history.undo.length) {
+              APP_STATE.history.redo.push(clonePlayers(APP_STATE.players));
+              APP_STATE.players = normalizePlayers(
+                APP_STATE.history.undo.pop()
+              );
+            }
+            break;
+          case "REDO":
+            if (APP_STATE.history.redo.length) {
+              APP_STATE.history.undo.push(clonePlayers(APP_STATE.players));
+              APP_STATE.players = normalizePlayers(
+                APP_STATE.history.redo.pop()
+              );
+            }
+            break;
+          case "IMPORT_PLAYERS":
+            APP_STATE.players = normalizePlayers(action.payload);
+            APP_STATE.history.undo = [];
+            APP_STATE.history.redo = [];
+            updateDirtyFlag(true);
+            break;
+          case "OPEN_MODAL":
+            APP_STATE.ui.modal = action.payload;
+            APP_STATE.ui.modalReturnFocus = document.activeElement;
+            break;
+          case "CLOSE_MODAL":
+            APP_STATE.ui.modal = null;
+            if (APP_STATE.ui.modalReturnFocus?.focus) {
+              const target = APP_STATE.ui.modalReturnFocus;
+              APP_STATE.ui.modalReturnFocus = null;
+              setTimeout(() => target.focus(), 0);
+            }
+            break;
+          case "SET_BANNER":
+            APP_STATE.ui.banner = action.payload;
+            break;
+          default:
+            break;
+        }
+
+        if (MUTATING_ACTIONS.has(action.type) || isUndo || isRedo) {
+          updateDirtyFlag(false);
+        }
+
+        APP_EVENTS.dispatchEvent(
+          new CustomEvent("state:change", { detail: action })
+        );
+        renderApp();
+      }
+
+      function isFilterActive() {
+        const filters = APP_STATE.filters;
+        return (
+          filters.positions.length > 0 ||
+          filters.teams.length > 0 ||
+          filters.ageMin !== "" ||
+          filters.ageMax !== "" ||
+          filters.byeMin !== "" ||
+          filters.byeMax !== "" ||
+          filters.searchQuery.trim() !== ""
+        );
+      }
+
+      function isSortActive() {
+        return !!APP_STATE.sort.key;
+      }
+
+      function computePositionRanks(players) {
+        const counts = {};
+        const map = {};
+        for (const player of players) {
+          const position = player.position;
+          counts[position] = (counts[position] || 0) + 1;
+          map[player.id] = `${position}${counts[position]}`;
+        }
+        return map;
+      }
+
+      function getDisplayValue(value) {
+        if (
+          value === null ||
+          value === undefined ||
+          value === "" ||
+          value === 0 ||
+          value === "0"
+        ) {
+          return "—";
+        }
+        return value;
+      }
+
+      function applyFilters(players) {
+        const filters = APP_STATE.filters;
+        return players.filter((player) => {
+          if (
+            filters.positions.length &&
+            !filters.positions.includes(player.position)
+          ) {
+            return false;
+          }
+          if (filters.teams.length && !filters.teams.includes(player.team)) {
+            return false;
+          }
+          if (filters.ageMin !== "") {
+            const minAge = Number(filters.ageMin);
+            if (!Number.isNaN(minAge) && player.age < minAge) {
+              return false;
+            }
+          }
+          if (filters.ageMax !== "") {
+            const maxAge = Number(filters.ageMax);
+            if (!Number.isNaN(maxAge) && player.age > maxAge) {
+              return false;
+            }
+          }
+          if (filters.byeMin !== "") {
+            const minBye = Number(filters.byeMin);
+            if (!Number.isNaN(minBye) && player.byeWeek < minBye) {
+              return false;
+            }
+          }
+          if (filters.byeMax !== "") {
+            const maxBye = Number(filters.byeMax);
+            if (!Number.isNaN(maxBye) && player.byeWeek > maxBye) {
+              return false;
+            }
+          }
+          if (filters.searchQuery.trim()) {
+            const query = filters.searchQuery.trim().toLowerCase();
+            if (!player.name.toLowerCase().includes(query)) {
+              return false;
+            }
+          }
+          return true;
+        });
+      }
+
+      function applySort(players) {
+        const sort = APP_STATE.sort;
+        if (!sort.key) {
+          return players;
+        }
+        const sorted = [...players].sort((a, b) => {
+          let comparison = 0;
+          switch (sort.key) {
+            case "name":
+              comparison = a.name.localeCompare(b.name);
+              break;
+            case "team":
+              comparison = a.team.localeCompare(b.team);
+              break;
+            case "position":
+              comparison = a.position.localeCompare(b.position);
+              break;
+            case "age":
+              comparison = a.age - b.age;
+              break;
+            case "byeWeek":
+              comparison = a.byeWeek - b.byeWeek;
+              break;
+            default:
+              break;
+          }
+          return sort.direction === "asc" ? comparison : -comparison;
+        });
+        return sorted;
+      }
+
+      function getTeamList(players) {
+        const set = new Set();
+        players.forEach((player) => {
+          if (player.team) {
+            set.add(player.team);
+          }
+        });
+        return Array.from(set).sort();
+      }
+
+      function buildPositionFilters() {
+        const filters = APP_STATE.filters;
+        const active = new Set(filters.positions);
+        const buttons = [
+          `<button class="position-btn ${
+            active.size === 0 ? "active" : ""
+          }" data-position="ALL">ALL</button>`,
+        ];
+        POSITIONS.filter((pos) => pos !== "UNK").forEach((position) => {
+          buttons.push(
+            `<button class="position-btn ${
+              active.has(position) ? "active" : ""
+            }" data-position="${position}">${position}</button>`
+          );
+        });
+        dom.positionFilters.innerHTML = buttons.join("");
+      }
+
+      function buildTeamFilters() {
+        const teams = getTeamList(APP_STATE.players);
+        const selectedTeams = new Set(APP_STATE.filters.teams);
+        dom.teamOptions.innerHTML = teams
+          .map(
+            (team) => `
+          <label>
+            <input type="checkbox" data-team="${escapeHtml(team)}" ${
+              selectedTeams.has(team) ? "checked" : ""
+            } />
+            ${escapeHtml(team)}
+          </label>
+        `
+          )
+          .join("");
+
+        dom.teamChips.innerHTML = Array.from(selectedTeams)
+          .map((team) => `<span class="team-chip">${escapeHtml(team)}</span>`)
+          .join("");
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll("thead th.sortable").forEach((th) => {
+          const indicator = th.querySelector("span");
+          if (APP_STATE.sort.key === th.dataset.sortKey) {
+            indicator.textContent = APP_STATE.sort.direction === "asc" ? "^" : "v";
+          } else {
+            indicator.textContent = "";
+          }
+        });
+      }
+
+      function renderBanner() {
+        if (APP_STATE.ui.banner) {
+          dom.banner.textContent = APP_STATE.ui.banner;
+          dom.banner.classList.add("active");
+        } else {
+          dom.banner.textContent = "";
+          dom.banner.classList.remove("active");
+        }
+      }
+
+      function renderDragHint() {
+        if (isFilterActive() || isSortActive()) {
+          dom.dragHint.textContent = "Clear sort/filter to reorder.";
+        } else {
+          dom.dragHint.textContent = "";
+        }
+      }
+
+      function renderModeBadge() {
+        const active = isFilterActive() || isSortActive();
+        dom.clearFilters.classList.add("visible");
+        dom.clearFilters.classList.toggle("filters-active", active);
+        dom.clearFilters.textContent = active ? "✕ Clear Filters" : "⇋ Reorder";
+      }
+
+      // === MODULE 1: TABLE RENDERING ===
+      function renderApp() {
+        buildPositionFilters();
+        buildTeamFilters();
+        updateSortIndicators();
+        renderBanner();
+        renderDragHint();
+        renderModeBadge();
+
+        dom.searchInput.value = APP_STATE.filters.searchQuery;
+        dom.ageMin.value = APP_STATE.filters.ageMin;
+        dom.ageMax.value = APP_STATE.filters.ageMax;
+        dom.byeMin.value = APP_STATE.filters.byeMin;
+        dom.byeMax.value = APP_STATE.filters.byeMax;
+
+        dom.undo.disabled = APP_STATE.history.undo.length === 0;
+        dom.redo.disabled = APP_STATE.history.redo.length === 0;
+        dom.dirtyIndicator.classList.toggle("active", APP_STATE.isDirty);
+
+        const positionRanks = computePositionRanks(APP_STATE.players);
+        const filtered = applyFilters(APP_STATE.players);
+        const viewPlayers = applySort(filtered);
+        const showTiers = !isFilterActive() && !isSortActive();
+
+        if (APP_STATE.players.length === 0) {
+          dom.tableBody.innerHTML = `
+            <tr>
+              <td colspan="10" class="empty-state">
+                No players yet. Add a player or import a CSV to get started.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        if (viewPlayers.length === 0) {
+          dom.tableBody.innerHTML = `
+            <tr>
+              <td colspan="10" class="empty-state">
+                No players match your filters. <button class="btn" data-action="clear-filters">Clear Filters</button>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        const rows = [];
+        viewPlayers.forEach((player, idx) => {
+          const isDrafted = APP_STATE.ui.draftedIds.has(player.id);
+          const isReorderLocked = isFilterActive() || isSortActive();
+          const posCls = player.position.toLowerCase().replace("/", "");
+          const isTierAbove = showTiers && player.tiersAbove;
+          const nextPlayer = viewPlayers[idx + 1];
+          const isPreTier = showTiers && nextPlayer && nextPlayer.tiersAbove;
+
+          const tierControl = showTiers
+            ? (player.tiersAbove
+                ? `<button class="tier-btn tier-remove" data-action="remove-tier" data-id="${player.id}" data-no-drag aria-label="Remove tier break">×</button>`
+                : `<button class="tier-btn tier-add" data-action="add-tier" data-id="${player.id}" data-no-drag aria-label="Add tier break above">+</button>`)
+            : '';
+
+          rows.push(`
+            <tr
+              class="player-row ${getPositionClass(player.position)} ${player.starred ? "starred" : ""} ${isDrafted ? "drafted" : ""} ${isReorderLocked ? "drag-disabled" : ""} ${isTierAbove ? "has-tier-above" : ""} ${isPreTier ? "pre-tier" : ""}"
+              data-id="${player.id}"
+              draggable="${!isReorderLocked}"
+              title="${isReorderLocked ? "Clear sort/filter to reorder." : ""}"
+            >
+              <td class="handle-cell">
+                ${tierControl}
+                <span class="drag-handle" aria-hidden="true">&#8286;</span>
+              </td>
+              <td class="cell-muted col-rank">${player.rank}</td>
+              <td class="col-pos-rank pos-cell-${posCls}">${positionRanks[player.id]}</td>
+              <td>
+                <button
+                  class="icon-btn"
+                  data-action="star"
+                  data-id="${player.id}"
+                  aria-pressed="${player.starred}"
+                  data-no-drag
+                >${player.starred ? "★" : "☆"}</button>
+              </td>
+              <td class="name-cell col-name">
+                ${escapeHtml(player.name)}<span class="pos-badge ${posCls}">${escapeHtml(player.position)}</span>
+              </td>
+              <td class="team-cell">${escapeHtml(getDisplayValue(player.team))}</td>
+              <td class="cell-muted">${getDisplayValue(player.age)}</td>
+              <td class="cell-muted">${getDisplayValue(player.byeWeek)}</td>
+              <td>
+                <button
+                  class="draft-btn"
+                  data-action="draft"
+                  data-id="${player.id}"
+                  data-no-drag
+                  aria-pressed="${isDrafted}"
+                >${isDrafted ? "Drafted" : "Draft"}</button>
+              </td>
+              <td class="note-cell">
+                <button
+                  class="icon-btn ${player.note ? "" : "note-empty"}"
+                  data-action="note"
+                  data-id="${player.id}"
+                  data-no-drag
+                  title="${player.note ? "Edit note" : "Add note"}"
+                >${player.note ? "📝" : "+"}</button>
+                <button
+                  class="icon-btn delete-btn"
+                  data-action="delete"
+                  data-id="${player.id}"
+                  data-no-drag
+                  aria-label="Delete player"
+                >&times;</button>
+              </td>
+            </tr>
+          `);
+        });
+
+        dom.tableBody.innerHTML = rows.join("");
+      }
+
+      function clearDropIndicators() {
+        document
+          .querySelectorAll(".drop-before, .drop-after")
+          .forEach((row) => row.classList.remove("drop-before", "drop-after"));
+      }
+
+      function setDropIndicator(targetRow, position) {
+        if (!targetRow) {
+          return;
+        }
+        clearDropIndicators();
+        targetRow.classList.add(position === "above" ? "drop-before" : "drop-after");
+      }
+
+      function findRowFromPoint(x, y) {
+        const el = document.elementFromPoint(x, y);
+        if (!el) {
+          return null;
+        }
+        return el.closest("tr.player-row");
+      }
+
+      function reorderPlayers(draggedId, targetId, position) {
+        if (!draggedId || !targetId || draggedId === targetId) {
+          return;
+        }
+        const players = [...APP_STATE.players];
+        const fromIndex = players.findIndex((player) => player.id === draggedId);
+        const toIndex = players.findIndex((player) => player.id === targetId);
+        if (fromIndex === -1 || toIndex === -1) {
+          return;
+        }
+        const [moved] = players.splice(fromIndex, 1);
+        const insertIndex =
+          position === "above"
+            ? toIndex
+            : toIndex + (fromIndex < toIndex ? 0 : 1);
+        players.splice(insertIndex, 0, moved);
+        dispatch({ type: "REORDER", payload: players });
+      }
+
+      // === MODULE 2: DRAG AND DROP ===
+      function initDragAndDrop() {
+        dom.tableBody.addEventListener("dragstart", (event) => {
+          const row = event.target.closest("tr.player-row");
+          if (!row || isFilterActive() || isSortActive()) {
+            return;
+          }
+          if (event.target.closest("[data-no-drag]")) {
+            event.preventDefault();
+            return;
+          }
+          APP_STATE.ui.drag.draggingId = row.dataset.id;
+          event.dataTransfer.setData("text/plain", row.dataset.id);
+          event.dataTransfer.effectAllowed = "move";
+        });
+
+        dom.tableBody.addEventListener("dragover", (event) => {
+          if (!APP_STATE.ui.drag.draggingId) {
+            return;
+          }
+          event.preventDefault();
+          const row = event.target.closest("tr.player-row");
+          if (!row) {
+            return;
+          }
+          const rect = row.getBoundingClientRect();
+          const position = event.clientY < rect.top + rect.height / 2 ? "above" : "below";
+          APP_STATE.ui.drag.overId = row.dataset.id;
+          APP_STATE.ui.drag.position = position;
+          setDropIndicator(row, position);
+        });
+
+        dom.tableBody.addEventListener("drop", (event) => {
+          event.preventDefault();
+          const draggedId = APP_STATE.ui.drag.draggingId;
+          const targetId = APP_STATE.ui.drag.overId;
+          const position = APP_STATE.ui.drag.position;
+          reorderPlayers(draggedId, targetId, position);
+          APP_STATE.ui.drag.draggingId = null;
+          APP_STATE.ui.drag.overId = null;
+          APP_STATE.ui.drag.position = null;
+          clearDropIndicators();
+        });
+
+        dom.tableBody.addEventListener("dragend", () => {
+          APP_STATE.ui.drag.draggingId = null;
+          APP_STATE.ui.drag.overId = null;
+          APP_STATE.ui.drag.position = null;
+          clearDropIndicators();
+        });
+
+        let touchState = null;
+
+        dom.tableBody.addEventListener(
+          "touchstart",
+          (event) => {
+            const row = event.target.closest("tr.player-row");
+            if (!row || isFilterActive() || isSortActive()) {
+              return;
+            }
+            if (event.target.closest("[data-no-drag]")) {
+              return;
+            }
+            const touch = event.changedTouches[0];
+            touchState = {
+              id: row.dataset.id,
+              startX: touch.clientX,
+              startY: touch.clientY,
+              active: false,
+            };
+          },
+          { passive: true }
+        );
+
+        dom.tableBody.addEventListener(
+          "touchmove",
+          (event) => {
+            if (!touchState) {
+              return;
+            }
+            const touch = event.changedTouches[0];
+            const delta = Math.abs(touch.clientY - touchState.startY);
+            if (!touchState.active && delta > 8) {
+              touchState.active = true;
+              APP_STATE.ui.drag.draggingId = touchState.id;
+            }
+            if (touchState.active) {
+              event.preventDefault();
+              const row = findRowFromPoint(touch.clientX, touch.clientY);
+              if (!row) {
+                return;
+              }
+              const rect = row.getBoundingClientRect();
+              const position =
+                touch.clientY < rect.top + rect.height / 2 ? "above" : "below";
+              APP_STATE.ui.drag.overId = row.dataset.id;
+              APP_STATE.ui.drag.position = position;
+              setDropIndicator(row, position);
+            }
+          },
+          { passive: false }
+        );
+
+        dom.tableBody.addEventListener(
+          "touchend",
+          () => {
+            if (touchState && touchState.active) {
+              reorderPlayers(
+                APP_STATE.ui.drag.draggingId,
+                APP_STATE.ui.drag.overId,
+                APP_STATE.ui.drag.position
+              );
+            }
+            touchState = null;
+            APP_STATE.ui.drag.draggingId = null;
+            APP_STATE.ui.drag.overId = null;
+            APP_STATE.ui.drag.position = null;
+            clearDropIndicators();
+          },
+          { passive: true }
+        );
+      }
+
+      // === MODULE 3: UNDO / REDO ===
+      function initUndoRedo() {
+        dom.undo.addEventListener("click", () => dispatch({ type: "UNDO" }));
+        dom.redo.addEventListener("click", () => dispatch({ type: "REDO" }));
+
+        document.addEventListener("keydown", (event) => {
+          const isMac = navigator.platform.toLowerCase().includes("mac");
+          const meta = isMac ? event.metaKey : event.ctrlKey;
+
+          if (meta && event.key.toLowerCase() === "z" && !event.shiftKey) {
+            event.preventDefault();
+            dispatch({ type: "UNDO" });
+            return;
+          }
+          if (
+            (meta && event.key.toLowerCase() === "y") ||
+            (meta && event.shiftKey && event.key.toLowerCase() === "z")
+          ) {
+            event.preventDefault();
+            dispatch({ type: "REDO" });
+            return;
+          }
+          if (meta && event.key.toLowerCase() === "e") {
+            event.preventDefault();
+            exportCsv();
+            return;
+          }
+          if (event.key === "Escape") {
+            dispatch({ type: "CLOSE_MODAL" });
+          }
+        });
+      }
+
+      // === MODULE 4: FILTERING AND SORTING ===
+      function initFiltersAndSorting() {
+        dom.positionFilters.addEventListener("click", (event) => {
+          const button = event.target.closest("button");
+          if (!button) {
+            return;
+          }
+          const position = button.dataset.position;
+          if (position === "ALL") {
+            dispatch({ type: "SET_FILTERS", payload: { positions: [] } });
+            return;
+          }
+          const current = new Set(APP_STATE.filters.positions);
+          if (current.has(position)) {
+            current.delete(position);
+          } else {
+            current.add(position);
+          }
+          dispatch({
+            type: "SET_FILTERS",
+            payload: { positions: Array.from(current) },
+          });
+        });
+
+        dom.teamOptions.addEventListener("change", (event) => {
+          const input = event.target.closest("input[data-team]");
+          if (!input) {
+            return;
+          }
+          const current = new Set(APP_STATE.filters.teams);
+          if (input.checked) {
+            current.add(input.dataset.team);
+          } else {
+            current.delete(input.dataset.team);
+          }
+          dispatch({
+            type: "SET_FILTERS",
+            payload: { teams: Array.from(current) },
+          });
+        });
+
+        dom.searchInput.addEventListener("input", (event) => {
+          dispatch({
+            type: "SET_FILTERS",
+            payload: { searchQuery: event.target.value },
+          });
+        });
+
+        [dom.ageMin, dom.ageMax, dom.byeMin, dom.byeMax].forEach((input) => {
+          input.addEventListener("input", () => {
+            dispatch({
+              type: "SET_FILTERS",
+              payload: {
+                ageMin: dom.ageMin.value,
+                ageMax: dom.ageMax.value,
+                byeMin: dom.byeMin.value,
+                byeMax: dom.byeMax.value,
+              },
+            });
+          });
+        });
+
+        dom.clearFilters.addEventListener("click", () => {
+          dispatch({
+            type: "SET_FILTERS",
+            payload: {
+              positions: [],
+              teams: [],
+              ageMin: "",
+              ageMax: "",
+              byeMin: "",
+              byeMax: "",
+              searchQuery: "",
+            },
+          });
+        });
+
+        document.querySelectorAll("thead th.sortable").forEach((th) => {
+          th.addEventListener("click", () => {
+            const key = th.dataset.sortKey;
+            if (APP_STATE.sort.key === key) {
+              if (APP_STATE.sort.direction === "asc") {
+                dispatch({
+                  type: "SET_SORT",
+                  payload: { key, direction: "desc" },
+                });
+              } else {
+                dispatch({ type: "SET_SORT", payload: { key: null } });
+              }
+            } else {
+              dispatch({
+                type: "SET_SORT",
+                payload: { key, direction: "asc" },
+              });
+            }
+          });
+        });
+      }
+
+      // === MODULE 5: TIER BREAKS ===
+      function initTierBreaks() {
+        dom.tableBody.addEventListener("click", (event) => {
+          const addButton = event.target.closest(
+            'button[data-action="add-tier"]'
+          );
+          const removeButton = event.target.closest(
+            'button[data-action="remove-tier"]'
+          );
+          if (addButton) {
+            dispatch({ type: "SET_TIER", payload: addButton.dataset.id });
+            return;
+          }
+          if (removeButton) {
+            dispatch({
+              type: "REMOVE_TIER",
+              payload: removeButton.dataset.id,
+            });
+          }
+        });
+
+        dom.tableBody.addEventListener("input", (event) => {
+          const input = event.target.closest('input[data-action="tier-label"]');
+          if (!input) {
+            return;
+          }
+          dispatch({
+            type: "SET_TIER_LABEL",
+            payload: { id: input.dataset.id, label: input.value },
+          });
+        });
+      }
+
+      function trapFocus(modal) {
+        if (modal.__trapHandler) {
+          modal.removeEventListener("keydown", modal.__trapHandler);
+        }
+        const focusable = modal.querySelectorAll(
+          "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        modal.__trapHandler = (event) => {
+          if (event.key !== "Tab") {
+            return;
+          }
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+        };
+
+        modal.addEventListener("keydown", modal.__trapHandler);
+
+        if (first) {
+          first.focus();
+        }
+      }
+
+      // === MODULE 6: NOTE MODAL ===
+      function initModal() {
+        dom.modalBackdrop.addEventListener("click", (event) => {
+          if (event.target === dom.modalBackdrop) {
+            dispatch({ type: "CLOSE_MODAL" });
+          }
+        });
+
+        dom.modalBackdrop.addEventListener("click", (event) => {
+          const closeButton = event.target.closest(
+            'button[data-action="close-modal"]'
+          );
+          if (closeButton) {
+            dispatch({ type: "CLOSE_MODAL" });
+          }
+        });
+      }
+
+      function renderModal() {
+        const modalState = APP_STATE.ui.modal;
+        if (!modalState) {
+          dom.modalBackdrop.classList.remove("open");
+          dom.modalBackdrop.setAttribute("aria-hidden", "true");
+          dom.modalContent.innerHTML = "";
+          return;
+        }
+
+        dom.modalBackdrop.classList.add("open");
+        dom.modalBackdrop.setAttribute("aria-hidden", "false");
+
+        if (modalState.type === "note") {
+          const player = APP_STATE.players.find(
+            (candidate) => candidate.id === modalState.playerId
+          );
+          dom.modalTitle.textContent = player ? player.name : "Notes";
+          dom.modalContent.innerHTML = `
+            <textarea id="note-input" rows="6" placeholder="Add a note for this player…"></textarea>
+            <div class="modal-actions">
+              <button class="btn subtle" data-action="clear-note">Clear Note</button>
+              <div class="modal-actions-end">
+                <button class="btn primary" data-action="save-note">Save</button>
+              </div>
+            </div>
+          `;
+          const noteInput = dom.modalContent.querySelector("#note-input");
+          if (noteInput) {
+            noteInput.value = player ? player.note : "";
+          }
+          trapFocus(dom.modalBackdrop.querySelector(".modal"));
+        }
+
+        if (modalState.type === "add") {
+          dom.modalTitle.textContent = "Add Player";
+          dom.modalContent.innerHTML = `
+            <form id="add-player-form">
+              <div class="form-grid">
+                <label>
+                  <span class="field-name">Name</span>
+                  <input name="name" required placeholder="Player name" />
+                </label>
+                <label>
+                  <span class="field-name">Position</span>
+                  <select name="position" required>
+                    ${POSITIONS.filter((pos) => pos !== "UNK")
+                      .map((pos) => `<option value="${pos}">${pos}</option>`)
+                      .join("")}
+                  </select>
+                </label>
+                <label>
+                  <span class="field-name">Team</span>
+                  <input name="team" required placeholder="e.g. KC" />
+                </label>
+                <label>
+                  <span class="field-name">Age</span>
+                  <input name="age" type="number" min="0" required placeholder="e.g. 26" />
+                </label>
+                <label>
+                  <span class="field-name">Bye Week</span>
+                  <input name="byeWeek" type="number" min="0" max="14" required placeholder="1–14" />
+                </label>
+              </div>
+              <div class="modal-actions">
+                <button class="btn subtle" type="button" data-action="close-modal">Cancel</button>
+                <div class="modal-actions-end">
+                  <button class="btn primary" type="submit">Add Player</button>
+                </div>
+              </div>
+            </form>
+          `;
+          trapFocus(dom.modalBackdrop.querySelector(".modal"));
+        }
+      }
+
+      // === MODULE 7: CSV IMPORT / EXPORT ===
+      function exportCsv() {
+        const positionRanks = computePositionRanks(APP_STATE.players);
+        const data = APP_STATE.players.map((player) => ({
+          rank: player.rank,
+          positionRank: positionRanks[player.id],
+          name: player.name,
+          position: player.position,
+          team: player.team,
+          age: player.age,
+          byeWeek: player.byeWeek,
+          starred: player.starred,
+          note: player.note,
+          tiersAbove: player.tiersAbove,
+        }));
+
+        const csv = Papa.unparse(data, {
+          header: true,
+          skipEmptyLines: true,
+          escapeFormulae: true,
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "big-board-export.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+
+        updateDirtyFlag(true);
+        renderApp();
+      }
+
+      function parseBoolean(value) {
+        if (typeof value === "boolean") {
+          return value;
+        }
+        if (typeof value === "string") {
+          return ["true", "1", "yes"].includes(value.toLowerCase());
+        }
+        return false;
+      }
+
+      function normalizePosition(value) {
+        if (!value) {
+          return "UNK";
+        }
+        const trimmed = String(value).toUpperCase();
+        return POSITIONS.includes(trimmed) ? trimmed : "UNK";
+      }
+
+      function initCsv() {
+        dom.exportCsv.addEventListener("click", exportCsv);
+        dom.importCsv.addEventListener("click", () => dom.csvInput.click());
+
+        dom.csvInput.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          if (!file) {
+            return;
+          }
+          const confirmReplace = confirm(
+            "Importing will replace the current board. Continue?"
+          );
+          if (!confirmReplace) {
+            dom.csvInput.value = "";
+            return;
+          }
+
+          Papa.parse(file, {
+            header: true,
+            skipEmptyLines: "greedy",
+            transformHeader: (header) => header.trim().toLowerCase(),
+            complete: (results) => {
+              const errors = results.errors || [];
+              const rows = results.data || [];
+              if (!rows.length) {
+                dispatch({
+                  type: "SET_BANNER",
+                  payload: "CSV import failed: empty file.",
+                });
+                return;
+              }
+
+              const required = ["name", "position", "team", "age", "byeweek"];
+              const headers = results.meta.fields || [];
+              const missing = required.filter((field) => !headers.includes(field));
+              if (missing.length) {
+                dispatch({
+                  type: "SET_BANNER",
+                  payload: `CSV import failed: missing columns (${missing.join(", ")}).`,
+                });
+                return;
+              }
+
+              const parsed = [];
+              let skipped = 0;
+
+              rows.forEach((row) => {
+                const name = row.name ? String(row.name).trim() : "";
+                const position = normalizePosition(row.position);
+                const team = row.team ? String(row.team).trim() : "";
+                const age = Number(row.age);
+                const byeWeek = Number(row.byeweek);
+                const importRank = Number(row.rank);
+
+                if (!name || !team || Number.isNaN(age) || Number.isNaN(byeWeek)) {
+                  skipped += 1;
+                  return;
+                }
+
+                parsed.push({
+                  id: `p-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+                  name,
+                  team,
+                  position,
+                  age,
+                  byeWeek,
+                  starred: parseBoolean(row.starred),
+                  note: row.note ? String(row.note) : "",
+                  tiersAbove: parseBoolean(row.tiersabove),
+                  importRank: Number.isNaN(importRank) ? null : importRank,
+                });
+              });
+
+              if (!parsed.length) {
+                dispatch({
+                  type: "SET_BANNER",
+                  payload: "CSV import failed: no valid rows.",
+                });
+                return;
+              }
+
+              if (errors.length || skipped) {
+                dispatch({
+                  type: "SET_BANNER",
+                  payload: `CSV imported with warnings: ${errors.length} parse error(s), ${skipped} row(s) skipped.`,
+                });
+              } else {
+                dispatch({ type: "SET_BANNER", payload: null });
+              }
+
+              const hasRank = parsed.every((player) => player.importRank !== null);
+              const sorted = hasRank
+                ? [...parsed].sort((a, b) => a.importRank - b.importRank)
+                : parsed;
+              const normalized = sorted.map((player, index) => {
+                const { importRank, ...rest } = player;
+                return { ...rest, rank: index + 1 };
+              });
+              dispatch({ type: "IMPORT_PLAYERS", payload: normalized });
+              dom.csvInput.value = "";
+            },
+            error: () => {
+              dispatch({
+                type: "SET_BANNER",
+                payload: "CSV import failed: unable to read file.",
+              });
+            },
+          });
+        });
+      }
+
+      // === MODULE 8: ADD / REMOVE PLAYERS ===
+      function initAddRemove() {
+        dom.addPlayer.addEventListener("click", () => {
+          dispatch({ type: "OPEN_MODAL", payload: { type: "add" } });
+        });
+
+        dom.tableBody.addEventListener("click", (event) => {
+          const star = event.target.closest('button[data-action="star"]');
+          const note = event.target.closest('button[data-action="note"]');
+          const del = event.target.closest('button[data-action="delete"]');
+          const clearFilters = event.target.closest(
+            'button[data-action="clear-filters"]'
+          );
+
+          if (star) {
+            dispatch({ type: "TOGGLE_STAR", payload: star.dataset.id });
+            return;
+          }
+          if (note) {
+            dispatch({
+              type: "OPEN_MODAL",
+              payload: { type: "note", playerId: note.dataset.id },
+            });
+            return;
+          }
+          if (del) {
+            const confirmRemove = confirm("Remove this player?");
+            if (confirmRemove) {
+              dispatch({ type: "REMOVE_PLAYER", payload: del.dataset.id });
+            }
+            return;
+          }
+          if (clearFilters) {
+            dom.clearFilters.click();
+          }
+        });
+
+        dom.modalContent.addEventListener("submit", (event) => {
+          const form = event.target.closest("#add-player-form");
+          if (!form) {
+            return;
+          }
+          event.preventDefault();
+          const formData = new FormData(form);
+          const name = formData.get("name").trim();
+          const position = normalizePosition(formData.get("position"));
+          const team = formData.get("team").trim();
+          const age = Number(formData.get("age"));
+          const byeWeek = Number(formData.get("byeWeek"));
+
+          const player = {
+            id:
+              typeof crypto !== "undefined" && crypto.randomUUID
+                ? crypto.randomUUID()
+                : `p-${Date.now()}`,
+            rank: APP_STATE.players.length + 1,
+            name,
+            team,
+            position,
+            age,
+            byeWeek,
+            starred: false,
+            note: "",
+            tiersAbove: false,
+          };
+
+          dispatch({ type: "ADD_PLAYER", payload: player });
+          dispatch({ type: "CLOSE_MODAL" });
+        });
+      }
+
+      // === MODULE 9: TOOLBAR AND LAYOUT ===
+      function initToolbar() {
+        dom.modalContent.addEventListener("click", (event) => {
+          const saveNote = event.target.closest('button[data-action="save-note"]');
+          const clearNote = event.target.closest(
+            'button[data-action="clear-note"]'
+          );
+          const closeModal = event.target.closest(
+            "button[data-action=\"close-modal\"]"
+          );
+
+          if (saveNote) {
+            const noteInput = dom.modalContent.querySelector("#note-input");
+            if (APP_STATE.ui.modal?.playerId) {
+              dispatch({
+                type: "UPDATE_NOTE",
+                payload: {
+                  id: APP_STATE.ui.modal.playerId,
+                  note: noteInput.value,
+                },
+              });
+              dispatch({ type: "CLOSE_MODAL" });
+            }
+            return;
+          }
+
+          if (clearNote) {
+            if (APP_STATE.ui.modal?.playerId) {
+              dispatch({
+                type: "CLEAR_NOTE",
+                payload: APP_STATE.ui.modal.playerId,
+              });
+              dispatch({ type: "CLOSE_MODAL" });
+            }
+            return;
+          }
+
+          if (closeModal) {
+            dispatch({ type: "CLOSE_MODAL" });
+          }
+        });
+
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+          const saved = localStorage.getItem("bb-theme") || "dark";
+          document.documentElement.setAttribute("data-theme", saved);
+          themeToggle.textContent = saved === "dark" ? "☀" : "☾";
+
+          themeToggle.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-theme");
+            const next = current === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", next);
+            localStorage.setItem("bb-theme", next);
+            themeToggle.textContent = next === "dark" ? "☀" : "☾";
+          });
+        }
+      }
+
+      // === MODULE 10: DRAFTED ===
+      function initDraftedModule() {
+        dom.tableBody.addEventListener("click", (event) => {
+          const draftBtn = event.target.closest('button[data-action="draft"]');
+          if (!draftBtn) {
+            return;
+          }
+          const id = draftBtn.dataset.id;
+          if (APP_STATE.ui.draftedIds.has(id)) {
+            APP_STATE.ui.draftedIds.delete(id);
+          } else {
+            APP_STATE.ui.draftedIds.add(id);
+          }
+          renderApp();
+        });
+      }
+
+      function attachGlobalRenders() {
+        APP_EVENTS.addEventListener("state:change", () => {
+          renderModal();
+        });
+      }
+
+      function initializeApp() {
+        updateDirtyFlag(false);
+        renderApp();
+        renderModal();
+        initDragAndDrop();
+        initUndoRedo();
+        initFiltersAndSorting();
+        initTierBreaks();
+        initModal();
+        initCsv();
+        initAddRemove();
+        initToolbar();
+        initDraftedModule();
+        attachGlobalRenders();
+      }
+
+      initializeApp();
+    </script>
+
+    <!--
+    MODULE 1 CHECK: Rendered columns (10), position ranks derived from master order, empty-state messaging ok.
+    MODULE 2 CHECK: Drag/drop reorders master list, touch fallback wired to touchstart/move/end.
+    MODULE 3 CHECK: Undo/redo stacks update and toolbar buttons disable when empty.
+    MODULE 4 CHECK: Sorting is view-only, filters hide rows, drag disables when filters/sort active.
+    MODULE 5 CHECK: Tier breaks stored on player and hidden when filters/sort active.
+    MODULE 6 CHECK: Modal traps focus, Escape closes, note save/clear updates state.
+    MODULE 7 CHECK: CSV import validates columns, skips malformed rows, export uses Blob download.
+    MODULE 8 CHECK: Add player modal and delete confirmation dispatch state changes.
+    MODULE 9 CHECK: Toolbar 3-zone layout, theme toggle with localStorage, mode badge updates.
+    MODULE 10 CHECK: Draft toggle purely local (Set in ui), renderApp reflects drafted state.
+    PASS 2: DM Sans + DM Mono fonts, data-theme token system (dark/light), pos badges, mode badge.
+    -->
+  </body>
+</html>
