@@ -1,11 +1,41 @@
 {
+  "env": {
+    "NTFY_CHANNEL_URL": "https://ntfy.sh/claude-termius-daniel",
+    "NTFY_PROJECT_TITLE": "rankAnything"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git rev-parse*)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)"
+    ]
+  },
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/post-edit-check.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "./scripts/notify.sh \"Claude finished\" \"rankAnything\" \"default\" \"white_check_mark,claude\" 2>/dev/null || true"
+            "command": "./scripts/notify.sh \"Claude finished\" \"$NTFY_PROJECT_TITLE\" \"default\" \"white_check_mark,claude\" 2>/dev/null || true"
           }
         ]
       }
@@ -15,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "MSG=$(python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('message','Claude notification'))\" 2>/dev/null || echo 'Claude notification'); ./scripts/notify.sh \"$MSG\" \"rankAnything\" \"high\" \"bell,claude\" 2>/dev/null || true"
+            "command": "bash scripts/notify-approval.sh"
           }
         ]
       }

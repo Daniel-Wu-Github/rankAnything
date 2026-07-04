@@ -1,0 +1,1 @@
+../../ai-workflow/scripts/notify-approval.sh

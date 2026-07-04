@@ -1,0 +1,1 @@
+../../ai-workflow/scripts/post-edit-check.sh
