@@ -1,17 +1,23 @@
-# Claude Code Instructions — Fantasy Football Big Board
+# Claude Code Instructions — Rank Anything
 
 These instructions are always-on for Claude Code agents working in this repository.
 
 ## Project Summary
 
-This is a **no-sign-up, single-file fantasy football big board** (`big-board.html`). The entire application ships as one HTML file with embedded CSS and JS. There is no build pipeline, no backend, and no framework. The frontend is the product.
+This repository is **Rank Anything** — a no-sign-up, zero-backend ranking site — plus its origin product, the **fantasy football big board**.
+
+- `big-board.html` — the original single-file football board. **FROZEN**: bug fixes only, no new features, single-file constraint still absolute. It ships verbatim at `/football/`.
+- `site/` — the generic app: schema-driven templates, board/tier/pairwise views, share-by-URL, embeds. Native ES modules, **zero runtime dependencies, no bundler**; `site/build.mjs` (zero-dep node) prerenders `site/dist`.
+- `e2e/` — the 23-test Playwright gate (see `e2e/README.md`). It must be green before any change to `big-board.html` or `site/` merges.
+- `docs/RANK_ANYTHING_ROADMAP.md` — the approved roadmap (P0 → Step 1 shipped; Step 2 social is traction-gated).
 
 ## Core Mission
 
-- Preserve the single-file, no-build-step constraint at all times.
+- Keep the product zero-backend and sign-up-free through Step 1. The board must always work from a static host and a URL.
+- `big-board.html` stays a single file with no build step. The generic app stays a single *static bundle*: build step allowed, bundler and runtime dependencies are not.
 - Keep the UI professional, distinctive, and non-generic.
-- No sign-up, no backend calls, no localStorage keys that break cross-device portability.
-- Prefer correctness, clarity, and verifiability over convenience.
+- No backend calls; localStorage keys must not break cross-device portability (share-URLs are the portability mechanism).
+- Prefer correctness, clarity, and verifiability over convenience. The e2e gate is the definition of "works".
 
 ## Workflow Principles
 
@@ -26,7 +32,10 @@ This is a **no-sign-up, single-file fantasy football big board** (`big-board.htm
 
 | File | Rule |
 |------|------|
-| `big-board.html` | Single deployable file — no external JS/CSS files may be introduced |
+| `big-board.html` | FROZEN single file — bug fixes only; no external JS/CSS beyond the existing CDN libs |
+| `site/src/**` | Native ES modules only; no npm runtime dependencies, no bundler |
+| `site/templates/*.json` | Curated only — every template must be a genuinely good list, not filler |
+| `e2e/**` | Suite must stay green; new features land with their specs |
 | `.github/skills/SKILL_MAP.md` | Must be updated whenever a skill is added, removed, or renamed |
 | `logging/progress_log.md` | Must be updated for any material change |
 
@@ -58,8 +67,10 @@ This is a **no-sign-up, single-file fantasy football big board** (`big-board.htm
 
 ## What Not to Do
 
-- Do not add a build step, package.json, bundler, or framework.
-- Do not add a login, registration, or server-side call.
-- Do not add external CSS or JS file references beyond the existing CDN libs (SortableJS, PapaParse).
+- Do not add features to `big-board.html` — it is frozen; new capability belongs in `site/`.
+- Do not add a bundler, framework, or npm runtime dependency to `site/` (dev-only tooling in `e2e/` is fine).
+- Do not add a login, registration, or server-side call — Step 2 (social) is gated on the roadmap's traction evidence and is a deliberate architecture change, not a drive-by.
+- Do not add external CSS/JS references beyond the existing CDN libs in `big-board.html` (SortableJS, PapaParse) and Google Fonts.
+- Do not merge with the e2e gate red, and do not delete failing specs to get green.
 - Do not skip `SKILL_MAP.md` on skill changes.
 - Do not leave `progress_log.md` empty after a material change.

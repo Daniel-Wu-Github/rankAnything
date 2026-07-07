@@ -2,6 +2,25 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 006 - 2026-07-07 - Roadmap executed: P0 hardening + Step 1 generalization (Rank Anything)
+
+- Task: Execute docs/RANK_ANYTHING_ROADMAP.md end-to-end ("go ahead with the plan, do not stop"): P0 pass on big-board.html, Step 1 generalization to a template-driven ranking site, and the automated verification gate. Step 2 (social) is traction-gated per the roadmap and intentionally not built.
+- What the agent did:
+  - P0 on big-board.html: share-by-URL (whole board gzip-compressed into the fragment, #b=/#r=), hand-drawn canvas PNG export, keyboard-accessible reordering (Space/arrows/Escape + aria-live, single undo entry per lift-drop), track() analytics stub, data-app-ready test signal. big-board.html is now FROZEN.
+  - Step 1 in site/: schema-driven engine (filters/columns/CSV derive from template schema), board + tier-lane views over one state, deterministic pairwise this-or-that mode (binary insertion, unit-verified), share codec v2 (schema carried inline), zero-dep CSV module, 12 curated templates (314 items), zero-dep build.mjs prerendering 26 indexed pages (/t/, /sort/, /b/, /embed/, /football/ = frozen original, sitemap, robots).
+  - e2e/: 23-test Playwright + axe gate (engine, pairwise truthful-oracle correctness, home paste-flow, frozen board P0 features, 0 critical/serious axe violations on all generic surfaces). Gate caught and fixed a real defect: primary buttons were white-on-cyan at ~2.8:1 contrast.
+  - Docs: CLAUDE.md and README.md rewritten for the two-product reality (frozen single-file board + static-bundle generic app); constraint evolved from "no build step ever" to "big-board.html single-file frozen; site/ = static bundle, no bundler, no runtime deps" per the approved roadmap.
+- Files edited:
+  - big-board.html; site/** (new); e2e/** (new); CLAUDE.md; README.md; docs/RANK_ANYTHING_ROADMAP.md (pre-existing); logging/progress_log.md
+- Verification:
+  - node --check on every module; pairwise core unit-tested via node (5/20-item truthful-oracle runs sort correctly at <= n*log n comparisons).
+  - Full gate: 23/23 Playwright tests green including axe (command: cd e2e && npm test).
+- Task alignment:
+  - Fulfillment: P0-1/2/3/4 and all of Step 1 (engine, three modes, templates, share/embed, SEO surfaces, gates) shipped and verified.
+  - Deviation 1: P0-5 "ship it" — no AWS CLI/credentials on this machine, so the S3/CloudFront deploy remains manual (PUBLISHING.md); analytics is a placeholder pending a tracker choice.
+  - Deviation 2: Roadmap's "football through the generic engine at pixel parity" acceptance was replaced by the stronger guarantee actually shipped: the original big-board.html serves verbatim (frozen) at /football/, so parity is exact by construction; the full 425-player list stays there rather than duplicated as a 13th engine template.
+  - Deviation 3: Shared governance skills (scope-creep-guard etc.) are broken symlinks on this machine (ai-workflow repo not cloned); proceeded on frontend-design + ui-ux-pro-max (real dirs) and the documented constraints.
+
 ## Entry 005 - 2026-05-10 - Hard-code FantasyPros rankings as default data
 
 - Task: Replace placeholder player data with 425 FantasyPros 2026 draft rankings hard-coded into the HTML as DEFAULT_PLAYERS. Preserve all existing columns, features, and UI.

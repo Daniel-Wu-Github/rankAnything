@@ -1,59 +1,57 @@
-# Fantasy Football Big Board
+# Rank Anything
 
-A no-sign-up, production-grade fantasy football big board — single HTML file, fully client-side, zero backend.
+Rank anything in seconds: paste a list or pick a template, then **drag it, tier it, or let this-or-that decide** — and share the whole board as a link or an image. No sign-up, no backend; every board lives in the browser and in any URL you share.
 
-## What It Is
+Born as a fantasy football big board (still served, frozen, at `/football/`), now a general ranking site.
 
-A professional drag-and-drop player ranking tool for fantasy football. Users can build, sort, tier, annotate, and export their personal big board without accounts, logins, or servers.
+## The two products in this repo
 
-## Features
+| | What | Where |
+|---|---|---|
+| **Rank Anything** | Schema-driven ranking engine: board table, tier lanes, and pairwise this-or-that — three views over one state. 12 curated templates + paste-your-own-list. Share-by-URL (the entire board is in the fragment), PNG export, CSV round-trip, iframe embeds. | `site/` → built to `site/dist` |
+| **Big Board** | The original single-file fantasy football board. Feature-frozen; ships verbatim at `/football/`. | `big-board.html` |
 
-- **Drag-and-drop reordering** with touch support
-- **Tier breaks** — insert and label custom tiers between players
-- **Position and team filters** with multi-select
-- **Age and bye-week range filters**
-- **Full-text player search**
-- **Star / flag** high-priority players
-- **Per-player notes** via modal
-- **CSV import and export** (round-trips cleanly)
-- **Undo / redo** with keyboard shortcuts (`Ctrl+Z`, `Ctrl+Y`)
-- **Dirty indicator** — glows when there are unsaved changes
-- **Ad column slots** — left/right sidebar and sticky banner placeholders
-- **No sign-up, no backend, no cookies** — runs entirely in the browser
+## Features (generic app)
+
+- **Three ranking modes over one state** — drag-and-drop board, tier-lane grid, and pairwise "this or that" (binary-insertion, ~n·log n choices), switchable without data loss
+- **Paste-a-list → instant board** — numbers/bullets stripped, under 10 seconds to first ranking
+- **Share the whole board as a URL** — gzip-compressed state in the fragment; no server ever sees it
+- **PNG image export** and **CSV import/export** (RFC-4180, formula-injection guarded)
+- **Embeds** — read-only iframe widget with a "rank this yourself" CTA
+- **Keyboard-first accessibility** — Space lifts, arrows move, Space drops, Escape cancels; aria-live announcements; axe gate of 0 critical/serious violations in CI
+- **Zero runtime dependencies, no bundler** — native ES modules + a zero-dep node build
+
+## Getting Started
+
+```bash
+node site/build.mjs               # prerenders site/dist (26 indexed pages)
+node e2e/server.mjs               # serves site/dist on http://127.0.0.1:4300
+cd e2e && npm install && npm test # 23-test Playwright + axe gate
+```
+
+`big-board.html` still opens directly in any browser, no build step.
+
+To publish: deploy `site/dist/` to any static host (set `SITE_ORIGIN=https://yourdomain.com` when building for correct canonicals/sitemap), replace the `<!-- ANALYTICS PLACEHOLDER -->` comments with your analytics snippet, and the ad slots in `big-board.html` with your ad tags. See `PUBLISHING.md` for the S3/CloudFront walkthrough.
 
 ## Project Structure
 
 ```
-rankAnything/
-├── big-board.html              # The entire application — single deployable file
-├── .github/
-│   ├── copilot-instructions.md # Always-on guidance for GitHub Copilot / VS Code
-│   ├── CLAUDE.md               # Always-on guidance for Claude Code
-│   ├── prompts/                # Slash-command prompt templates
-│   └── skills/                 # Reusable agent skill library
-│       ├── SKILL_MAP.md        # Central skill registry (read first)
-│       ├── frontend-design/    # Production-grade frontend design skill
-│       ├── ui-ux-pro-max/      # UI/UX design intelligence (50+ styles, palettes)
-│       └── ...                 # Governance, logging, and workflow skills
-├── docs/
-│   └── NONSPECIFIC_SKILLS.md   # Portable workflow handbook
-└── logging/
-    ├── progress_log.md         # Material change record
-    └── commit_log.md           # Commit history log
+rank-anything/
+├── big-board.html         # FROZEN original football board (served at /football/)
+├── site/
+│   ├── src/js/            # engine, views (board/tiers), pairwise, share, csv, image
+│   ├── src/pages/         # shells: home, board, sort, embed
+│   ├── templates/*.json   # 12 curated templates (schema + items)
+│   └── build.mjs          # zero-dep static build → site/dist
+├── e2e/                   # Playwright gate (23 tests, see e2e/README.md)
+├── docs/RANK_ANYTHING_ROADMAP.md  # approved roadmap (Step 2 social is traction-gated)
+├── .github/skills/        # agent skill library (SKILL_MAP.md first)
+└── logging/               # progress + commit logs
 ```
 
-## Getting Started
+## CSV Format (football board)
 
-Open `big-board.html` in any modern browser — no build step, no server, no install.
-
-To publish:
-1. Edit `DEFAULT_PLAYERS` in the `<script>` block to seed your player list.
-2. Replace the `<!-- INSERT AD TAG HERE -->` comments with your ad network tags.
-3. Deploy the single HTML file to any static host (GitHub Pages, Netlify, S3, etc.).
-
-## CSV Format
-
-Import/export uses these column headers (case-insensitive):
+The generic app derives its CSV columns from each template's schema (`rank, name, <schema keys…>, starred, note, tiersabove`). The frozen football board uses these column headers (case-insensitive):
 
 | Column | Required | Notes |
 |--------|----------|-------|
@@ -77,8 +75,8 @@ Key skills for frontend work:
 
 ## Design Principles
 
-- **No sign-up** — zero friction, maximum reach
-- **Single file** — deploy anywhere, no build pipeline
+- **No sign-up** — zero friction, maximum reach; the URL is the account
+- **Static bundle** — deploy anywhere; no backend, no runtime dependencies (`big-board.html` remains a true single file)
 - **Dark-first** — deep navy theme built for long sessions
-- **Ad-ready** — sticky sidebar and banner slots baked in
-- **Accessible** — keyboard navigation, focus management, ARIA labels, reduced-motion support
+- **Ad-ready** — analytics placeholder on every page; sidebar/banner ad slots in the football board
+- **Accessible** — full keyboard ranking, aria-live announcements, focus management, reduced-motion support, axe-gated in CI
