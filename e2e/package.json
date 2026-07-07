@@ -1,0 +1,14 @@
+{
+	"name": "rank-anything-e2e",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"pretest": "node ../site/build.mjs",
+		"test": "xvfb-run -a playwright test",
+		"test:headed": "playwright test"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "^4.10.2",
+		"@playwright/test": "^1.58.2"
+	}
+}
