@@ -1,0 +1,116 @@
+{
+ "slug": "programming-languages",
+ "title": "Programming Languages",
+ "description": "Rank them by love, hate, or sheer job-market gravity.",
+ "schema": [
+  {
+   "key": "year",
+   "label": "Since",
+   "type": "number",
+   "filter": true
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Python",
+   "year": 1991
+  },
+  {
+   "name": "JavaScript",
+   "year": 1995
+  },
+  {
+   "name": "TypeScript",
+   "year": 2012
+  },
+  {
+   "name": "Rust",
+   "year": 2010
+  },
+  {
+   "name": "Go",
+   "year": 2009
+  },
+  {
+   "name": "C",
+   "year": 1972
+  },
+  {
+   "name": "C++",
+   "year": 1985
+  },
+  {
+   "name": "C#",
+   "year": 2000
+  },
+  {
+   "name": "Java",
+   "year": 1995
+  },
+  {
+   "name": "Kotlin",
+   "year": 2011
+  },
+  {
+   "name": "Swift",
+   "year": 2014
+  },
+  {
+   "name": "Ruby",
+   "year": 1995
+  },
+  {
+   "name": "PHP",
+   "year": 1995
+  },
+  {
+   "name": "SQL",
+   "year": 1974
+  },
+  {
+   "name": "Haskell",
+   "year": 1990
+  },
+  {
+   "name": "Elixir",
+   "year": 2011
+  },
+  {
+   "name": "Zig",
+   "year": 2016
+  },
+  {
+   "name": "Scala",
+   "year": 2004
+  },
+  {
+   "name": "R",
+   "year": 1993
+  },
+  {
+   "name": "Julia",
+   "year": 2012
+  },
+  {
+   "name": "Lua",
+   "year": 1993
+  },
+  {
+   "name": "Perl",
+   "year": 1987
+  },
+  {
+   "name": "Objective-C",
+   "year": 1984
+  },
+  {
+   "name": "Dart",
+   "year": 2011
+  },
+  {
+   "name": "Assembly",
+   "year": 1949
+  }
+ ]
+}

@@ -1,0 +1,121 @@
+{
+ "slug": "nba-goats",
+ "title": "NBA GOATs",
+ "description": "The greatest to ever do it. Settle the barbershop argument.",
+ "schema": [
+  {
+   "key": "pos",
+   "label": "Pos",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Guard",
+    "Forward",
+    "Center"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Michael Jordan",
+   "pos": "Guard"
+  },
+  {
+   "name": "LeBron James",
+   "pos": "Forward"
+  },
+  {
+   "name": "Kareem Abdul-Jabbar",
+   "pos": "Center"
+  },
+  {
+   "name": "Magic Johnson",
+   "pos": "Guard"
+  },
+  {
+   "name": "Bill Russell",
+   "pos": "Center"
+  },
+  {
+   "name": "Wilt Chamberlain",
+   "pos": "Center"
+  },
+  {
+   "name": "Larry Bird",
+   "pos": "Forward"
+  },
+  {
+   "name": "Tim Duncan",
+   "pos": "Forward"
+  },
+  {
+   "name": "Kobe Bryant",
+   "pos": "Guard"
+  },
+  {
+   "name": "Shaquille O'Neal",
+   "pos": "Center"
+  },
+  {
+   "name": "Hakeem Olajuwon",
+   "pos": "Center"
+  },
+  {
+   "name": "Stephen Curry",
+   "pos": "Guard"
+  },
+  {
+   "name": "Kevin Durant",
+   "pos": "Forward"
+  },
+  {
+   "name": "Giannis Antetokounmpo",
+   "pos": "Forward"
+  },
+  {
+   "name": "Nikola Jokic",
+   "pos": "Center"
+  },
+  {
+   "name": "Oscar Robertson",
+   "pos": "Guard"
+  },
+  {
+   "name": "Jerry West",
+   "pos": "Guard"
+  },
+  {
+   "name": "Moses Malone",
+   "pos": "Center"
+  },
+  {
+   "name": "Dirk Nowitzki",
+   "pos": "Forward"
+  },
+  {
+   "name": "Kevin Garnett",
+   "pos": "Forward"
+  },
+  {
+   "name": "Charles Barkley",
+   "pos": "Forward"
+  },
+  {
+   "name": "Karl Malone",
+   "pos": "Forward"
+  },
+  {
+   "name": "David Robinson",
+   "pos": "Center"
+  },
+  {
+   "name": "Dwyane Wade",
+   "pos": "Guard"
+  },
+  {
+   "name": "Allen Iverson",
+   "pos": "Guard"
+  }
+ ]
+}

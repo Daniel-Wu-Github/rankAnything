@@ -1,0 +1,145 @@
+{
+ "slug": "pokemon-gen1",
+ "title": "Gen 1 Pok\u00e9mon",
+ "description": "The original 151 distilled to the icons. Rank your childhood.",
+ "schema": [
+  {
+   "key": "type",
+   "label": "Type",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Fire",
+    "Water",
+    "Grass",
+    "Electric",
+    "Psychic",
+    "Normal",
+    "Other"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Charizard",
+   "type": "Fire"
+  },
+  {
+   "name": "Blastoise",
+   "type": "Water"
+  },
+  {
+   "name": "Venusaur",
+   "type": "Grass"
+  },
+  {
+   "name": "Pikachu",
+   "type": "Electric"
+  },
+  {
+   "name": "Mewtwo",
+   "type": "Psychic"
+  },
+  {
+   "name": "Mew",
+   "type": "Psychic"
+  },
+  {
+   "name": "Gengar",
+   "type": "Other"
+  },
+  {
+   "name": "Dragonite",
+   "type": "Other"
+  },
+  {
+   "name": "Gyarados",
+   "type": "Water"
+  },
+  {
+   "name": "Eevee",
+   "type": "Normal"
+  },
+  {
+   "name": "Snorlax",
+   "type": "Normal"
+  },
+  {
+   "name": "Alakazam",
+   "type": "Psychic"
+  },
+  {
+   "name": "Machamp",
+   "type": "Other"
+  },
+  {
+   "name": "Arcanine",
+   "type": "Fire"
+  },
+  {
+   "name": "Lapras",
+   "type": "Water"
+  },
+  {
+   "name": "Vaporeon",
+   "type": "Water"
+  },
+  {
+   "name": "Jolteon",
+   "type": "Electric"
+  },
+  {
+   "name": "Flareon",
+   "type": "Fire"
+  },
+  {
+   "name": "Articuno",
+   "type": "Other"
+  },
+  {
+   "name": "Zapdos",
+   "type": "Electric"
+  },
+  {
+   "name": "Moltres",
+   "type": "Fire"
+  },
+  {
+   "name": "Ninetales",
+   "type": "Fire"
+  },
+  {
+   "name": "Raichu",
+   "type": "Electric"
+  },
+  {
+   "name": "Golem",
+   "type": "Other"
+  },
+  {
+   "name": "Onix",
+   "type": "Other"
+  },
+  {
+   "name": "Hitmonlee",
+   "type": "Other"
+  },
+  {
+   "name": "Scyther",
+   "type": "Other"
+  },
+  {
+   "name": "Magikarp",
+   "type": "Water"
+  },
+  {
+   "name": "Psyduck",
+   "type": "Water"
+  },
+  {
+   "name": "Jigglypuff",
+   "type": "Normal"
+  }
+ ]
+}

@@ -1,0 +1,117 @@
+{
+ "slug": "sitcoms",
+ "title": "Sitcoms",
+ "description": "Laugh tracks optional. Rank the funniest shows ever made.",
+ "schema": [
+  {
+   "key": "decade",
+   "label": "Decade",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "'90s",
+    "2000s",
+    "2010s"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Seinfeld",
+   "decade": "'90s"
+  },
+  {
+   "name": "Friends",
+   "decade": "'90s"
+  },
+  {
+   "name": "Frasier",
+   "decade": "'90s"
+  },
+  {
+   "name": "Fresh Prince of Bel-Air",
+   "decade": "'90s"
+  },
+  {
+   "name": "The Simpsons",
+   "decade": "'90s"
+  },
+  {
+   "name": "Everybody Loves Raymond",
+   "decade": "'90s"
+  },
+  {
+   "name": "The Office (US)",
+   "decade": "2000s"
+  },
+  {
+   "name": "Arrested Development",
+   "decade": "2000s"
+  },
+  {
+   "name": "30 Rock",
+   "decade": "2000s"
+  },
+  {
+   "name": "How I Met Your Mother",
+   "decade": "2000s"
+  },
+  {
+   "name": "It's Always Sunny in Philadelphia",
+   "decade": "2000s"
+  },
+  {
+   "name": "Curb Your Enthusiasm",
+   "decade": "2000s"
+  },
+  {
+   "name": "Scrubs",
+   "decade": "2000s"
+  },
+  {
+   "name": "Malcolm in the Middle",
+   "decade": "2000s"
+  },
+  {
+   "name": "Parks and Recreation",
+   "decade": "2010s"
+  },
+  {
+   "name": "Community",
+   "decade": "2010s"
+  },
+  {
+   "name": "Brooklyn Nine-Nine",
+   "decade": "2010s"
+  },
+  {
+   "name": "Modern Family",
+   "decade": "2010s"
+  },
+  {
+   "name": "The Good Place",
+   "decade": "2010s"
+  },
+  {
+   "name": "Veep",
+   "decade": "2010s"
+  },
+  {
+   "name": "Schitt's Creek",
+   "decade": "2010s"
+  },
+  {
+   "name": "What We Do in the Shadows",
+   "decade": "2010s"
+  },
+  {
+   "name": "Ted Lasso",
+   "decade": "2010s"
+  },
+  {
+   "name": "Abbott Elementary",
+   "decade": "2010s"
+  }
+ ]
+}

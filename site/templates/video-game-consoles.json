@@ -1,0 +1,111 @@
+{
+ "slug": "video-game-consoles",
+ "title": "Video Game Consoles",
+ "description": "Cartridges, discs, and everything between \u2014 rank the machines.",
+ "schema": [
+  {
+   "key": "maker",
+   "label": "Maker",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Nintendo",
+    "Sony",
+    "Microsoft",
+    "Sega",
+    "Other"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Super Nintendo",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "Nintendo 64",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "GameCube",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "Wii",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "Nintendo Switch",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "Game Boy",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "Nintendo DS",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "NES",
+   "maker": "Nintendo"
+  },
+  {
+   "name": "PlayStation",
+   "maker": "Sony"
+  },
+  {
+   "name": "PlayStation 2",
+   "maker": "Sony"
+  },
+  {
+   "name": "PlayStation 3",
+   "maker": "Sony"
+  },
+  {
+   "name": "PlayStation 4",
+   "maker": "Sony"
+  },
+  {
+   "name": "PlayStation 5",
+   "maker": "Sony"
+  },
+  {
+   "name": "PSP",
+   "maker": "Sony"
+  },
+  {
+   "name": "Xbox",
+   "maker": "Microsoft"
+  },
+  {
+   "name": "Xbox 360",
+   "maker": "Microsoft"
+  },
+  {
+   "name": "Xbox One",
+   "maker": "Microsoft"
+  },
+  {
+   "name": "Xbox Series X",
+   "maker": "Microsoft"
+  },
+  {
+   "name": "Sega Genesis",
+   "maker": "Sega"
+  },
+  {
+   "name": "Dreamcast",
+   "maker": "Sega"
+  },
+  {
+   "name": "Atari 2600",
+   "maker": "Other"
+  },
+  {
+   "name": "Steam Deck",
+   "maker": "Other"
+  }
+ ]
+}

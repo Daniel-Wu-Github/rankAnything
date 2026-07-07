@@ -1,0 +1,136 @@
+{
+ "slug": "movies-2010s",
+ "title": "Best Films of the 2010s",
+ "description": "The defining films of the decade \u2014 rank the 2010s canon your way.",
+ "schema": [
+  {
+   "key": "year",
+   "label": "Year",
+   "type": "number",
+   "filter": true
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Mad Max: Fury Road",
+   "year": 2015
+  },
+  {
+   "name": "Parasite",
+   "year": 2019
+  },
+  {
+   "name": "The Social Network",
+   "year": 2010
+  },
+  {
+   "name": "Get Out",
+   "year": 2017
+  },
+  {
+   "name": "Moonlight",
+   "year": 2016
+  },
+  {
+   "name": "La La Land",
+   "year": 2016
+  },
+  {
+   "name": "Whiplash",
+   "year": 2014
+  },
+  {
+   "name": "Her",
+   "year": 2013
+  },
+  {
+   "name": "Interstellar",
+   "year": 2014
+  },
+  {
+   "name": "Inception",
+   "year": 2010
+  },
+  {
+   "name": "The Grand Budapest Hotel",
+   "year": 2014
+  },
+  {
+   "name": "Arrival",
+   "year": 2016
+  },
+  {
+   "name": "12 Years a Slave",
+   "year": 2013
+  },
+  {
+   "name": "Gone Girl",
+   "year": 2014
+  },
+  {
+   "name": "The Wolf of Wall Street",
+   "year": 2013
+  },
+  {
+   "name": "Spider-Man: Into the Spider-Verse",
+   "year": 2018
+  },
+  {
+   "name": "Blade Runner 2049",
+   "year": 2017
+  },
+  {
+   "name": "Lady Bird",
+   "year": 2017
+  },
+  {
+   "name": "Call Me by Your Name",
+   "year": 2017
+  },
+  {
+   "name": "Roma",
+   "year": 2018
+  },
+  {
+   "name": "A Quiet Place",
+   "year": 2018
+  },
+  {
+   "name": "Django Unchained",
+   "year": 2012
+  },
+  {
+   "name": "The Master",
+   "year": 2012
+  },
+  {
+   "name": "Birdman",
+   "year": 2014
+  },
+  {
+   "name": "Ex Machina",
+   "year": 2014
+  },
+  {
+   "name": "Hereditary",
+   "year": 2018
+  },
+  {
+   "name": "Drive",
+   "year": 2011
+  },
+  {
+   "name": "The Revenant",
+   "year": 2015
+  },
+  {
+   "name": "Once Upon a Time in Hollywood",
+   "year": 2019
+  },
+  {
+   "name": "Knives Out",
+   "year": 2019
+  }
+ ]
+}

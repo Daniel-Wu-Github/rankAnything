@@ -1,0 +1,122 @@
+{
+ "slug": "nfl-qbs-alltime",
+ "title": "Greatest NFL QBs",
+ "description": "From Otto to Mahomes \u2014 rank the all-time signal callers.",
+ "schema": [
+  {
+   "key": "era",
+   "label": "Era",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Pre-merger",
+    "'70s-'80s",
+    "'90s-'00s",
+    "Modern"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Tom Brady",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Peyton Manning",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Joe Montana",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Patrick Mahomes",
+   "era": "Modern"
+  },
+  {
+   "name": "Johnny Unitas",
+   "era": "Pre-merger"
+  },
+  {
+   "name": "Dan Marino",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "John Elway",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Brett Favre",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Aaron Rodgers",
+   "era": "Modern"
+  },
+  {
+   "name": "Drew Brees",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Steve Young",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Otto Graham",
+   "era": "Pre-merger"
+  },
+  {
+   "name": "Roger Staubach",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Terry Bradshaw",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Troy Aikman",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Ben Roethlisberger",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Russell Wilson",
+   "era": "Modern"
+  },
+  {
+   "name": "Eli Manning",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Kurt Warner",
+   "era": "'90s-'00s"
+  },
+  {
+   "name": "Fran Tarkenton",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Bart Starr",
+   "era": "Pre-merger"
+  },
+  {
+   "name": "Warren Moon",
+   "era": "'70s-'80s"
+  },
+  {
+   "name": "Josh Allen",
+   "era": "Modern"
+  },
+  {
+   "name": "Lamar Jackson",
+   "era": "Modern"
+  },
+  {
+   "name": "Joe Burrow",
+   "era": "Modern"
+  }
+ ]
+}

@@ -1,0 +1,118 @@
+{
+ "slug": "cereal",
+ "title": "Breakfast Cereals",
+ "description": "The most important ranking of the day.",
+ "schema": [
+  {
+   "key": "vibe",
+   "label": "Vibe",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Chocolate",
+    "Fruity",
+    "Sweet",
+    "Grown-up"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Cinnamon Toast Crunch",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Frosted Flakes",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Lucky Charms",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Cocoa Puffs",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Count Chocula",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Cocoa Pebbles",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Chocolate Frosted Mini Wheats",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Fruity Pebbles",
+   "vibe": "Fruity"
+  },
+  {
+   "name": "Froot Loops",
+   "vibe": "Fruity"
+  },
+  {
+   "name": "Trix",
+   "vibe": "Fruity"
+  },
+  {
+   "name": "Apple Jacks",
+   "vibe": "Fruity"
+  },
+  {
+   "name": "Cap'n Crunch Crunch Berries",
+   "vibe": "Fruity"
+  },
+  {
+   "name": "Honey Nut Cheerios",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Frosted Mini Wheats",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Golden Grahams",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Honeycomb",
+   "vibe": "Sweet"
+  },
+  {
+   "name": "Reese's Puffs",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Krave",
+   "vibe": "Chocolate"
+  },
+  {
+   "name": "Cheerios",
+   "vibe": "Grown-up"
+  },
+  {
+   "name": "Raisin Bran",
+   "vibe": "Grown-up"
+  },
+  {
+   "name": "Special K",
+   "vibe": "Grown-up"
+  },
+  {
+   "name": "Grape-Nuts",
+   "vibe": "Grown-up"
+  },
+  {
+   "name": "Shredded Wheat",
+   "vibe": "Grown-up"
+  },
+  {
+   "name": "Life",
+   "vibe": "Grown-up"
+  }
+ ]
+}

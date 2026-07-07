@@ -1,0 +1,126 @@
+{
+ "slug": "kpop-groups",
+ "title": "K-pop Groups",
+ "description": "From 2nd gen legends to 5th gen rookies \u2014 rank the roster.",
+ "schema": [
+  {
+   "key": "gen",
+   "label": "Gen",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "2nd gen",
+    "3rd gen",
+    "4th gen",
+    "5th gen"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "BTS",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "BLACKPINK",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "TWICE",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "EXO",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "Red Velvet",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "SEVENTEEN",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "NCT 127",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "MAMAMOO",
+   "gen": "3rd gen"
+  },
+  {
+   "name": "Stray Kids",
+   "gen": "4th gen"
+  },
+  {
+   "name": "NewJeans",
+   "gen": "4th gen"
+  },
+  {
+   "name": "IVE",
+   "gen": "4th gen"
+  },
+  {
+   "name": "aespa",
+   "gen": "4th gen"
+  },
+  {
+   "name": "LE SSERAFIM",
+   "gen": "4th gen"
+  },
+  {
+   "name": "ITZY",
+   "gen": "4th gen"
+  },
+  {
+   "name": "ATEEZ",
+   "gen": "4th gen"
+  },
+  {
+   "name": "TXT",
+   "gen": "4th gen"
+  },
+  {
+   "name": "ENHYPEN",
+   "gen": "4th gen"
+  },
+  {
+   "name": "(G)I-DLE",
+   "gen": "4th gen"
+  },
+  {
+   "name": "ILLIT",
+   "gen": "5th gen"
+  },
+  {
+   "name": "BABYMONSTER",
+   "gen": "5th gen"
+  },
+  {
+   "name": "RIIZE",
+   "gen": "5th gen"
+  },
+  {
+   "name": "BIGBANG",
+   "gen": "2nd gen"
+  },
+  {
+   "name": "Girls' Generation",
+   "gen": "2nd gen"
+  },
+  {
+   "name": "SHINee",
+   "gen": "2nd gen"
+  },
+  {
+   "name": "2NE1",
+   "gen": "2nd gen"
+  },
+  {
+   "name": "Super Junior",
+   "gen": "2nd gen"
+  }
+ ]
+}

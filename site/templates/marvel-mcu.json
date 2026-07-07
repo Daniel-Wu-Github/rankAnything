@@ -1,0 +1,136 @@
+{
+ "slug": "marvel-mcu",
+ "title": "MCU Movies",
+ "description": "Infinity Saga to Multiverse \u2014 rank the whole MCU.",
+ "schema": [
+  {
+   "key": "year",
+   "label": "Year",
+   "type": "number",
+   "filter": true
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "Iron Man",
+   "year": 2008
+  },
+  {
+   "name": "The Avengers",
+   "year": 2012
+  },
+  {
+   "name": "Captain America: The Winter Soldier",
+   "year": 2014
+  },
+  {
+   "name": "Guardians of the Galaxy",
+   "year": 2014
+  },
+  {
+   "name": "Avengers: Infinity War",
+   "year": 2018
+  },
+  {
+   "name": "Avengers: Endgame",
+   "year": 2019
+  },
+  {
+   "name": "Black Panther",
+   "year": 2018
+  },
+  {
+   "name": "Thor: Ragnarok",
+   "year": 2017
+  },
+  {
+   "name": "Spider-Man: Homecoming",
+   "year": 2017
+  },
+  {
+   "name": "Captain America: Civil War",
+   "year": 2016
+  },
+  {
+   "name": "Doctor Strange",
+   "year": 2016
+  },
+  {
+   "name": "Ant-Man",
+   "year": 2015
+  },
+  {
+   "name": "Spider-Man: No Way Home",
+   "year": 2021
+  },
+  {
+   "name": "Shang-Chi",
+   "year": 2021
+  },
+  {
+   "name": "Guardians of the Galaxy Vol. 2",
+   "year": 2017
+  },
+  {
+   "name": "Guardians of the Galaxy Vol. 3",
+   "year": 2023
+  },
+  {
+   "name": "Thor",
+   "year": 2011
+  },
+  {
+   "name": "Captain America: The First Avenger",
+   "year": 2011
+  },
+  {
+   "name": "Iron Man 3",
+   "year": 2013
+  },
+  {
+   "name": "Avengers: Age of Ultron",
+   "year": 2015
+  },
+  {
+   "name": "Captain Marvel",
+   "year": 2019
+  },
+  {
+   "name": "Black Widow",
+   "year": 2021
+  },
+  {
+   "name": "Eternals",
+   "year": 2021
+  },
+  {
+   "name": "Thor: Love and Thunder",
+   "year": 2022
+  },
+  {
+   "name": "Ant-Man and the Wasp",
+   "year": 2018
+  },
+  {
+   "name": "Doctor Strange in the Multiverse of Madness",
+   "year": 2022
+  },
+  {
+   "name": "Spider-Man: Far From Home",
+   "year": 2019
+  },
+  {
+   "name": "The Incredible Hulk",
+   "year": 2008
+  },
+  {
+   "name": "Iron Man 2",
+   "year": 2010
+  },
+  {
+   "name": "Deadpool & Wolverine",
+   "year": 2024
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{TITLE}} — Rank Anything</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{TITLE}} — Rank Anything" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="{{TITLE}} — Rank Anything" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="/assets/css/app.css" />
+    <!-- ANALYTICS PLACEHOLDER: replace with your GA/PostHog snippet -->
+  </head>
+  <body>
+    <div class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="/"><span class="tick">▲</span> Rank Anything</a>
+        <nav><a class="wordmark" href="{{SORT_LINK}}">This-or-that mode →</a></nav>
+      </header>
+
+      <h1 class="board-title" id="board-title">{{TITLE}}</h1>
+      <p class="board-subtitle" id="board-subtitle">{{DESCRIPTION}}</p>
+
+      <div class="banner" id="banner"></div>
+      <div class="sr-only" id="live-region" aria-live="polite" role="status"></div>
+
+      <div class="toolbar">
+        <div class="view-switch" role="group" aria-label="View">
+          <button class="btn" id="view-board-btn" aria-pressed="true">Board</button>
+          <button class="btn" id="view-tiers-btn" aria-pressed="false">Tiers</button>
+        </div>
+        <input class="search-input" id="search-input" type="search" placeholder="Search…" aria-label="Search items" />
+        <span class="spacer"></span>
+        <button class="btn" id="add-btn">+ Add</button>
+        <button class="btn" id="import-btn">Import</button>
+        <button class="btn" id="export-btn">Export CSV</button>
+        <button class="btn primary" id="share-btn" title="Copy a link that contains this whole board">Share</button>
+        <button class="btn" id="image-btn" title="Download as PNG">Image</button>
+        <button class="btn" id="embed-btn" title="Copy an iframe embed snippet">Embed</button>
+        <button class="btn" id="undo-btn">Undo</button>
+        <button class="btn" id="redo-btn">Redo</button>
+        <span class="dirty-indicator" id="dirty-indicator" aria-hidden="true"></span>
+      </div>
+
+      <div class="filter-bar" id="filter-bar" hidden></div>
+
+      <main id="view-root"></main>
+
+      <footer class="site-footer">
+        <span>No sign-up. Your board lives in your browser — and in any link you share.</span>
+        <a href="/">All templates</a>
+      </footer>
+    </div>
+
+    <dialog class="note-dialog" id="note-dialog">
+      <h3 style="margin:0 0 10px;font-size:15px">Note</h3>
+      <textarea id="note-text" aria-label="Item note"></textarea>
+      <div class="dialog-actions">
+        <button class="btn" id="note-cancel">Cancel</button>
+        <button class="btn primary" id="note-save">Save</button>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status"></div>
+    <input id="csv-input" type="file" accept=".csv" hidden />
+
+    <script type="application/json" id="template-data">{{TEMPLATE_JSON}}</script>
+    <script type="module">
+      import { bootBoardApp } from "/assets/js/app.js";
+      bootBoardApp();
+    </script>
+  </body>
+</html>

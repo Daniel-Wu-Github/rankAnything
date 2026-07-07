@@ -1,0 +1,136 @@
+{
+ "slug": "fast-food",
+ "title": "Fast Food Chains",
+ "description": "Every drive-thru argument, settled in one board.",
+ "schema": [
+  {
+   "key": "category",
+   "label": "Category",
+   "type": "enum",
+   "filter": true,
+   "values": [
+    "Burgers",
+    "Chicken",
+    "Mexican",
+    "Pizza",
+    "Sandwiches",
+    "Coffee & Treats"
+   ]
+  }
+ ],
+ "defaultView": "board",
+ "items": [
+  {
+   "name": "McDonald's",
+   "category": "Burgers"
+  },
+  {
+   "name": "In-N-Out",
+   "category": "Burgers"
+  },
+  {
+   "name": "Five Guys",
+   "category": "Burgers"
+  },
+  {
+   "name": "Whataburger",
+   "category": "Burgers"
+  },
+  {
+   "name": "Wendy's",
+   "category": "Burgers"
+  },
+  {
+   "name": "Burger King",
+   "category": "Burgers"
+  },
+  {
+   "name": "Shake Shack",
+   "category": "Burgers"
+  },
+  {
+   "name": "Culver's",
+   "category": "Burgers"
+  },
+  {
+   "name": "Chick-fil-A",
+   "category": "Chicken"
+  },
+  {
+   "name": "Popeyes",
+   "category": "Chicken"
+  },
+  {
+   "name": "KFC",
+   "category": "Chicken"
+  },
+  {
+   "name": "Raising Cane's",
+   "category": "Chicken"
+  },
+  {
+   "name": "Wingstop",
+   "category": "Chicken"
+  },
+  {
+   "name": "Chipotle",
+   "category": "Mexican"
+  },
+  {
+   "name": "Taco Bell",
+   "category": "Mexican"
+  },
+  {
+   "name": "Qdoba",
+   "category": "Mexican"
+  },
+  {
+   "name": "Del Taco",
+   "category": "Mexican"
+  },
+  {
+   "name": "Domino's",
+   "category": "Pizza"
+  },
+  {
+   "name": "Papa John's",
+   "category": "Pizza"
+  },
+  {
+   "name": "Little Caesars",
+   "category": "Pizza"
+  },
+  {
+   "name": "Subway",
+   "category": "Sandwiches"
+  },
+  {
+   "name": "Jersey Mike's",
+   "category": "Sandwiches"
+  },
+  {
+   "name": "Jimmy John's",
+   "category": "Sandwiches"
+  },
+  {
+   "name": "Arby's",
+   "category": "Sandwiches"
+  },
+  {
+   "name": "Panera",
+   "category": "Sandwiches"
+  },
+  {
+   "name": "Dunkin'",
+   "category": "Coffee & Treats"
+  },
+  {
+   "name": "Starbucks",
+   "category": "Coffee & Treats"
+  },
+  {
+   "name": "Dairy Queen",
+   "category": "Coffee & Treats"
+  }
+ ]
+}

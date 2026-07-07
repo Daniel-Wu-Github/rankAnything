@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rank Anything — drag it, tier it, or let this-or-that decide</title>
+    <meta name="description" content="Rank anything in seconds: paste a list or pick a template, then drag, tier, or answer this-or-that questions. Share the whole board as a link or image. No sign-up, no server." />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Rank Anything — rank it, tier it, share it" />
+    <meta property="og:description" content="Paste a list or pick a template. Drag-and-drop rankings, tier boards, and this-or-that sorting — shared as a link, no sign-up." />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="/assets/css/app.css" />
+    <!-- ANALYTICS PLACEHOLDER: replace with your GA/PostHog snippet -->
+  </head>
+  <body>
+    <div class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="/"><span class="tick">▲</span> Rank Anything</a>
+        <nav><a class="wordmark" href="/football/">Fantasy Football Big Board →</a></nav>
+      </header>
+
+      <section class="hero">
+        <h1>Rank anything.</h1>
+        <p>Drag it, tier it, or let this-or-that decide — then share the whole board as a link or an image. No sign-up. No server. Your list never leaves your browser.</p>
+      </section>
+
+      <section class="paste-panel" aria-label="Start from your own list">
+        <label class="section-label" for="paste-input" style="margin-top:0">Paste your list — one item per line</label>
+        <textarea id="paste-input" placeholder="The Godfather&#10;Goodfellas&#10;Heat&#10;Casino&#10;The Departed"></textarea>
+        <div class="paste-actions">
+          <span class="paste-hint">Numbers and bullets are stripped automatically. Ctrl+Enter works too.</span>
+          <button class="btn primary" id="paste-go">Rank it →</button>
+        </div>
+      </section>
+
+      <h2 class="section-label">Or start from a template</h2>
+      <div class="gallery">
+{{GALLERY_CARDS}}
+      </div>
+
+      <footer class="site-footer">
+        <span>Every board is yours: exported as CSV, shared as a link, embedded anywhere.</span>
+        <a href="/football/">Fantasy Football Big Board</a>
+      </footer>
+    </div>
+
+    <script type="module">
+      import { bootHomeApp } from "/assets/js/home-app.js";
+      bootHomeApp();
+    </script>
+  </body>
+</html>
