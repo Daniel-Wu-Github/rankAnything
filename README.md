@@ -31,7 +31,7 @@ cd e2e && npm install && npm test # 23-test Playwright + axe gate
 
 `big-board.html` still opens directly in any browser, no build step.
 
-To publish: deploy `site/dist/` to any static host (set `SITE_ORIGIN=https://yourdomain.com` when building for correct canonicals/sitemap), replace the `<!-- ANALYTICS PLACEHOLDER -->` comments with your analytics snippet, and the ad slots in `big-board.html` with your ad tags. See `PUBLISHING.md` for the S3/CloudFront walkthrough.
+To publish: deploy `site/dist/` to any static host (set `SITE_ORIGIN=https://yourdomain.com` when building for correct canonicals/sitemap), replace the `<!-- ANALYTICS PLACEHOLDER -->` comments with your analytics snippet, and the ad slots in `big-board.html` with your ad tags. See `PUBLISHING.md` for the free Cloudflare Pages walkthrough.
 
 ## Project Structure
 

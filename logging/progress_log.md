@@ -2,6 +2,23 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 007 - 2026-07-24 - Deploy runbook switched to Cloudflare Pages (free hosting)
+
+- Task: User asked whether the deploy runbook was free of charge. It was not — the AWS S3 + CloudFront + Route 53 stack in PUBLISHING.md/deploy.sh/.github/workflows/deploy.yml has a guaranteed recurring cost (Route 53 hosted zone $0.50/month minimum, CloudFront billed outside a new-account 12-month free-tier window). User chose to replace it with Cloudflare Pages, which has no fixed monthly cost.
+- What the agent did: Rewrote PUBLISHING.md as a Cloudflare Pages walkthrough (connect repo, build command `node site/build.mjs`, output dir `site/dist` — which already contains both the generic app and the frozen big board at `/football/`, since build.mjs copies big-board.html verbatim). Removed the AWS-specific deploy.sh and .github/workflows/deploy.yml, since Cloudflare Pages deploys on every push natively with no separate script or Actions workflow needed. Updated the one-line README pointer to PUBLISHING.md.
+- Files edited:
+  - PUBLISHING.md (rewritten)
+  - deploy.sh (removed)
+  - .github/workflows/deploy.yml (removed)
+  - README.md (one-line update)
+  - logging/progress_log.md
+- Verification:
+  - Confirmed via grep that site/build.mjs already copies big-board.html into site/dist/football/index.html, so a single Cloudflare Pages build/output config serves both products — no additional build step needed.
+  - No code paths (site/src, e2e, big-board.html content) were touched; e2e gate unaffected.
+- Task alignment:
+  - Fulfillment: Runbook now reflects a genuinely $0 hosting path; cost comparison table included in PUBLISHING.md for transparency.
+  - Deviation: None — user explicitly selected Cloudflare Pages and approved removing the AWS-specific files as part of the same change.
+
 ## Entry 006 - 2026-07-07 - Roadmap executed: P0 hardening + Step 1 generalization (Rank Anything)
 
 - Task: Execute docs/RANK_ANYTHING_ROADMAP.md end-to-end ("go ahead with the plan, do not stop"): P0 pass on big-board.html, Step 1 generalization to a template-driven ranking site, and the automated verification gate. Step 2 (social) is traction-gated per the roadmap and intentionally not built.
