@@ -18,6 +18,22 @@ Use this file to record material workflow-impacting changes.
   - Fulfillment: Root cause identified and fixed per user's explicit request; verified with before/after screenshots and the project's e2e gate.
   - Deviation: None.
 
+## Entry 009 - 2026-07-24 - e2e: fix racy share-URL clipboard assertion
+
+- Task: The e2e gate showed 22/23 passing with `engine.spec.ts`'s "share URL round-trip" test failing (`expect(url).toContain("#b=")`, received `""`). Investigated whether this was caused by the big-board.html grid fix (Entry 008) or pre-existing.
+- Root cause: test bug, not a product bug. `#share-btn`'s click handler in `site/src/js/app.js` is `async` (`await encodeToHash(state)` uses `CompressionStream`, then `await navigator.clipboard.writeText(url)`, then shows a toast). `page.click()` resolves once the click event dispatches, not once the handler's promise chain settles, so `tests/engine.spec.ts:166` was reading the clipboard before the write necessarily completed — a timing-dependent race, not deterministic. Confirmed via an isolated repro that `clipboard.writeText` itself works fine in this environment; the flake was purely the missing wait.
+- Fix: added `await expect(page.locator("#toast")).toContainText("Link copied")` before reading the clipboard, since the toast only fires after the write succeeds — this makes the wait deterministic instead of timing-dependent.
+- Files edited:
+  - e2e/tests/engine.spec.ts (1 line added)
+  - logging/progress_log.md
+- Verification:
+  - Reproduced the original failure by reverting Entry 008's CSS fix and confirming the same test failure occurred (proves it's unrelated to the grid change).
+  - Isolated Playwright repro confirmed `navigator.clipboard.writeText` succeeds without error in this environment — ruling out a permissions/environment issue.
+  - Full suite: `npx playwright test` — 23/23 passed after the fix.
+- Task alignment:
+  - Fulfillment: Gate is fully green again; root cause documented so it doesn't get miscategorized as a product regression in the future.
+  - Deviation: None.
+
 ## Entry 007 - 2026-07-24 - Deploy runbook switched to Cloudflare Pages (free hosting)
 
 - Task: User asked whether the deploy runbook was free of charge. It was not — the AWS S3 + CloudFront + Route 53 stack in PUBLISHING.md/deploy.sh/.github/workflows/deploy.yml has a guaranteed recurring cost (Route 53 hosted zone $0.50/month minimum, CloudFront billed outside a new-account 12-month free-tier window). User chose to replace it with Cloudflare Pages, which has no fixed monthly cost.

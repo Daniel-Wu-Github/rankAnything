@@ -163,6 +163,7 @@ test("share URL round-trip: full board state opens identically in a fresh page",
 
 	await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 	await page.click("#share-btn");
+	await expect(page.locator("#toast")).toContainText("Link copied");
 	const url = await page.evaluate(() => navigator.clipboard.readText());
 	expect(url).toContain("#b=");
 	expect(url.length).toBeLessThan(8192);
