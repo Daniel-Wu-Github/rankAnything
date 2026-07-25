@@ -112,6 +112,14 @@
         top: 20px;
       }
 
+      .ad-column.ad-left {
+        grid-column: 1;
+      }
+
+      .ad-column.ad-right {
+        grid-column: 3;
+      }
+
       .ad-placeholder {
         border: 1px dashed var(--border);
         background: var(--panel);
@@ -140,6 +148,7 @@
       }
 
       .app {
+        grid-column: 2;
         display: flex;
         flex-direction: column;
         gap: 16px;

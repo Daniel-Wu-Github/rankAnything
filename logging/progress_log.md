@@ -2,6 +2,22 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 008 - 2026-07-24 - big-board.html: fix ad-blocker-triggered layout squish
+
+- Task: User reported the deployed board looked "squished on the left" in their desktop browser (Vivaldi, default ad blocker on). Diagnosed via headless Playwright screenshots (live URL, local file://, with/without simulated ad-blocking) that this was a pre-existing CSS Grid bug in big-board.html, not a Cloudflare Pages deployment defect — confirmed identical on the old AWS setup's underlying file too.
+- Root cause: `.page` is `display:grid; grid-template-columns: 160px minmax(0,1fr) 160px`, and `.app` (main content) had no explicit `grid-column`. When an ad blocker's cosmetic filter matches `.ad-column`/`.ad-placeholder`/"Advertisement" text and sets `display:none` (or removes the node), that `<aside>` is excluded from grid layout entirely, so CSS Grid auto-placement shifts `.app` into track 1 (the 160px column) instead of track 2 — squishing the whole board.
+- Fix: pinned `.app { grid-column: 2; }` and, for symmetry, `.ad-column.ad-left { grid-column: 1; }` / `.ad-column.ad-right { grid-column: 3; }`, so each region stays in its intended track regardless of sibling presence/absence.
+- Files edited:
+  - big-board.html (CSS only, ~9 lines added; no markup/behavior change)
+  - logging/progress_log.md
+- Verification:
+  - Playwright screenshot comparison: normal render before/after fix is pixel-identical (no regression).
+  - Playwright screenshot with `.ad-column` forced to `display:none` (simulating an ad blocker): board now stays centered/full-width in track 2 instead of squishing into the 160px track.
+  - e2e gate: `cd e2e && npx playwright test` — 22/23 passed. The 1 failure (`engine.spec.ts` share-URL round-trip) is a pre-existing, unrelated test race — reproduced identically with this fix stashed out. See Entry 009 for its fix.
+- Task alignment:
+  - Fulfillment: Root cause identified and fixed per user's explicit request; verified with before/after screenshots and the project's e2e gate.
+  - Deviation: None.
+
 ## Entry 007 - 2026-07-24 - Deploy runbook switched to Cloudflare Pages (free hosting)
 
 - Task: User asked whether the deploy runbook was free of charge. It was not — the AWS S3 + CloudFront + Route 53 stack in PUBLISHING.md/deploy.sh/.github/workflows/deploy.yml has a guaranteed recurring cost (Route 53 hosted zone $0.50/month minimum, CloudFront billed outside a new-account 12-month free-tier window). User chose to replace it with Cloudflare Pages, which has no fixed monthly cost.
