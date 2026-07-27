@@ -2,6 +2,53 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 010 - 2026-07-25 - Mobile UX pass on big-board.html (Launch Gap #1) + new skill
+
+- Task: Launch Gap #1 ("truly professional mobile UX") from `FOOTBALL_V1_LAUNCH_GAPS.md`. Planned in `docs/MOBILE_UX_PLAN.md`, then implemented all phases. Treated as a bug fix (broken mobile behavior), not a feature, so in-bounds for the frozen file.
+- Audit (verified with live Playwright at 320/375/414, not assumed): (A) horizontal page scroll — `body.scrollWidth` 774 on a 375 viewport; (B) table columns cut off; (C) **audit self-corrected** — touch reorder was NOT broken (a hand-rolled `touchstart/move/end` handler works); the real bug is it hijacked scrolling (any row swipe reordered). Initial plan to wire SortableJS was withdrawn as unnecessary churn; (D) `.search-zone` rendered 240px tall; (E) no sub-480 breakpoint; (F) sub-44px touch targets.
+- What changed (all in `big-board.html`, CSS/markup + one JS guard):
+  - Containment: `.app { min-width: 0 }`, new `.table-scroll` wrapper; fixed a real latent bug where `.app { grid-column: 2 }` (Entry 008) collided with the 980px single-column collapse (phantom column-2 overflow) — reset to `grid-column: 1` at ≤980; `flex-wrap: nowrap` + `min-width: 0` on the stacked toolbar to stop the nowrap chip strip forcing overflow.
+  - Card collapse ≤600px: CSS-grid row→card with `data-label` KV rows (added `data-label` + disambiguating classes to cells in the render template).
+  - Touch gate: `touchstart` now only starts a drag when it begins on `.drag-handle`; handle is a 44×44 target on the card. Swipe scrolls, handle drags.
+  - Sub-480 pass: 2-col action-button grid, 44px touch targets (toggle/buttons/star/draft/note/handle/filter chips), 16px search input (no iOS zoom), inline Age/Bye; `.search-zone { flex: 0 0 auto }` fixed Finding D.
+- New skill: `mobile-interaction-patterns` (added to `ai-workflow/skills/`, symlinked into `.github/skills/`, registered in `SKILL_MAP.md` selection order + registry + YAML index, and added to `setup.sh`'s `--with-ui-skill` group). Covers input-method parity (incl. the native-DnD-is-mouse-only and touch-drag-scroll-hijack traps), horizontal-scroll containment, table-collapse strategy, filter drawers, touch-target sizing.
+- Files edited: big-board.html; e2e/tests/bigboard-mobile.spec.ts (new, 6 tests); docs/MOBILE_UX_PLAN.md (new); .github/skills/SKILL_MAP.md; .github/skills/mobile-interaction-patterns (new symlink); ../ai-workflow/skills/mobile-interaction-patterns/SKILL.md (new); ../ai-workflow/setup.sh; logging/progress_log.md
+- Verification:
+  - `body.scrollWidth === innerWidth` at 320/375/414 (Playwright); was 774 at 375.
+  - New mobile spec 6/6 green (no-h-scroll ×3, card collapse, touch gate both directions, 44px targets).
+  - Full e2e gate 29/29 green (23 pre-existing + 6 new).
+  - One-off axe run at 375px on `/football/`: 0 critical/serious (board is gate-exempt by design, checked anyway since the table display changed).
+  - Visual confirmation via screenshots at 375 (toolbar + card layout).
+- Task alignment:
+  - Fulfillment: Findings A–F fixed and gated; `/football/` still serves the frozen board (unchanged behavior on desktop; e2e desktop drag/keyboard/CSV/share all still green).
+  - Deviation 1: Phase 3 rescoped mid-implementation after live testing disproved the "touch drag broken" premise — handle-gate guard instead of a SortableJS rewrite (lower risk, documented in the plan's Decision Record). User had pre-approved the SortableJS path; the corrected approach is strictly smaller-scope.
+  - Deviation 2: Mobile toolbar still ~597px tall; a filter drawer (the proper fix) is a new interaction = feature, so deferred to `site/` per the project's own new-features-go-to-site ruling, not built into the frozen file. Recorded as a residual in the plan.
+  - Deviation 3: Pre-existing hand-rolled touch drag has no edge auto-scroll (long-distance mobile reordering limited) — not introduced here, noted as residual.
+
+## Entry 011 - 2026-07-26 - QC pass on Entry 010's mobile UX + below-the-fold and density fixes
+
+- Task: QC review of Entry 010's mobile work against explicit hard gates (native mobile feel, ease of use/visibility, accessibility, "pull factor"), then two rounds of user-directed follow-up: (1) fix the below-the-fold toolbar flagged in QC, (2) redesign the mobile card — user reported it "too big... defeats the purpose of a mobile ranker," wanted toolbar at 30-40% of viewport and ~10 players visible without scrolling. Mid-implementation the user also caught: two identical-looking icons (more-info vs. drag handle) on opposite ends of the row, and misaligned Age/Bye Min/Max inputs.
+- QC verdict on Entry 010 (before this session's changes): touch-hijack fix and no-h-scroll fix independently verified correct; axe clean; desktop pixel-identical (diffed live render against `git show HEAD:big-board.html`, not assumed). Two gaps found: board sat below the fold (toolbar ~597px), and the multi-line labeled card, once seen live, was too tall for a "ranker" (only ~1.5 players/screen).
+- What changed (all in `big-board.html`):
+  - **Filters drawer**: `.toolbar-bottom.filters` wrapped in a native `<details id="filters-drawer">` (reusing the file's existing "Teams" disclosure pattern, not a new component) with an active-filter-count badge. Desktop: toggle CSS-hidden, `open` ships in markup — pixel-identical, re-verified this session. Mobile: closed on load via a one-time `initFiltersDrawer()` matchMedia check.
+  - **Row redesign**: multi-line labeled card (~92-140px) replaced below 600px with one dense single-line divider-list row (~44-49px): drag handle, rank, star, name+position, "more info" (⋮). Team/Age/Bye/Draft/Note/Tier/Delete moved into a new `player-actions` modal type reusing the existing generic modal component (same one "Add Note" uses) — not a new UI system.
+  - **Icon fix** (caught by user mid-review): handle and more-button both rendered as dot-clusters. Fixed via flex `order` (more-info left, handle right — CSS-only, no DOM/JS reorder, desktop table columns untouched) and swapped the handle to a hamburger glyph via a mobile-only `::after`.
+  - **Tier-break gap** (caught by user mid-review): removing the hover-only tier +/- control from the row without relocating it would have made tier breaks unreachable on touch. Added "Add/Remove Tier Break" to the `player-actions` modal, wired to the existing `SET_TIER`/`REMOVE_TIER` actions.
+  - **Age/Bye alignment fix** (caught by user mid-review): the Min label's inline "Age"/"Bye" text wrapped onto its own line under `width:100%`, but the Max label had no text and stayed single-line, so the two inputs sat on different rows. Fixed with a matching `aria-hidden` span on the Max label (space-reserving `visibility:hidden` on mobile only, `display:none` on desktop — zero desktop impact).
+  - A `td.handle-cell`/`.star-cell`/`.more-cell` flex-basis bug was found and fixed during implementation: these tds inherit a desktop fixed `width`/`!important` padding that, left unset in the mobile rule, silently shrank the 44px controls to ~28-32px wide despite the CSS declaring 44px — caught by measuring rendered `boundingBox()`, not by reading the CSS.
+- Files edited: big-board.html; e2e/tests/bigboard-mobile.spec.ts (rewritten, 13 tests — old assertions for the removed card layout replaced, not patched); docs/MOBILE_UX_PLAN.md (Phase 6 added); logging/progress_log.md
+- Verification:
+  - Density/toolbar targets measured via Playwright `getBoundingClientRect`, not estimated: toolbar 36.6% of viewport (target 30-40%); **10 rows fully visible** at 375×812 (was ~1.5); no horizontal overflow at 320/375/414.
+  - Touch-drag gate re-verified after the icon markup change (handle drag reorders, body swipe doesn't).
+  - `player-actions` modal end-to-end: draft toggle, tier add/remove round-trip, all verified via Playwright, not just rendered-and-assumed.
+  - Full e2e suite: 36/36 green (23 original + 13 rewritten mobile).
+  - axe: 0 critical/serious at 320/375/414 in three states — drawer closed, drawer open, more-actions modal open.
+  - Desktop: re-diffed against the true pre-session `HEAD` baseline (not the mid-session working tree) — `body.scrollWidth`, row display mode, row height, and a full-page screenshot all identical.
+- Task alignment:
+  - Fulfillment: both QC-flagged gaps (below-the-fold, oversized cards) resolved; both user-directed density targets hit (30-40% toolbar, ~10 players); all three mid-review corrections (icon confusion, tier-break reachability, Age/Bye alignment) fixed and verified, not just acknowledged.
+  - Deviation: Entry 010's plan had explicitly deferred the filter-drawer fix to `site/` on the reasoning that it's "a new interaction pattern = a feature." This session built it into the frozen file instead, under direct user instruction. Judged still in-bounds because it reuses an interaction pattern (`<details>`/`<summary>`) already present in this exact file for "Teams" — not a novel component — and is framed as a compaction/layout fix to existing broken UX, consistent with the frozen-file's "bug fixes only" rule. Documented in `MOBILE_UX_PLAN.md` Phase 6.
+  - Deviation: Team/Age/Bye are no longer visible at a glance on the compact row (one tap away via "more info"). Necessary trade-off to hit the ≥44px touch-target floor within the user's explicit ~10-rows-visible target; made under direct user direction, not unilaterally.
+
 ## Entry 008 - 2026-07-24 - big-board.html: fix ad-blocker-triggered layout squish
 
 - Task: User reported the deployed board looked "squished on the left" in their desktop browser (Vivaldi, default ad blocker on). Diagnosed via headless Playwright screenshots (live URL, local file://, with/without simulated ad-blocking) that this was a pre-existing CSS Grid bug in big-board.html, not a Cloudflare Pages deployment defect — confirmed identical on the old AWS setup's underlying file too.

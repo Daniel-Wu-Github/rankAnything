@@ -149,6 +149,7 @@
 
       .app {
         grid-column: 2;
+        min-width: 0; /* allow the track to shrink; wide table scrolls in .table-scroll instead of stretching the page */
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -460,6 +461,28 @@
         flex-wrap: wrap;
       }
 
+      /* The Max input's label carries a duplicate, invisible field-name (see
+         markup) purely to reserve the same vertical space as the Min
+         label's visible one — see the mobile alignment fix below. On
+         desktop it never renders at all. */
+      .filter-group label .field-name[aria-hidden="true"] {
+        display: none;
+      }
+
+      /* Filters drawer: on desktop the filter row stays always-visible (its
+         native <details> ships `open` in markup and the toggle control below
+         is hidden), so desktop behavior is unchanged. Below 600px the toggle
+         becomes visible and JS closes the drawer by default (see
+         initFiltersDrawer) so the board isn't pushed below the fold by an
+         always-expanded filter block. */
+      .filters-drawer {
+        margin: 0;
+      }
+
+      .filters-drawer > summary {
+        display: none;
+      }
+
       .team-filter {
         position: relative;
       }
@@ -527,6 +550,15 @@
         overflow: hidden;
         box-shadow: 0 4px 16px var(--shadow);
         animation: boardEnter 0.3s ease both;
+      }
+
+      /* Wide table scrolls horizontally inside its own region so it can never
+         widen the page. Clips at the rounded board corners via overflow. */
+      .table-scroll {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--r-lg);
       }
 
       /* === TABLE === */
@@ -782,6 +814,13 @@
         color: var(--muted);
       }
 
+      /* "More actions" column only exists for the mobile compact row
+         (opens the player-actions modal for age/bye/draft/note/delete);
+         the desktop table has those as their own columns already. */
+      .more-cell {
+        display: none;
+      }
+
       .icon-btn {
         background: transparent;
         border: none;
@@ -899,6 +938,39 @@
         gap: 8px;
       }
 
+      /* Player "more actions" modal (mobile row overflow) */
+      .player-actions-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .player-actions-stats > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .player-actions-stats .field-name {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+      }
+
+      .player-actions-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .player-actions-buttons .btn {
+        width: 100%;
+        min-height: 44px;
+      }
+
       /* Add player 2-col grid */
       #add-player-form {
         display: flex;
@@ -952,6 +1024,14 @@
           grid-template-columns: 1fr;
         }
 
+        /* Ad columns are hidden here, so the desktop `.app { grid-column: 2 }`
+           pin (which keeps the board in the middle track on desktop) would
+           misplace the board into a phantom column 2. Reset it to the single
+           remaining track. */
+        .app {
+          grid-column: 1;
+        }
+
         .ad-column {
           display: none;
         }
@@ -965,29 +1045,351 @@
         .toolbar-top {
           flex-direction: column;
           align-items: stretch;
+          flex-wrap: nowrap; /* a wrapping column flex sizes to content width; force a single column */
         }
 
         .actions-zone {
           margin-left: 0;
         }
 
+        /* In the stacked (column) toolbar, search-zone's `flex: 1 1 240px`
+           basis applies to the main (vertical) axis, ballooning it to 240px
+           tall. Reset to content height. */
+        .search-zone {
+          flex: 0 0 auto;
+        }
+
         .toolbar-bottom {
           flex-direction: column;
           align-items: stretch;
+          flex-wrap: nowrap; /* a wrapping column flex sizes to content width; force a single column */
+          min-width: 0; /* flex item: don't inherit the chip strip's min-content width */
         }
 
         .position-filters {
           overflow-x: auto;
           white-space: nowrap;
           flex-wrap: nowrap;
-        }
-
-        .col-handle {
-          display: none;
+          -webkit-overflow-scrolling: touch;
+          min-width: 0; /* let the nowrap chip strip scroll instead of forcing the toolbar wider than the viewport */
         }
 
         #add-player-form .form-grid {
           grid-template-columns: 1fr;
+        }
+      }
+
+      /* === MOBILE CARD COLLAPSE ===
+         At phone widths the 10-column table can't fit, so each row becomes a
+         labeled card (name = title, secondary fields as key/value pairs). No
+         horizontal scroll; every field reachable by vertical scroll only. */
+      @media (max-width: 600px) {
+        .table-scroll {
+          overflow-x: visible;
+        }
+
+        /* Filters collapse behind a tappable "Filters" row so the board
+           isn't pushed below the fold by an always-open filter block. */
+        .filters-drawer > summary {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          list-style: none;
+          cursor: pointer;
+          min-height: 44px;
+          padding: 11px 14px;
+          border: 1px solid var(--border);
+          border-radius: var(--r-sm);
+          background: var(--bg-soft);
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .filters-drawer > summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .filters-count {
+          background: var(--accent-tint);
+          color: var(--accent);
+          border-radius: 999px;
+          padding: 1px 8px;
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .filters-chevron {
+          margin-left: auto;
+          transition: transform 0.2s ease;
+        }
+
+        .filters-drawer[open] > summary .filters-chevron {
+          transform: rotate(180deg);
+        }
+
+        .filters-drawer .toolbar-bottom {
+          margin-top: 10px;
+        }
+
+        table,
+        tbody {
+          display: block;
+          width: 100%;
+        }
+
+        thead {
+          display: none;
+        }
+
+        /* One dense row per player — rank, name, team, star, drag handle,
+           and a "more" button that opens the existing modal component for
+           the secondary fields (age/bye/pos-rank/draft/note/delete). A
+           labeled multi-line card was too tall to scan a board on a phone
+           (only 1-2 players visible per screen); this fits ~10. */
+        /* Divided-list style (not individual bordered cards) — a card per
+           row with margins/border/radius couldn't shrink below ~54-58px
+           without crowding the 44px controls; a flat divider list hits the
+           44px floor exactly, which is what gets ~10 rows on screen. */
+        tbody tr.player-row {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          height: auto; /* override the fixed 44px table-row height */
+          min-height: 44px;
+          padding: 0 8px;
+          margin: 0;
+          border: none;
+          border-bottom: 1px solid var(--border);
+          background: var(--panel);
+        }
+
+        tbody {
+          border: 1px solid var(--border);
+          border-radius: var(--r-sm);
+          overflow: hidden;
+        }
+
+        tr.player-row:last-child {
+          border-bottom: none;
+        }
+
+        tr.player-row > td {
+          padding: 0;
+          border: none;
+          font-size: 14px;
+        }
+
+        tr.player-row > td::before {
+          content: none;
+        }
+
+        /* Secondary fields move into the "more actions" modal on mobile —
+           still fully reachable, just not competing for row width. */
+        td.col-pos-rank,
+        td.team-cell,
+        td.age-cell,
+        td.bye-cell,
+        td.draft-cell,
+        td.note-cell {
+          display: none;
+        }
+
+        /* Visual left-to-right order: more-info, rank, star, name, drag
+           handle. Set via flex `order` only — DOM order (and the desktop
+           table's column order) is untouched. */
+        td.more-cell { order: 1; }
+        td.col-rank { order: 2; }
+        td.star-cell { order: 3; }
+        td.name-cell { order: 4; }
+        td.handle-cell { order: 5; }
+
+        td.handle-cell,
+        td.star-cell,
+        td.more-cell {
+          flex: 0 0 44px; /* desktop's fixed-width table columns (e.g. .handle-cell's 40px) would otherwise set this flex item's basis and shrink the 44px control inside it */
+          width: 44px;
+          padding: 0 !important; /* .handle-cell's desktop padding is !important; must out-rank it here too */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        td.col-rank {
+          flex: 0 0 auto;
+          width: auto;
+          color: var(--muted);
+          font-size: 13px;
+          text-align: right;
+        }
+
+        td.name-cell {
+          flex: 1 1 auto;
+          min-width: 0;
+          display: flex;
+          align-items: baseline;
+          gap: 6px;
+          font-size: 15px;
+          font-weight: 700;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        /* Drag handle: on touch, only this target starts a reorder (see the
+           touchstart guard), so swiping the row body scrolls the list. Sized
+           a full 44x44 hit area (not just the glyph's ink width) — the row's
+           horizontal budget has room for three 44px controls plus the name.
+           The glyph is swapped to a hamburger (three horizontal bars) here,
+           mobile-only, so it doesn't read as a second "more info" control —
+           the shared span's own text (used by the desktop drag dots) is
+           hidden and replaced with a ::after icon. */
+        td.handle-cell .drag-handle {
+          position: relative;
+          font-size: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+        }
+
+        td.handle-cell .drag-handle::after {
+          content: "\2261"; /* ☰ */
+          font-size: 18px;
+          line-height: 1;
+          opacity: 0.55;
+        }
+
+        td.handle-cell .tier-btn {
+          display: none; /* hover-only affordance on desktop; reachable via the "more" modal on touch instead */
+        }
+
+        td.star-cell .icon-btn {
+          width: 44px;
+          height: 44px;
+          font-size: 17px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        td.more-cell .more-btn {
+          width: 44px;
+          height: 44px;
+          font-size: 18px;
+          color: var(--muted);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* Tier break renders as a top accent border on the row */
+        tr.player-row.has-tier-above {
+          border-top: 2px solid var(--accent);
+        }
+
+        /* Drop indicators during a touch reorder */
+        tr.player-row.drop-before {
+          box-shadow: inset 0 3px 0 var(--accent);
+        }
+
+        tr.player-row.drop-after {
+          box-shadow: inset 0 -3px 0 var(--accent);
+        }
+      }
+
+      /* === SMALL-PHONE REFINEMENTS (<=480px) === */
+      @media (max-width: 480px) {
+        .page {
+          padding: 10px;
+        }
+
+        .toolbar {
+          padding: 10px;
+          gap: 8px;
+        }
+
+        .toolbar-top,
+        .toolbar-bottom {
+          gap: 6px;
+        }
+
+        /* Action buttons: full-width tap targets, 3-up grid (keeps the
+           toolbar to roughly a third of the screen so the board is visible
+           without scrolling past it first). */
+        .actions-zone {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 6px;
+        }
+
+        .actions-zone .btn {
+          width: 100%;
+          min-height: 44px;
+          padding: 8px 4px;
+          font-size: 12.5px;
+        }
+
+        /* Filter chips: 44px tap targets */
+        .position-btn {
+          min-height: 44px;
+          padding: 6px 14px;
+        }
+
+        .team-filter summary {
+          min-height: 44px;
+          padding: 11px 14px;
+        }
+
+        /* Theme toggle sits in the 3-up grid like the other action buttons
+           (not spanning full width) so it doesn't read as an empty bar; it
+           just gets the same 44px hit area. */
+        .actions-zone .theme-toggle {
+          width: 100%;
+          min-height: 44px;
+        }
+
+        .search-input {
+          padding: 11px 12px;
+          font-size: 16px; /* >=16px prevents iOS zoom-on-focus */
+        }
+
+        /* Keep Age/Bye min-max pairs inline (one row each) so the filter block
+           stays compact rather than stacking into four rows. */
+        .filter-group {
+          gap: 6px;
+        }
+
+        /* Stack each label's field-name above its input. The Min label's
+           name is visible; the Max label carries a same-text invisible one
+           (see base CSS + markup) so both labels are the same height and
+           the two inputs land on the same row instead of Min sitting a
+           line lower than Max. */
+        .filter-group label {
+          flex: 1 1 0;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 3px;
+        }
+
+        .filter-group label .field-name {
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--muted);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .filter-group label .field-name[aria-hidden="true"] {
+          display: block;
+          visibility: hidden;
+        }
+
+        .filter-group input {
+          width: 100%;
+          min-width: 0;
         }
       }
 
@@ -1077,24 +1479,31 @@
               <button class="btn" id="redo-btn">Redo</button>
             </div>
           </div>
-          <div class="toolbar-bottom filters">
-            <div class="position-filters" id="position-filters"></div>
-            <div class="filter-group">
-              <details class="team-filter" id="team-filter">
-                <summary>Teams</summary>
-                <div class="team-options" id="team-options"></div>
-              </details>
-              <div class="team-chips" id="team-chips"></div>
+          <details class="filters-drawer" id="filters-drawer" open>
+            <summary>
+              <span>Filters</span>
+              <span class="filters-count" id="filters-count" hidden></span>
+              <span class="filters-chevron" aria-hidden="true">&#9662;</span>
+            </summary>
+            <div class="toolbar-bottom filters">
+              <div class="position-filters" id="position-filters"></div>
+              <div class="filter-group">
+                <details class="team-filter" id="team-filter">
+                  <summary>Teams</summary>
+                  <div class="team-options" id="team-options"></div>
+                </details>
+                <div class="team-chips" id="team-chips"></div>
+              </div>
+              <div class="filter-group">
+                <label><span class="field-name">Age</span><input id="age-min" type="number" placeholder="Min" min="0" /></label>
+                <label><span class="field-name" aria-hidden="true">Age</span><input id="age-max" type="number" placeholder="Max" min="0" /></label>
+              </div>
+              <div class="filter-group">
+                <label><span class="field-name">Bye</span><input id="bye-min" type="number" placeholder="Min" min="0" /></label>
+                <label><span class="field-name" aria-hidden="true">Bye</span><input id="bye-max" type="number" placeholder="Max" min="0" /></label>
+              </div>
             </div>
-            <div class="filter-group">
-              <label>Age <input id="age-min" type="number" placeholder="Min" min="0" /></label>
-              <label><input id="age-max" type="number" placeholder="Max" min="0" /></label>
-            </div>
-            <div class="filter-group">
-              <label>Bye <input id="bye-min" type="number" placeholder="Min" min="0" /></label>
-              <label><input id="bye-max" type="number" placeholder="Max" min="0" /></label>
-            </div>
-          </div>
+          </details>
         </header>
 
         <div class="banner" id="banner"></div>
@@ -1103,6 +1512,7 @@
         <div class="sr-only" id="kb-live" aria-live="polite" role="status"></div>
 
         <section class="board">
+          <div class="table-scroll">
           <table>
             <thead>
               <tr>
@@ -1120,6 +1530,7 @@
             </thead>
             <tbody id="player-table-body"></tbody>
           </table>
+          </div>
         </section>
       </main>
       <aside class="ad-column ad-right">
@@ -1258,6 +1669,8 @@
         ageMax: document.getElementById("age-max"),
         byeMin: document.getElementById("bye-min"),
         byeMax: document.getElementById("bye-max"),
+        filtersDrawer: document.getElementById("filters-drawer"),
+        filtersCount: document.getElementById("filters-count"),
         clearFilters: document.getElementById("clear-filters-btn"),
         addPlayer: document.getElementById("add-player-btn"),
         importCsv: document.getElementById("import-csv-btn"),
@@ -1474,6 +1887,22 @@
         );
       }
 
+      function countActiveFilterGroups() {
+        const filters = APP_STATE.filters;
+        let count = 0;
+        if (filters.positions.length > 0) count++;
+        if (filters.teams.length > 0) count++;
+        if (filters.ageMin !== "" || filters.ageMax !== "") count++;
+        if (filters.byeMin !== "" || filters.byeMax !== "") count++;
+        return count;
+      }
+
+      function renderFiltersDrawerBadge() {
+        const count = countActiveFilterGroups();
+        dom.filtersCount.hidden = count === 0;
+        dom.filtersCount.textContent = String(count);
+      }
+
       function isSortActive() {
         return !!APP_STATE.sort.key;
       }
@@ -1662,6 +2091,7 @@
         dom.clearFilters.classList.add("visible");
         dom.clearFilters.classList.toggle("filters-active", active);
         dom.clearFilters.textContent = active ? "✕ Clear Filters" : "⇋ Reorder";
+        renderFiltersDrawerBadge();
       }
 
       // === MODULE 1: TABLE RENDERING ===
@@ -1738,9 +2168,9 @@
                 ${tierControl}
                 <span class="drag-handle" aria-hidden="true">&#8286;</span>
               </td>
-              <td class="cell-muted col-rank">${player.rank}</td>
-              <td class="col-pos-rank pos-cell-${posCls}">${positionRanks[player.id]}</td>
-              <td>
+              <td class="cell-muted col-rank" data-label="Rank">${player.rank}</td>
+              <td class="col-pos-rank pos-cell-${posCls}" data-label="Pos">${positionRanks[player.id]}</td>
+              <td class="star-cell" data-label="Star">
                 <button
                   class="icon-btn"
                   data-action="star"
@@ -1752,10 +2182,10 @@
               <td class="name-cell col-name">
                 ${escapeHtml(player.name)}<span class="pos-badge ${posCls}">${escapeHtml(player.position)}</span>
               </td>
-              <td class="team-cell">${escapeHtml(getDisplayValue(player.team))}</td>
-              <td class="cell-muted">${getDisplayValue(player.age)}</td>
-              <td class="cell-muted">${getDisplayValue(player.byeWeek)}</td>
-              <td>
+              <td class="team-cell" data-label="Team">${escapeHtml(getDisplayValue(player.team))}</td>
+              <td class="cell-muted age-cell" data-label="Age">${getDisplayValue(player.age)}</td>
+              <td class="cell-muted bye-cell" data-label="Bye">${getDisplayValue(player.byeWeek)}</td>
+              <td class="draft-cell" data-label="Draft">
                 <button
                   class="draft-btn"
                   data-action="draft"
@@ -1764,7 +2194,7 @@
                   aria-pressed="${isDrafted}"
                 >${isDrafted ? "Drafted" : "Draft"}</button>
               </td>
-              <td class="note-cell">
+              <td class="note-cell" data-label="Note">
                 <button
                   class="icon-btn ${player.note ? "" : "note-empty"}"
                   data-action="note"
@@ -1779,6 +2209,15 @@
                   data-no-drag
                   aria-label="Delete player"
                 >&times;</button>
+              </td>
+              <td class="more-cell" data-label="More">
+                <button
+                  class="icon-btn more-btn"
+                  data-action="more"
+                  data-id="${player.id}"
+                  data-no-drag
+                  aria-label="More actions for ${escapeHtml(player.name)}"
+                >&#8942;</button>
               </td>
             </tr>
           `);
@@ -1889,6 +2328,12 @@
               return;
             }
             if (event.target.closest("[data-no-drag]")) {
+              return;
+            }
+            // Only the drag handle starts a touch reorder. A plain swipe
+            // anywhere else on the row falls through to native scrolling,
+            // so the list stays scrollable on touch devices.
+            if (!event.target.closest(".drag-handle")) {
               return;
             }
             const touch = event.changedTouches[0];
@@ -2198,6 +2643,38 @@
           trapFocus(dom.modalBackdrop.querySelector(".modal"));
         }
 
+        if (modalState.type === "player-actions") {
+          const player = APP_STATE.players.find(
+            (candidate) => candidate.id === modalState.playerId
+          );
+          if (!player) {
+            dispatch({ type: "CLOSE_MODAL" });
+            return;
+          }
+          const isDrafted = APP_STATE.ui.draftedIds.has(player.id);
+          const showTiers = !isFilterActive() && !isSortActive();
+          const tierButton = showTiers
+            ? player.tiersAbove
+              ? `<button class="btn" data-action="remove-tier" data-id="${player.id}">Remove Tier Break</button>`
+              : `<button class="btn" data-action="add-tier" data-id="${player.id}">Add Tier Break Above</button>`
+            : "";
+          dom.modalTitle.textContent = player.name;
+          dom.modalContent.innerHTML = `
+            <div class="player-actions-stats">
+              <div><span class="field-name">Team</span>${escapeHtml(getDisplayValue(player.team))}</div>
+              <div><span class="field-name">Age</span>${getDisplayValue(player.age)}</div>
+              <div><span class="field-name">Bye</span>${getDisplayValue(player.byeWeek)}</div>
+            </div>
+            <div class="modal-actions player-actions-buttons">
+              <button class="btn ${isDrafted ? "primary" : ""}" data-action="draft" data-id="${player.id}" aria-pressed="${isDrafted}">${isDrafted ? "Drafted" : "Mark Drafted"}</button>
+              <button class="btn" data-action="note" data-id="${player.id}">${player.note ? "Edit Note" : "Add Note"}</button>
+              ${tierButton}
+              <button class="btn subtle" data-action="delete" data-id="${player.id}">Delete Player</button>
+            </div>
+          `;
+          trapFocus(dom.modalBackdrop.querySelector(".modal"));
+        }
+
         if (modalState.type === "add") {
           dom.modalTitle.textContent = "Add Player";
           dom.modalContent.innerHTML = `
@@ -2417,12 +2894,20 @@
           const star = event.target.closest('button[data-action="star"]');
           const note = event.target.closest('button[data-action="note"]');
           const del = event.target.closest('button[data-action="delete"]');
+          const more = event.target.closest('button[data-action="more"]');
           const clearFilters = event.target.closest(
             'button[data-action="clear-filters"]'
           );
 
           if (star) {
             dispatch({ type: "TOGGLE_STAR", payload: star.dataset.id });
+            return;
+          }
+          if (more) {
+            dispatch({
+              type: "OPEN_MODAL",
+              payload: { type: "player-actions", playerId: more.dataset.id },
+            });
             return;
           }
           if (note) {
@@ -2488,6 +2973,52 @@
           const closeModal = event.target.closest(
             "button[data-action=\"close-modal\"]"
           );
+          const draftBtn = event.target.closest('button[data-action="draft"]');
+          const noteBtn = event.target.closest('button[data-action="note"]');
+          const deleteBtn = event.target.closest('button[data-action="delete"]');
+          const addTierBtn = event.target.closest('button[data-action="add-tier"]');
+          const removeTierBtn = event.target.closest('button[data-action="remove-tier"]');
+
+          if (addTierBtn) {
+            dispatch({ type: "SET_TIER", payload: addTierBtn.dataset.id });
+            dispatch({ type: "CLOSE_MODAL" });
+            return;
+          }
+
+          if (removeTierBtn) {
+            dispatch({ type: "REMOVE_TIER", payload: removeTierBtn.dataset.id });
+            dispatch({ type: "CLOSE_MODAL" });
+            return;
+          }
+
+          if (draftBtn) {
+            const id = draftBtn.dataset.id;
+            if (APP_STATE.ui.draftedIds.has(id)) {
+              APP_STATE.ui.draftedIds.delete(id);
+            } else {
+              APP_STATE.ui.draftedIds.add(id);
+            }
+            dispatch({ type: "CLOSE_MODAL" });
+            renderApp();
+            return;
+          }
+
+          if (noteBtn) {
+            dispatch({
+              type: "OPEN_MODAL",
+              payload: { type: "note", playerId: noteBtn.dataset.id },
+            });
+            return;
+          }
+
+          if (deleteBtn) {
+            const confirmRemove = confirm("Remove this player?");
+            if (confirmRemove) {
+              dispatch({ type: "REMOVE_PLAYER", payload: deleteBtn.dataset.id });
+              dispatch({ type: "CLOSE_MODAL" });
+            }
+            return;
+          }
 
           if (saveNote) {
             const noteInput = dom.modalContent.querySelector("#note-input");
@@ -2891,7 +3422,19 @@
         });
       }
 
+      function initFiltersDrawer() {
+        // Desktop keeps the filter row always-expanded (its toggle is
+        // CSS-hidden there, see .filters-drawer > summary). Below 600px the
+        // toggle appears and the drawer starts closed so the board isn't
+        // pushed below the fold; a user's own open/close tap is left alone
+        // after this point.
+        if (window.matchMedia && window.matchMedia("(max-width: 600px)").matches) {
+          dom.filtersDrawer.open = false;
+        }
+      }
+
       async function initializeApp() {
+        initFiltersDrawer();
         // A shared-board URL wins over localStorage: the link IS the board.
         const loadedFromHash = await loadBoardFromLocation();
         if (!loadedFromHash) {
