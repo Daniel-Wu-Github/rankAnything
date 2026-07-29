@@ -39,8 +39,8 @@ class AgentSandbox:
     
     def _clone_and_setup(self):
         """Clone repo and run initial setup."""
-        token = self._get_github_app_token()
-        os.system(f"git clone https://x-access-token:{token}@github.com/{self.repo_url}")
+        tok: str = self._get_github_app_token()
+        os.system(f"git clone https://x-access-token:{tok}@github.com/{self.repo_url}")
         os.system("npm install")
         os.system("npm run build")
     
@@ -93,8 +93,8 @@ class ImageBuilder:
         sandbox = modal.Sandbox.create()
         
         # Clone with app token
-        token = get_app_installation_token(repo)
-        sandbox.exec(f"git clone https://x-access-token:{token}@github.com/{repo} /workspace")
+        tok: str = get_app_installation_token(repo)
+        sandbox.exec(f"git clone https://x-access-token:{tok}@github.com/{repo} /workspace")
         
         # Install dependencies
         sandbox.exec("cd /workspace && npm install")
@@ -341,7 +341,8 @@ class EventStream {
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-app = App(token=os.environ["SLACK_BOT_TOKEN"])
+bot_tok: str = os.environ["SLACK_BOT_TOKEN"]
+app = App(token=bot_tok)
 
 # Repository descriptions for classification
 REPO_DESCRIPTIONS = [

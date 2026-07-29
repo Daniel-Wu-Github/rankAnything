@@ -161,3 +161,105 @@ Entries are grouped by branch and extend commit messages with file-level change 
     - Files:
       - D .claude/skills/frontend-design/SKILL.md
       - A .github/skills/frontend-design/SKILL.md
+
+### 2026-07-29 05:59:50Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 1456b9a07a6dc08153738d1c22dda891b8c2f871..1dabed9d466e5246eb16125792239a683fb24104
+- Commits:
+  - b399836 chore: migrate skill library from .github/skills to .claude/skills
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-29T00:37:45-05:00
+    - Purpose: Claude Code discovers skills under .claude/skills via the Skill tool;
+    - Files:
+      - A .claude/skills/SKILL_MAP.md
+      - A .claude/skills/advanced-evaluation/SKILL.md
+      - A .claude/skills/advanced-evaluation/references/bias-mitigation.md
+      - A .claude/skills/advanced-evaluation/references/evaluation-pipeline.md
+      - A .claude/skills/advanced-evaluation/references/implementation-patterns.md
+      - A .claude/skills/advanced-evaluation/references/metrics-guide.md
+      - A .claude/skills/advanced-evaluation/scripts/evaluation_example.py
+      - A .claude/skills/bdi-mental-states/SKILL.md
+      - A .claude/skills/bdi-mental-states/references/bdi-ontology-core.md
+      - A .claude/skills/bdi-mental-states/references/framework-integration.md
+      - A .claude/skills/bdi-mental-states/references/rdf-examples.md
+      - A .claude/skills/bdi-mental-states/references/sparql-competency.md
+      - A .claude/skills/context-compression/SKILL.md
+      - A .claude/skills/context-compression/references/evaluation-framework.md
+      - A .claude/skills/context-compression/scripts/compression_evaluator.py
+      - A .claude/skills/context-compression/tests/test_compression_evaluator.py
+      - A .claude/skills/context-degradation/SKILL.md
+      - A .claude/skills/context-degradation/references/patterns.md
+      - A .claude/skills/context-degradation/scripts/degradation_detector.py
+      - A .claude/skills/context-fundamentals/SKILL.md
+      - A .claude/skills/context-fundamentals/references/context-components.md
+      - A .claude/skills/context-fundamentals/scripts/context_manager.py
+      - A .claude/skills/context-optimization/SKILL.md
+      - A .claude/skills/context-optimization/references/optimization_techniques.md
+      - A .claude/skills/context-optimization/scripts/compaction.py
+      - A .claude/skills/detailed-chat-output/SKILL.md
+      - A .claude/skills/documentation-cohesion/SKILL.md
+      - A .claude/skills/evaluation/SKILL.md
+      - A .claude/skills/evaluation/references/metrics.md
+      - A .claude/skills/evaluation/scripts/evaluator.py
+      - A .claude/skills/filesystem-context/SKILL.md
+      - A .claude/skills/filesystem-context/references/implementation-patterns.md
+      - A .claude/skills/filesystem-context/scripts/filesystem_context.py
+      - A .claude/skills/frontend-design/SKILL.md
+      - A .claude/skills/harness-engineering/SKILL.md
+      - A .claude/skills/hosted-agents/SKILL.md
+      - A .claude/skills/hosted-agents/references/infrastructure-patterns.md
+      - A .claude/skills/hosted-agents/scripts/sandbox_manager.py
+      - A .claude/skills/latent-briefing/SKILL.md
+      - A .claude/skills/latent-briefing/references/attention-matching-formulation.md
+      - A .claude/skills/manual-testing-guides/SKILL.md
+      - A .claude/skills/memory-systems/SKILL.md
+      - A .claude/skills/memory-systems/references/implementation.md
+      - A .claude/skills/memory-systems/scripts/memory_store.py
+      - A .claude/skills/mobile-interaction-patterns/SKILL.md
+      - A .claude/skills/multi-agent-patterns/SKILL.md
+      - A .claude/skills/multi-agent-patterns/references/frameworks.md
+      - A .claude/skills/multi-agent-patterns/scripts/coordination.py
+      - A .claude/skills/project-development/SKILL.md
+      - A .claude/skills/project-development/references/case-studies.md
+      - A .claude/skills/project-development/references/pipeline-patterns.md
+      - A .claude/skills/project-development/scripts/pipeline_template.py
+      - A .claude/skills/remote-commit-logging/SKILL.md
+      - A .claude/skills/repo-workflow/SKILL.md
+      - A .claude/skills/scope-creep-guard/SKILL.md
+      - A .claude/skills/self-improvement-loop/SKILL.md
+      - A .claude/skills/skill-improvement-loop/SKILL.md
+      - A .claude/skills/skill-map-governance/SKILL.md
+      - A .claude/skills/tool-design/SKILL.md
+      - A .claude/skills/tool-design/references/architectural_reduction.md
+      - A .claude/skills/tool-design/references/best_practices.md
+      - A .claude/skills/tool-design/scripts/description_generator.py
+      - A .claude/skills/ui-ux-pro-max/SKILL.md
+      - A .claude/skills/verification-gate/SKILL.md
+      - A .claude/skills/workflow-logging/SKILL.md
+      - D .github/skills/SKILL_MAP.md
+      - D .github/skills/context-engineering
+      - D .github/skills/detailed-chat-output
+      - D .github/skills/documentation-cohesion
+      - D .github/skills/frontend-design/SKILL.md
+      - D .github/skills/manual-testing-guides
+      - D .github/skills/remote-commit-logging
+      - D .github/skills/repo-workflow
+      - D .github/skills/scope-creep-guard
+      - D .github/skills/self-improvement-loop
+      - D .github/skills/skill-improvement-loop
+      - D .github/skills/skill-map-governance
+      - D .github/skills/ui-ux-pro-max
+      - D .github/skills/verification-gate
+      - D .github/skills/workflow-logging
+      - M CLAUDE.md
+      - M README.md
+      - M docs/NONSPECIFIC_SKILLS.md
+      - M logging/commit_log.md
+  - 1dabed9 docs: domain decision (rankanything.net) + next-session handoff
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-29T00:46:04-05:00
+    - Purpose: Records the custom-domain choice for Launch Gap #6 (AdSense needs a
+    - Files:
+      - A docs/DOMAIN_DECISION.md
+      - A docs/NEXT_SESSION_HANDOFF.md

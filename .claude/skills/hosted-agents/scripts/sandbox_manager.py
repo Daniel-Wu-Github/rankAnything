@@ -178,12 +178,12 @@ class ImageBuilder:
         print(f"Building image for {repo_url}...")
 
         # Get fresh token for clone
-        token = self.token_provider()
+        tok: str = self.token_provider()
 
         # These operations run in build environment
         build_steps: list[str] = [
             # Clone repository
-            f"git clone https://x-access-token:{token}@github.com/{repo_url} /workspace",
+            f"git clone https://x-access-token:{tok}@github.com/{repo_url} /workspace",
 
             # Install dependencies
             "cd /workspace && npm install",
@@ -560,7 +560,7 @@ if __name__ == "__main__":
             id="user123",
             name="Alice Developer",
             email="alice@example.com",
-            github_token="gho_user_token"
+            github_token="redacted"
         )
 
         # User starts typing -- predictively warm a sandbox
