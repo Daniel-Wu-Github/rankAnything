@@ -45,7 +45,7 @@ rank-anything/
 │   └── build.mjs          # zero-dep static build → site/dist
 ├── e2e/                   # Playwright gate (23 tests, see e2e/README.md)
 ├── docs/RANK_ANYTHING_ROADMAP.md  # approved roadmap (Step 2 social is traction-gated)
-├── .github/skills/        # agent skill library (SKILL_MAP.md first)
+├── .claude/skills/        # agent skill library (SKILL_MAP.md first)
 └── logging/               # progress + commit logs
 ```
 
@@ -67,11 +67,11 @@ The generic app derives its CSV columns from each template's schema (`rank, name
 
 ## Agent Workflow
 
-All AI agents working in this repo must read `.github/skills/SKILL_MAP.md` first.
+All AI agents working in this repo must read `.claude/skills/SKILL_MAP.md` first.
 
 Key skills for frontend work:
-- [`frontend-design`](.github/skills/frontend-design/SKILL.md) — production-grade, distinctive frontend interfaces
-- [`ui-ux-pro-max`](.github/skills/ui-ux-pro-max/SKILL.md) — comprehensive UI/UX design intelligence
+- [`frontend-design`](.claude/skills/frontend-design/SKILL.md) — production-grade, distinctive frontend interfaces
+- [`ui-ux-pro-max`](.claude/skills/ui-ux-pro-max/SKILL.md) — comprehensive UI/UX design intelligence
 
 ## Design Principles
 

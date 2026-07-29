@@ -21,9 +21,11 @@ This repository is **Rank Anything** — a no-sign-up, zero-backend ranking site
 
 ## Workflow Principles
 
-- Read `.github/skills/SKILL_MAP.md` first on every task.
-- Load `scope-creep-guard` before planning or edits.
-- For frontend or UI tasks, load `frontend-design` and `ui-ux-pro-max`.
+- Read `.claude/skills/SKILL_MAP.md` first on every task.
+- Invoke `Skill(scope-creep-guard)` before planning or edits — via the `Skill`
+  tool, not by reading `SKILL.md` directly; skills live under `.claude/skills/`
+  specifically so the `Skill` tool can find and invoke them.
+- For frontend or UI tasks, invoke `Skill(frontend-design)` and `Skill(ui-ux-pro-max)`.
 - Execute in small, verifiable steps.
 - Record material workflow changes in `logging/progress_log.md`.
 - Run a verification gate before completion on any file-editing task.
@@ -36,23 +38,25 @@ This repository is **Rank Anything** — a no-sign-up, zero-backend ranking site
 | `site/src/**` | Native ES modules only; no npm runtime dependencies, no bundler |
 | `site/templates/*.json` | Curated only — every template must be a genuinely good list, not filler |
 | `e2e/**` | Suite must stay green; new features land with their specs |
-| `.github/skills/SKILL_MAP.md` | Must be updated whenever a skill is added, removed, or renamed |
+| `.claude/skills/SKILL_MAP.md` | Must be updated whenever a skill is added, removed, or renamed |
 | `logging/progress_log.md` | Must be updated for any material change |
 
 ## Skill Load Order
 
-1. [`repo-workflow`](.github/skills/repo-workflow/SKILL.md)
-2. [`scope-creep-guard`](.github/skills/scope-creep-guard/SKILL.md) — every task
-3. [`frontend-design`](.github/skills/frontend-design/SKILL.md) — any UI/visual work
-4. [`ui-ux-pro-max`](.github/skills/ui-ux-pro-max/SKILL.md) — design system, palettes, component patterns
-5. [`documentation-cohesion`](.github/skills/documentation-cohesion/SKILL.md) — doc changes
+Invoke each via the `Skill` tool (e.g. `Skill(repo-workflow)`), not by reading its `SKILL.md`:
+
+1. `repo-workflow`
+2. `scope-creep-guard` — every task
+3. `frontend-design` — any UI/visual work
+4. `ui-ux-pro-max` — design system, palettes, component patterns
+5. `documentation-cohesion` — doc changes
 6. Cross-cutting skills as needed: `skill-map-governance`, `verification-gate`, `workflow-logging`
 
 ## Sources of Truth
 
 - This file (`CLAUDE.md`) — Claude Code always-on instructions
-- `.github/copilot-instructions.md` — VS Code Copilot always-on instructions (parallel surface)
-- `.github/skills/SKILL_MAP.md` — skill registry
+- `.github/copilot-instructions.md` — VS Code Copilot always-on instructions (parallel surface; not kept in sync with the `.claude/skills` migration below, since Copilot is out of scope here)
+- `.claude/skills/SKILL_MAP.md` — skill registry
 - `README.md` — project overview and CSV format spec
 - `big-board.html` — the application itself
 

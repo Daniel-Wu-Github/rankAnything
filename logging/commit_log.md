@@ -91,3 +91,73 @@ Entries are grouped by branch and extend commit messages with file-level change 
       - D deploy.sh
       - M logging/commit_log.md
       - M logging/progress_log.md
+
+### 2026-07-25 02:03:16Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: c8ee1831dfdb99cca93aa08194e7ab6c1e7ea6aa..0bdf6cbcfed3fa48a92da4114a0b1051ab5c0d3a
+- Commits:
+  - 1296a16 fix: big-board.html ad-blocker-triggered layout squish
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-24T21:02:21-05:00
+    - Purpose: .app had no explicit grid-column in the 3-track page grid. When an ad
+    - Files:
+      - M big-board.html
+      - M logging/commit_log.md
+      - M logging/progress_log.md
+  - 0bdf6cb test: fix racy share-URL clipboard assertion in e2e gate
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-24T21:03:09-05:00
+    - Purpose: #share-btn's click handler is async (CompressionStream + clipboard
+    - Files:
+      - M e2e/tests/engine.spec.ts
+      - M logging/progress_log.md
+
+### 2026-07-25 02:28:20Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 0bdf6cbcfed3fa48a92da4114a0b1051ab5c0d3a..cec024a3ffa4dc5abad4252a5c7f7708eb0a61f4
+- Commits:
+  - cec024a fix: point big-board.html social meta tags at rankanything.pages.dev
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-24T21:27:21-05:00
+    - Purpose: Replaces PUBLISHING.md Step 6's PLACEHOLDER_DOMAIN.com with the real
+    - Files:
+      - M big-board.html
+
+### 2026-07-25 05:12:23Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: cec024a3ffa4dc5abad4252a5c7f7708eb0a61f4..2b645b617bbf67e034a71a0bd394d64aa6a23d08
+- Commits:
+  - 2b645b6 docs: football v1 launch gaps + engine migration plan
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-25T00:12:12-05:00
+    - Purpose: Captures pre-launch gap analysis for big-board.html (mobile UX, OG image,
+    - Files:
+      - A docs/FOOTBALL_ENGINE_MIGRATION_PLAN.md
+      - A docs/FOOTBALL_V1_LAUNCH_GAPS.md
+
+### 2026-07-27 01:30:43Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 2b645b617bbf67e034a71a0bd394d64aa6a23d08..1456b9a07a6dc08153738d1c22dda891b8c2f871
+- Commits:
+  - 1cfde12 fix: mobile UX pass on big-board.html (Launch Gap #1)
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-26T20:22:30-05:00
+    - Purpose: Eliminates horizontal page overflow, collapses the 10-column table to
+    - Files:
+      - A .claude/skills/frontend-design/SKILL.md
+      - D .github/skills/frontend-design/SKILL.md
+      - M big-board.html
+      - A docs/MOBILE_UX_PLAN.md
+      - A e2e/tests/bigboard-mobile.spec.ts
+      - M logging/progress_log.md
+  - 1456b9a chore: revert stray frontend-design skill move from mobile commit
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-26T20:30:11-05:00
+    - Purpose: The frontend-design SKILL.md rename (.github/skills -> .claude/skills)
+    - Files:
+      - D .claude/skills/frontend-design/SKILL.md
+      - A .github/skills/frontend-design/SKILL.md
