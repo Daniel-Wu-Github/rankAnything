@@ -2,6 +2,57 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 013 - 2026-07-30 - Real age/team/bye-week data for DEFAULT_PLAYERS + ADP script deferred
+
+- Task: fill in `big-board.html`'s `DEFAULT_PLAYERS` age and bye-week fields (hard-coded to `0` for all 425 players since Entry 005) with real data, and keep `team` accurate as players move (trades/free-agency signings) — bye week derives from team. User explicitly deferred both the ADP-fetch half of Launch Gap #4 and AdSense/domain work (#5) this session; scope narrowed to age/team/bye only.
+- Data sources (verified live, not assumed):
+  - **Team + age**: `api.sleeper.app/v1/players/nfl` — confirmed CORS-open (per prior session's research) and free; has no ADP but does have per-player current team + age, which is what's missing here.
+  - **Bye weeks**: fetched the NFL's actual 2026 schedule release (nfl.com) via WebFetch — all 32 teams cross-checked to sum to 32 across weeks 5-14 (no byes in week 12) before hardcoding into a lookup table.
+- New file: `scripts/refresh-bigboard-data.mjs` — a rerunnable, zero-dep dev script (not part of any build; `big-board.html` stays buildless/frozen). Extracts `DEFAULT_PLAYERS` from `big-board.html` via bracket-matching + `new Function` eval (data is a JS literal, not JSON — unquoted keys), matches each player against Sleeper by normalized name (strips punctuation/suffixes, with a small hand-verified alias map for real nickname mismatches: Hollywood Brown/Marquise Brown, Bam Knight/Zonovan Knight, etc.), fills in age + current team, computes `byeWeek` from team via the hardcoded 2026 table, and rewrites the array back into the file in its original compact format. D/ST entries get byeWeek only (age/team don't apply to a defense).
+- Real findings the refresh surfaced (not hypothetical): 3 players whose `team` was stale relative to the embedded FantasyPros CSV, confirmed individually via web search before trusting Sleeper's data over the file's: **A.J. Brown** (PHI→NE, traded to Patriots), **David Njoku** (FA→LAC, signed May 2026), **Aaron Rodgers** (FA→PIT). This is exactly the "must stay accurate as players move" case the user flagged.
+- Bug caught before it shipped: Sleeper uses team code `JAX` for Jacksonville; this codebase uses `JAC` everywhere (CSV, D/ST entries, the bye-week table itself). The first script run blindly wrote back `JAX`, which silently zeroed out `byeWeek` for all 10 Jaguars players (lookup key mismatch) and created a `JAC`/`JAX` split against the Jaguars' own D/ST entry. Caught by diffing before/after team codes rather than trusting the run; fixed with a `TEAM_CODE_FROM_SLEEPER` normalization map in the script, reverted the bad write via `git checkout`, and re-ran clean.
+- Process note: `git checkout -- big-board.html` (used to undo the bad JAX write) reverted the *whole file* to `HEAD`, which silently also discarded this session's earlier uncommitted watermark-pill code (Entry 012, never committed). Caught by the e2e watermark-pixel assertion failing on re-run — re-applied the watermark edit from scratch, confirmed nothing else was lost, full suite green after. Lesson: a targeted `git checkout` on a file with multiple layers of uncommitted work wipes all of them, not just the one being undone — should have used `git stash`/manual diff review instead of a blanket checkout mid-session.
+- 2 of 425 players unmatched against Sleeper (left with `age:0`, `byeWeek` still derived from existing team): "Tommy Myers" (deep-bench FA TE, likely not in Sleeper's active dataset) and "Tev Johnson" (WR, TB) — logged by the script on every run for visibility, not silently dropped.
+- Files edited:
+  - big-board.html (DEFAULT_PLAYERS age/team/byeWeek values; watermark pill re-added)
+  - scripts/refresh-bigboard-data.mjs (new)
+  - logging/progress_log.md
+- Verification:
+  - Full e2e suite green, 36/36, after `node site/build.mjs` + `npx playwright test` (including the mobile age/bye-alignment regression test and the watermark-pixel assertion from Entry 012).
+  - `node --check`-equivalent parse of the rewritten `DEFAULT_PLAYERS` array (via the same `new Function` extraction the script uses) confirms valid JS, 425 entries.
+  - Manually diffed every team-code change against `HEAD` and cross-verified all 3 real trades/signings via live web search before accepting them; confirmed zero stray `JAX` codes and all 33 expected team codes (32 + `FA`) present post-run.
+- Task alignment:
+  - Fulfillment: age and bye week are now real for 423/425 players (99.5%), team stays refreshable via a rerunnable script rather than another one-time hardcode.
+  - Deviation: ADP fetch (the other half of Launch Gap #4) and AdSense/domain work (#5) explicitly out of scope this session per user instruction — not attempted.
+
+---
+
+## Entry 012 - 2026-07-29 - OG share image shipped + export watermark (Launch Gap #2)
+
+- Task: `FOOTBALL_V1_LAUNCH_GAPS.md` item 2 (OG share image) + item 3 (export watermark). Domain purchase (item 6, `DOMAIN_DECISION.md`/`NEXT_SESSION_HANDOFF.md`) explicitly deferred this session — user chose not to buy `rankanything.net` yet, but approved shipping the already-designed OG image and watermark as-is even though their baked-in text reads `rankanything.net` (aspirational; site still lives at `rankanything.pages.dev`).
+- Context: the approved OG image design and a watermark reference PNG had been prototyped last session in a Playwright-screenshot scratchpad that (as documented) doesn't survive between sessions. User recovered both as `ogimagefinal.png` / `watermarkfinal.png` at repo root via Claude Code's own chat-history persistence — verified they exist, match the approved spec (1200x630 OG image; 640x240 watermark reference), and are untracked in git before using them.
+- What changed:
+  - Copied `ogimagefinal.png` → `site/og-image.png` (source asset, ships from `site/`).
+  - Added a static-asset copy step to `site/build.mjs` (`og-image.png` → `dist/og-image.png`) — previously the build only copied `src/js`/`src/css`/generated pages, no root-level static assets.
+  - `big-board.html`'s existing `og:image`/`twitter:image` meta tags already pointed at `.../og-image.png` (see prior session) — no meta-tag edit needed, the file just needed to exist at that path.
+  - Wired the export watermark directly into `exportImage()` in `big-board.html` (not by compositing `watermarkfinal.png` — that reference PNG is mostly padding around a small badge; redrew the same pill design with canvas primitives instead, crisper at the export's 2x scale): a rounded pill, accent-blue dot, "rank"/"anything" (white/accent) + ".net" (muted mono), bottom-right of the export footer band, ~72% opacity — but the alpha is scoped to the pill's translucent background/border only, not the dot/text, so the brand mark itself stays a bit-exact accent-blue rather than blending duller against the dark background (this also makes the color assertable in a test).
+  - Extended `e2e/tests/bigboard.spec.ts`'s "CSV and image exports download" test: after the image download, loads the PNG into an in-page canvas and scans the bottom-right region for accent-blue (`#38bdf8`) pixels within tolerance, asserting the watermark is actually present rather than just that a file downloaded.
+- Files edited:
+  - site/og-image.png (new)
+  - site/build.mjs
+  - big-board.html
+  - e2e/tests/bigboard.spec.ts
+  - logging/progress_log.md
+- Verification:
+  - Full e2e suite green, 36/36 (`node ../site/build.mjs && npx playwright test` from `e2e/`) — including the new watermark-pixel assertion.
+  - First test run against a stale `site/dist` (built before the watermark fix) failed the new assertion; rebuilding `site/dist` before rerunning fixed it — a reminder that `npx playwright test` run directly (bypassing the `pretest` npm script) serves whatever was last built, not current source.
+  - Root-level `ogimagefinal.png`/`watermarkfinal.png` left in place, untracked — not deleted, since they weren't created this session and may be wanted as raw source; `watermarkfinal.png` itself is no longer used at runtime (canvas-drawn pill replaced it).
+- Task alignment:
+  - Fulfillment: OG image now actually resolves at deploy (was a 404 before — meta tag pointed at a file that never existed in the build output); every image export now carries a durable brand mark back to the site, regression-guarded by e2e.
+  - Deviation: Domain purchase and the `rankanything.pages.dev` → `rankanything.net` URL swap (handoff steps 1-3, 6) explicitly not done this session per user instruction — OG image/watermark still say `.net`, a known, accepted mismatch until the domain is bought.
+
+---
+
 ## Entry 010 - 2026-07-25 - Mobile UX pass on big-board.html (Launch Gap #1) + new skill
 
 - Task: Launch Gap #1 ("truly professional mobile UX") from `FOOTBALL_V1_LAUNCH_GAPS.md`. Planned in `docs/MOBILE_UX_PLAN.md`, then implemented all phases. Treated as a bug fix (broken mobile behavior), not a feature, so in-bounds for the frozen file.

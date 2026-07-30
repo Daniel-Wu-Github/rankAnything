@@ -33,6 +33,9 @@ mkdirSync(dist, { recursive: true });
 cpSync(join(here, "src/js"), join(dist, "assets/js"), { recursive: true });
 cpSync(join(here, "src/css"), join(dist, "assets/css"), { recursive: true });
 
+// 1b. Root-level static assets (OG share image, etc.) — served at /<name>.
+cpSync(join(here, "og-image.png"), join(dist, "og-image.png"));
+
 // 2. Frozen football board — the original product, untouched, at /football/.
 mkdirSync(join(dist, "football"), { recursive: true });
 cpSync(join(repoRoot, "big-board.html"), join(dist, "football/index.html"));

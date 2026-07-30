@@ -3,6 +3,7 @@
 // Note: this page loads SortableJS/PapaParse from CDN — the one non-hermetic
 // dependency in the suite (documented in e2e/README.md).
 import { test, expect, type Page } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 const BOARD = "/football/";
 
@@ -81,7 +82,39 @@ test("CSV and image exports download", async ({ page }) => {
 
 	downloadPromise = page.waitForEvent("download");
 	await page.click("#image-btn");
-	expect((await downloadPromise).suggestedFilename()).toBe("big-board.png");
+	const imageDownload = await downloadPromise;
+	expect(imageDownload.suggestedFilename()).toBe("big-board.png");
+
+	// Regression guard for the brand watermark pill (bottom-right of the
+	// export): scan for its accent-blue dot/text color so a silent removal
+	// or mis-positioning of the watermark fails the gate.
+	const path = await imageDownload.path();
+	const buffer = await readFile(path as string);
+	const dataUrl = `data:image/png;base64,${buffer.toString("base64")}`;
+	const watermarkFound = await page.evaluate(async (src) => {
+		const img = new Image();
+		await new Promise((resolve, reject) => {
+			img.onload = resolve;
+			img.onerror = reject;
+			img.src = src;
+		});
+		const canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		const ctx = canvas.getContext("2d")!;
+		ctx.drawImage(img, 0, 0);
+		const regionW = Math.min(400, img.width);
+		const regionH = Math.min(120, img.height);
+		const data = ctx.getImageData(img.width - regionW, img.height - regionH, regionW, regionH).data;
+		for (let i = 0; i < data.length; i += 4) {
+			const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+			if (a > 0 && Math.abs(r - 56) < 25 && Math.abs(g - 189) < 25 && Math.abs(b - 248) < 25) {
+				return true;
+			}
+		}
+		return false;
+	}, dataUrl);
+	expect(watermarkFound).toBe(true);
 });
 
 test("autosave restores the board after reload", async ({ page }) => {
