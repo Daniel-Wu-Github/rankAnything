@@ -167,6 +167,17 @@ body {
 
 .search-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+.sort-select {
+  font: 400 13px "DM Sans", sans-serif;
+  color: var(--text);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 7px 10px;
+}
+
+.sort-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;

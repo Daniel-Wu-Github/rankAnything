@@ -54,6 +54,7 @@ export async function bootBoardApp() {
     viewRoot: document.getElementById("view-root"),
     filterBar: document.getElementById("filter-bar"),
     search: document.getElementById("search-input"),
+    sortSelect: document.getElementById("sort-select"),
     viewBoard: document.getElementById("view-board-btn"),
     viewTiers: document.getElementById("view-tiers-btn"),
     add: document.getElementById("add-btn"),
@@ -101,6 +102,14 @@ export async function bootBoardApp() {
   const boardView = createBoardView(state, dom.viewRoot, { announce, enumColorMap, onEdit: openNote });
   const tiersView = createTiersView(state, dom.viewRoot, { announce, enumColorMap });
 
+  const sortableFields = template.schema.filter((field) => field.type === "number");
+  if (dom.sortSelect && sortableFields.length) {
+    dom.sortSelect.hidden = false;
+    dom.sortSelect.innerHTML = `<option value="">Manual order</option>${sortableFields
+      .map((field) => `<option value="${escapeHtml(field.key)}">Sort: ${escapeHtml(field.label)}</option>`)
+      .join("")}`;
+  }
+
   function renderFilters() {
     const enumField = template.schema.find((field) => field.type === "enum" && field.filter);
     if (!enumField) { dom.filterBar.hidden = true; return; }
@@ -118,6 +127,7 @@ export async function bootBoardApp() {
     dom.viewBoard.setAttribute("aria-pressed", String(state.view === "board"));
     dom.viewTiers.setAttribute("aria-pressed", String(state.view === "tiers"));
     renderFilters();
+    if (dom.sortSelect && sortableFields.length) dom.sortSelect.value = state.sort.key || "";
     if (state.view === "tiers") tiersView.render();
     else boardView.render();
   }
@@ -145,6 +155,14 @@ export async function bootBoardApp() {
   dom.search.addEventListener("input", () => {
     dispatch(state, { type: "SET_FILTERS", payload: { search: dom.search.value } });
   });
+
+  if (dom.sortSelect) {
+    dom.sortSelect.addEventListener("change", () => {
+      const key = dom.sortSelect.value || null;
+      dispatch(state, { type: "SET_SORT", payload: { key, direction: "asc" } });
+      track("sort_by", { template: template.slug, key });
+    });
+  }
 
   dom.filterBar.addEventListener("click", (event) => {
     const chip = event.target.closest(".filter-chip");

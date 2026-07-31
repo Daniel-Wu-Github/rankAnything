@@ -2,6 +2,54 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 015 - 2026-07-31 - Toggle between consensus rank and ADP (site/ engine, new template)
+
+- Task: user proposed toggling between Sleeper/Yahoo/ESPN/aggregate rankings as "a massive win for users." Investigated before building anything: ESPN's and Yahoo's `robots.txt` both explicitly `Disallow: /` for `anthropic-ai` (Yahoo also names `Claude-Web` and `ClaudeBot`) — an explicit, named instruction not to crawl either site with an Anthropic agent, build-time or not. Declined to scrape either, including via a build script sending a generic User-Agent to route around the block — that would be evasion of a stated access control, not a legitimate workaround. Sleeper's `robots.txt` is open, but (per Entry 014's research) Sleeper has no rankings/ADP product to scrape in the first place. So the real, legitimate version of "toggle rankings" is two sources already in hand: **FantasyPros consensus rank** (already embedded) and **Fantasy Football Calculator ADP** (Entry 014). Built that instead, with the user's explicit go-ahead.
+- Where this landed: `site/`'s generic engine, not `big-board.html` — the frozen file's own rule (`CLAUDE.md`: "no new features") rules it out there; a new capability like this belongs in `site/` by the repo's own architecture split.
+- New generic engine capability — **sort by any number field**: `SET_SORT`/`applySort`/`isSortActive` already existed in `engine.js` but were never wired to any UI (dead capability, discovered while designing this). Added a `<select id="sort-select">` to `board.html`'s toolbar, populated from the template's `number`-type schema fields (hidden/empty for templates without any, e.g. `cereal.json`), wired in `app.js` to dispatch `SET_SORT`. Reuses the engine's existing `locked()` gate (`isFilterActive || isSortActive`) so drag-reorder auto-disables while a sort is active, exactly like the filter-lock behavior already shipped. This benefits every template with a number field, not just football — a generalization, not a one-off.
+- Second small generalization, needed to show "Team" as a column: `board.js` only ever rendered the *first* enum-type schema field as a column (`schema.find(...)`), silently dropping any second one. Changed to `schema.filter(...)`, keeping the first enum as the colored badge (unchanged look for all 12 existing templates, none of which have >1 enum field) and rendering any additional enum fields as plain muted-text columns (reusing the existing `.col-num` style) — so "Team" shows without visually competing with the "Position" badge color.
+- New template: `site/templates/fantasy-football-2026.json`, built by new script `scripts/build-fantasy-football-template.mjs` — merges `FantasyPros_2026_Draft_ALL_Rankings.csv` (consensus rank) with `site/data/adp-ppr-2026.json` (Entry 014's fetch) by normalized name (reusing the diacritic/suffix normalization approach from Entry 013's player-data script, plus alias entries for the 2 real mismatches found: "Kenny Gainwell"/"Kenneth Gainwell", "Eddy Pineiro"/"Eddy Piñeiro"). Team defenses matched by team code (`JAX`→`JAC` normalized, same fix as Entry 013) rather than name, since FFC labels them "Seattle Defense" etc. while FantasyPros uses full team names. 215/242 ADP players matched to a consensus rank; the other 27 (mostly deep-bench/kickers not in the consensus list) get a sentinel rank so they sort to the bottom of Consensus order without colliding with real ranks. Initial item order = Consensus Rank (matches `big-board.html`'s own default, consistent product-wide).
+- Files edited:
+  - site/src/pages/board.html (sort-select control)
+  - site/src/js/app.js (sort-select wiring + population)
+  - site/src/js/views/board.js (multi-enum-column rendering)
+  - site/src/css/app.css (.sort-select style)
+  - scripts/build-fantasy-football-template.mjs (new)
+  - site/templates/fantasy-football-2026.json (new, generated)
+  - e2e/tests/engine.spec.ts (new sort-toggle test)
+  - e2e/tests/home.spec.ts (gallery count 12 → 13)
+  - logging/progress_log.md
+- Verification:
+  - Full e2e suite green, 37/37 (up from 36 — one new test added), including the a11y gate (exercised on `movies-2010s`, which already has a number field, so the new sort-select's accessibility was covered by the existing gate without a dedicated new a11y test).
+  - New test drives the actual feature end-to-end: default manual order matches Consensus Rank (`Jahmyr Gibbs` first), switching to ADP changes the order and locks drag-reorder, switching back to "Manual order" restores both the original order and draggability. Also asserts the Position and Team columns both render.
+  - Confirmed via direct `curl` against the built `site/dist` that the gallery lists 13 cards and `/t/fantasy-football-2026/` serves with the right title before writing the e2e assertion.
+- Task alignment:
+  - Fulfillment: real, working "toggle between ranking sources," built from data that's actually legitimately available — not the ESPN/Yahoo/Sleeper toggle originally proposed, since 2 of those 3 aren't accessible for stated (robots.txt) or factual (no product) reasons.
+  - Deviation: scope narrowed from "Sleeper/Yahoo/ESPN/aggregate" to "FantasyPros consensus/FFC ADP" per the above — flagged to the user before building, who approved proceeding on this narrower, real version.
+
+---
+
+## Entry 014 - 2026-07-30 - Build-time ADP fetch script (Launch Gap #4)
+
+- Task: write the build-time ADP fetch script deferred in Entry 013 — the other half of Launch Gap #4. Re-verified the source survey before building rather than trusting last session's conclusion: re-curled Fantasy Football Calculator's live API directly (confirmed no auth, no CORS, real 2026 data — 3,673 aggregated drafts), and web-searched for anything missed. Found one option not in the original survey — **Fantasy Nerds API** has an ADP endpoint, but real (non-`TEST`-key) commercial use requires a paid $74.95/yr plan, so it's not a genuine free alternative. FantasyCalc is dynasty trade values, not redraft ADP — different product. No public NFL.com ADP endpoint exists. Conclusion unchanged: **Fantasy Football Calculator remains the only free, no-auth, commercial-safe ADP source.**
+- New file: `scripts/fetch-adp.mjs` — zero-dep, same philosophy as `site/build.mjs`. Fetches FFC's `/api/v1/adp/<format>?teams=&year=` endpoint (defaults: ppr/12-team/2026, overridable via CLI args), writes a clean static JSON snapshot to `site/data/adp-<format>-<year>.json` (name, position, team, adp, timesDrafted, byeWeek — FFC conveniently returns bye week per player too, which cross-checked cleanly against Entry 013's independently-built bye-week table for spot-checked players).
+- `site/build.mjs`: added a guarded copy step (1c) — `site/data/` → `dist/data/` if the directory exists, so a fetched snapshot ships as a normal same-origin static asset. Guarded with `existsSync` specifically because a fresh checkout won't have `site/data/` until someone runs the fetch script by hand; verified the build still succeeds cleanly with the directory absent.
+- Explicitly NOT done, per scope-creep-guard: no UI wiring. `big-board.html` is frozen (adding an ADP column there would be a new feature, against its explicit rule); `site/`'s schema/views/templates were not touched to consume this data either — that's a distinct feature decision (which template gets an ADP column, sort-by-ADP, etc.) deferred to a future task, not bundled into "write the fetch script."
+- Files edited:
+  - scripts/fetch-adp.mjs (new)
+  - site/build.mjs
+  - site/data/adp-ppr-2026.json (generated artifact, from running the script — not hand-written)
+  - logging/progress_log.md
+- Verification:
+  - Ran the script live: 242 players written, matches FFC's reported `total_drafts: 3673` and draft-date-range metadata.
+  - Full e2e suite green, 36/36, after `node site/build.mjs` with `site/data/` present (confirmed `dist/data/adp-ppr-2026.json` served correctly).
+  - Re-ran the build with `site/data/` temporarily moved aside — confirmed the guarded copy step doesn't break a fresh-checkout build.
+- Task alignment:
+  - Fulfillment: the build-time fetch half of Launch Gap #4 is done and produces real, verifiable data from the one legitimate free source.
+  - Deviation: none from what was asked ("write the adp script") — UI consumption was never requested and is flagged as separate follow-on work, not silently skipped.
+
+---
+
 ## Entry 013 - 2026-07-30 - Real age/team/bye-week data for DEFAULT_PLAYERS + ADP script deferred
 
 - Task: fill in `big-board.html`'s `DEFAULT_PLAYERS` age and bye-week fields (hard-coded to `0` for all 425 players since Entry 005) with real data, and keep `team` accurate as players move (trades/free-agency signings) — bye week derives from team. User explicitly deferred both the ADP-fetch half of Launch Gap #4 and AdSense/domain work (#5) this session; scope narrowed to age/team/bye only.

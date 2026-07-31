@@ -15,7 +15,7 @@ export function createBoardView(state, root, options) {
   function render() {
     const filtered = applySort(state, applyFilters(state));
     const showTiers = !locked();
-    const enumField = state.template.schema.find((field) => field.type === "enum");
+    const [enumField, ...secondaryEnumFields] = state.template.schema.filter((field) => field.type === "enum");
     const numberFields = state.template.schema.filter((field) => field.type === "number");
 
     if (!state.items.length) {
@@ -33,6 +33,7 @@ export function createBoardView(state, root, options) {
         <th class="col-star" aria-label="Starred">★</th>
         <th class="col-name">Name</th>
         ${enumField ? `<th>${escapeHtml(enumField.label)}</th>` : ""}
+        ${secondaryEnumFields.map((field) => `<th class="col-num">${escapeHtml(field.label)}</th>`).join("")}
         ${numberFields.map((field) => `<th class="col-num">${escapeHtml(field.label)}</th>`).join("")}
         <th class="col-actions" aria-label="Actions"></th>
       </tr>`;
@@ -69,6 +70,7 @@ export function createBoardView(state, root, options) {
             ${item.note ? `<span class="note-dot" title="${escapeHtml(item.note)}"></span>` : ""}
           </td>
           ${enumField ? `<td><span class="enum-badge" style="--badge-color:${enumColor || "var(--muted)"}">${escapeHtml(enumValue ?? "")}</span></td>` : ""}
+          ${secondaryEnumFields.map((field) => `<td class="col-num">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
           ${numberFields.map((field) => `<td class="col-num">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
           <td class="col-actions">
             <button class="icon-btn" data-action="note" data-id="${item.id}" aria-label="Edit note">✎</button>

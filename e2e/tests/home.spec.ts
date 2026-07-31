@@ -22,9 +22,9 @@ test("paste-a-list creates a custom board in two interactions", async ({ page })
 	expect(names).toEqual(["Coffee", "Tea", "Water", "Juice", "Milk"]);
 });
 
-test("gallery lists all 12 templates and navigates to a board", async ({ page }) => {
+test("gallery lists all 13 templates and navigates to a board", async ({ page }) => {
 	await page.goto("/");
-	await expect(page.locator(".gallery-card")).toHaveCount(12);
+	await expect(page.locator(".gallery-card")).toHaveCount(13);
 	await page.click('.gallery-card[href="/t/nba-goats/"]');
 	await ready(page);
 	await expect(page.locator("tr.item-row")).toHaveCount(25);
