@@ -1,0 +1,18 @@
+{
+  "name": "Rank Anything",
+  "short_name": "Rank Anything",
+  "description": "Drag it, tier it, or let this-or-that decide — then share the whole board as a link or an image. No sign-up, no server.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d1017",
+  "theme_color": "#0d1017",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

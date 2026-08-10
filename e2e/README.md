@@ -6,15 +6,18 @@ Playwright suite over the built static site (`site/dist`, rebuilt by `pretest`).
 cd e2e && npm install && npm test   # xvfb-run; use npm run test:headed with a display
 ```
 
-## Coverage (23 tests)
+## Coverage (53 tests)
 
 | Spec | Guards |
 |---|---|
-| `engine.spec.ts` | Template load + meta, mouse drag + undo/redo, keyboard-only reorder (Space/arrows/Escape + aria-live), tier break + label + view-switch state preservation, filter lock, CSV round-trip, share-URL round-trip (< 8KB), embed render, PNG download |
+| `engine.spec.ts` | Template load + meta, mouse drag + undo/redo, keyboard-only reorder (Space/arrows/Escape + aria-live), tier break + label + view-switch state preservation, filter lock, CSV round-trip, share-URL round-trip (< 8KB), embed render, PNG download, sort-by-field toggle (consensus vs ADP) locking/unlocking reorder |
+| `engine-mobile.spec.ts` | Mobile gate for the generic engine: touch-drag on the handle reorders **and** a plain body swipe does not (native HTML5 DnD is a mouse-events spec and never fires on touch — the bug this file exists to prevent), zero horizontal scroll across all 13 templates at 320/375/414, 44px touch targets, row→card collapse exposing `data-label` key/value rows |
 | `pairwise.spec.ts` | Truthful-oracle full run must produce a correctly sorted ranking (correctness independent of the seeded shuffle), editor handoff preserves order, undo/keyboard choices |
 | `home.spec.ts` | Paste-a-list → board in 2 interactions (bullets/numbers stripped), gallery count + navigation, frozen `/football/` still serves, sitemap/robots index every surface |
-| `bigboard.spec.ts` | P0 on the frozen football board: keyboard reorder = one undo entry, share round-trip with stars/tiers, CSV + PNG downloads, autosave restore after reload |
-| `a11y.spec.ts` | axe: 0 critical/serious on home, template board, tier view, pairwise. `/football/` is exempt by design (feature-frozen; its keyboard path is covered functionally) |
+| `bigboard.spec.ts` | P0 on the frozen football board: keyboard reorder = one undo entry, share round-trip with stars/tiers, CSV + PNG downloads (incl. the brand watermark pixels), autosave restore after reload |
+| `bigboard-mobile.spec.ts` | Mobile gate for the frozen football board: no x-scroll at 320/375/414, dense rows, filters drawer, handle-gated touch reorder, more-actions modal, 44px targets |
+| `security.spec.ts` | Every surface boots with the **production** CSP applied and logs zero CSP violations (`server.mjs` applies `site/dist/_headers` the way Pages does, so a policy that would white-screen prod fails here instead), baseline headers present, `/embed/` stays iframe-able, 404 page serves, favicon/manifest resolve |
+| `a11y.spec.ts` | axe: 0 critical/serious on home, template board, tier view, pairwise, **and the board at 320/375** (card collapse drops implicit table semantics, so mobile needs its own pass). `/football/` is exempt by design (feature-frozen; its keyboard path is covered functionally) |
 
 ## Non-hermetic notes
 

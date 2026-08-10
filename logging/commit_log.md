@@ -277,3 +277,38 @@ Entries are grouped by branch and extend commit messages with file-level change 
       - M .claude/skills/hosted-agents/references/infrastructure-patterns.md
       - M .claude/skills/hosted-agents/scripts/sandbox_manager.py
       - M logging/commit_log.md
+
+### 2026-08-03 14:41:43Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 7fe5c03b1a4d3afa31b65b553443772e6c33c80a..12f3ec15b886f9f696a295b073fd27ff780663b4
+- Commits:
+  - 1341854 feat: ship OG share image + export watermark; refresh player age/team/bye data
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-30T02:40:42-05:00
+    - Purpose: Launch Gap #2/#3: og-image.png now actually ships in the build (was
+    - Files:
+      - M big-board.html
+      - M e2e/tests/bigboard.spec.ts
+      - M logging/commit_log.md
+      - M logging/progress_log.md
+      - A scripts/refresh-bigboard-data.mjs
+      - M site/build.mjs
+      - A site/og-image.png
+  - 12f3ec1 feat: build-time ADP fetch + consensus/ADP ranking toggle (Launch Gap #4)
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-07-31T01:48:33-05:00
+    - Purpose: Fantasy Football Calculator remains the only free, no-auth, commercial-
+    - Files:
+      - M e2e/tests/engine.spec.ts
+      - M e2e/tests/home.spec.ts
+      - M logging/progress_log.md
+      - A scripts/build-fantasy-football-template.mjs
+      - A scripts/fetch-adp.mjs
+      - M site/build.mjs
+      - A site/data/adp-ppr-2026.json
+      - M site/src/css/app.css
+      - M site/src/js/app.js
+      - M site/src/js/views/board.js
+      - M site/src/pages/board.html
+      - A site/templates/fantasy-football-2026.json

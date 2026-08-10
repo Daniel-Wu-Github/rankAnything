@@ -49,3 +49,16 @@ test("pairwise page has no critical/serious violations", async ({ page }) => {
 	await ready(page);
 	await gate(page);
 });
+
+// The board collapses row->card at phone widths (display:table-* becomes
+// flex), which drops implicit table semantics — so mobile needs its own axe
+// pass, not just the desktop one above.
+for (const width of [320, 375]) {
+	test(`board at ${width}px has no critical/serious violations`, async ({ page }) => {
+		await page.addInitScript(() => localStorage.clear());
+		await page.setViewportSize({ width, height: 780 });
+		await page.goto("/t/fantasy-football-2026/");
+		await ready(page);
+		await gate(page);
+	});
+}

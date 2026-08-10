@@ -242,7 +242,7 @@ body {
 }
 
 .col-num { font-family: "DM Mono", monospace; color: var(--muted); }
-.col-actions { text-align: right; width: 80px; }
+.col-actions { text-align: right; width: 108px; white-space: nowrap; }
 
 .icon-btn {
   font-size: 14px;
@@ -622,11 +622,151 @@ body.embed { background: var(--bg); }
   color: var(--accent);
 }
 
+/* Drag handle: the touch-drag grab point (touch reorder is gated to it so a
+   plain swipe still scrolls). Also a useful desktop affordance. */
+.drag-handle {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: grab;
+  font-size: 15px;
+  line-height: 1;
+  padding: 4px 6px;
+  touch-action: none;
+}
+.drag-handle:disabled { opacity: 0.3; cursor: default; }
+.drag-handle:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 @media (max-width: 640px) {
   .duel { grid-template-columns: 1fr; }
   .duel-vs { padding: 4px 0; }
   .tier-lane { grid-template-columns: 1fr; }
   .tier-lane-label { padding: 8px 12px; }
+}
+
+/* Phone: the schema-driven table can hold arbitrarily many columns, so it
+   collapses row->card rather than shrinking columns into unreadable slivers.
+   Attribute cells surface their header via data-label (emitted in board.js).
+   Chosen over horizontal-scroll-with-frozen-column because rows here are
+   read and acted on individually (drag/star/note), not compared side by side. */
+@media (max-width: 600px) {
+  .shell, .board-table { min-width: 0; }
+
+  .board-table thead { display: none; }
+
+  .board-table, .board-table tbody, .board-table tr, .board-table td {
+    display: block;
+    width: auto;
+  }
+
+  .board-table tr.item-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 6px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* The per-cell bottom border is a table-layout artifact; in card mode the
+     row itself carries the separator. */
+  .board-table td { border-bottom: 0; padding: 2px 0; }
+  .item-row.drop-before { border-top: 2px solid var(--accent); }
+  .item-row.drop-after { border-bottom: 2px solid var(--accent); }
+  .item-row.drop-before td, .item-row.drop-after td { border: 0; }
+
+  /* Forces the attribute strip onto its own line below name/actions. */
+  .board-table tr.item-row::after {
+    content: "";
+    flex-basis: 100%;
+    height: 0;
+    order: 5;
+  }
+
+  .board-table tr.item-row > .col-rank {
+    order: 1;
+    font-size: 15px;
+    min-width: 24px;
+  }
+
+  .board-table tr.item-row > td:nth-child(2) { order: 2; } /* star */
+
+  .board-table tr.item-row > .col-name {
+    order: 3;
+    flex: 1 1 30%;
+    min-width: 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-align: left;
+  }
+
+  .board-table tr.item-row > .col-actions {
+    order: 4;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Attribute cells become a labeled key/value strip under the name. */
+  .board-table tr.item-row > td[data-label] {
+    order: 6;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 12px;
+    font-size: 12px;
+    text-align: left;
+  }
+
+  .board-table tr.item-row > td[data-label]::before {
+    content: attr(data-label) ":";
+    color: var(--muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .board-table tr.item-row > td[data-label]:empty { display: none; }
+
+  .board-table tr.tier-row { display: block; padding: 0; }
+  .board-table tr.tier-row td { display: block; width: auto; }
+
+  /* 44px touch targets (the glyphs stay small; the hit area grows). */
+  .icon-btn, .drag-handle {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Tier +/- stays in flow next to the name rather than overlapping it, and
+     is always visible on touch (the desktop hover-to-reveal has no touch
+     equivalent). Full 44px hit area like every other control. */
+  .tier-btn {
+    min-width: 44px;
+    min-height: 44px;
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.55;
+    flex: 0 0 auto;
+    margin-right: 0;
+    border: 0;          /* the dashed box reads as an error state at this size */
+    background: none;
+    font-size: 16px;
+  }
+
+  .toolbar .btn, .toolbar select, .toolbar input, .filter-chip {
+    min-height: 44px;
+  }
+
+  .filter-chip { min-width: 44px; }
+
+  .search-input, .sort-select { font-size: 16px; } /* no iOS zoom-on-focus */
 }
 
 @media (prefers-reduced-motion: reduce) {

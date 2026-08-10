@@ -18,4 +18,5 @@ exports/
 
 # Logs
 *.log
-.claude/notification_log.txt
+.claude/notification_log.txt.playwright-mcp/
+e2e/test-results/

@@ -69,12 +69,13 @@ export function createBoardView(state, root, options) {
             <span class="item-name">${escapeHtml(item.name)}</span>
             ${item.note ? `<span class="note-dot" title="${escapeHtml(item.note)}"></span>` : ""}
           </td>
-          ${enumField ? `<td><span class="enum-badge" style="--badge-color:${enumColor || "var(--muted)"}">${escapeHtml(enumValue ?? "")}</span></td>` : ""}
-          ${secondaryEnumFields.map((field) => `<td class="col-num">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
-          ${numberFields.map((field) => `<td class="col-num">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
+          ${enumField ? `<td data-label="${escapeHtml(enumField.label)}"><span class="enum-badge" style="--badge-color:${enumColor || "var(--muted)"}">${escapeHtml(enumValue ?? "")}</span></td>` : ""}
+          ${secondaryEnumFields.map((field) => `<td class="col-num" data-label="${escapeHtml(field.label)}">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
+          ${numberFields.map((field) => `<td class="col-num" data-label="${escapeHtml(field.label)}">${escapeHtml(item.attrs[field.key] ?? "")}</td>`).join("")}
           <td class="col-actions">
             <button class="icon-btn" data-action="note" data-id="${item.id}" aria-label="Edit note">✎</button>
             <button class="icon-btn danger" data-action="delete" data-id="${item.id}" aria-label="Delete ${escapeHtml(item.name)}">×</button>
+            <button class="drag-handle" data-id="${item.id}" aria-label="Drag to reorder ${escapeHtml(item.name)}" ${isLocked ? "disabled" : ""}>⠿</button>
           </td>
         </tr>`;
     });
@@ -124,6 +125,51 @@ export function createBoardView(state, root, options) {
     drag.id = drag.overId = drag.position = null;
     root.querySelectorAll(".drop-before, .drop-after").forEach((el) =>
       el.classList.remove("drop-before", "drop-after"));
+  });
+
+  // --- touch drag & drop ---
+  // Native HTML5 DnD above is a mouse-events spec and never fires on touch,
+  // so touch gets its own handler. Gated to .drag-handle on purpose: starting
+  // a drag from anywhere on the row would hijack scrolling (a plain swipe
+  // must still scroll the list), which is the exact trap big-board.html hit.
+  const touchDrag = { id: null, overId: null, position: null };
+
+  function clearDropMarkers() {
+    root.querySelectorAll(".drop-before, .drop-after").forEach((el) =>
+      el.classList.remove("drop-before", "drop-after"));
+  }
+
+  root.addEventListener("touchstart", (event) => {
+    const handle = event.target.closest(".drag-handle");
+    if (!handle || locked()) return;
+    touchDrag.id = handle.dataset.id;
+    const row = handle.closest("tr.item-row");
+    if (row) row.classList.add("kb-lifted");
+  }, { passive: true });
+
+  root.addEventListener("touchmove", (event) => {
+    if (!touchDrag.id) return;
+    // Only now suppress scrolling — the gesture is a confirmed drag.
+    event.preventDefault();
+    const touch = event.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const row = target && target.closest ? target.closest("tr.item-row") : null;
+    if (!row || row.dataset.id === touchDrag.id) return;
+    const rect = row.getBoundingClientRect();
+    touchDrag.overId = row.dataset.id;
+    touchDrag.position = touch.clientY < rect.top + rect.height / 2 ? "above" : "below";
+    clearDropMarkers();
+    row.classList.add(touchDrag.position === "above" ? "drop-before" : "drop-after");
+  }, { passive: false });
+
+  root.addEventListener("touchend", () => {
+    if (!touchDrag.id) return;
+    root.querySelectorAll(".kb-lifted").forEach((el) => el.classList.remove("kb-lifted"));
+    clearDropMarkers();
+    if (touchDrag.overId) {
+      moveItem(state, touchDrag.id, touchDrag.overId, touchDrag.position);
+    }
+    touchDrag.id = touchDrag.overId = touchDrag.position = null;
   });
 
   // --- keyboard reordering (Space lift / arrows / Space drop / Esc cancel) ---
