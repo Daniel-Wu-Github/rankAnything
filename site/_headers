@@ -2,12 +2,16 @@
 # applied by e2e/server.mjs so the e2e gate exercises this exact policy.
 #
 # Why the CSP is repeated per-path instead of set once under /*:
-# Pages' merge behaviour for a header defined by BOTH /* and a more specific
-# rule is not something this project can verify locally (combine vs override).
-# Writing the complete policy on every path makes the result correct under
-# either interpretation: no path can end up with a partial CSP, and /embed/*
-# cannot inherit a frame restriction. The cost is repetition; the benefit is
-# that the deployed policy is not a guess. e2e/tests/security.spec.ts asserts
+# This was originally written defensively, because Pages' merge behaviour for
+# a header defined by BOTH /* and a more specific rule couldn't be verified
+# locally. VERIFIED IN PRODUCTION 2026-08-10 (curl against the live deploy):
+# Pages COMBINES — it emits both headers, and the browser applies the
+# intersection of multiple CSP headers (i.e. the most restrictive wins). The
+# repetition is therefore redundant but harmless and self-consistent: each
+# path still ends up with exactly the intended effective policy, and /embed/*
+# correctly receives no X-Frame-Options and frame-ancestors *.
+# Keeping the explicit per-path policies means this file does not depend on
+# that merge behaviour staying the same. e2e/tests/security.spec.ts asserts
 # both the full policy and the embed exception.
 #
 # CSP trade-offs, stated honestly:
