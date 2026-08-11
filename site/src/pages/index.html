@@ -21,6 +21,14 @@
     <meta name="theme-color" content="#0d1017" />
     <link rel="stylesheet" href="/assets/css/app.css" />
     <!-- ANALYTICS PLACEHOLDER: replace with your GA/PostHog snippet -->
+    <script>
+      // Ad preview dry-run: ?ads=preview renders real-sized ad units so the
+      // visual cost can be judged before any ad code exists. No network calls,
+      // no tracking — pure layout. Real ads would set the same attribute.
+      if (new URLSearchParams(location.search).get("ads") === "preview") {
+        document.documentElement.dataset.ads = "on";
+      }
+    </script>
   </head>
   <body>
     <div class="shell">
@@ -28,6 +36,8 @@
         <a class="wordmark" href="/"><span class="tick">▲</span> Rank Anything</a>
         <nav><a class="wordmark" href="/football/">Fantasy Football Big Board →</a></nav>
       </header>
+
+      <div class="ad-slot ad-leaderboard">Advertisement</div>
 
       <section class="hero">
         <h1>Rank anything.</h1>
@@ -58,5 +68,6 @@
       import { bootHomeApp } from "/assets/js/home-app.js";
       bootHomeApp();
     </script>
+    <div class="ad-slot ad-anchor">Advertisement</div>
   </body>
 </html>

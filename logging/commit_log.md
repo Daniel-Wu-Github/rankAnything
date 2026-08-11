@@ -312,3 +312,66 @@ Entries are grouped by branch and extend commit messages with file-level change 
       - M site/src/js/views/board.js
       - M site/src/pages/board.html
       - A site/templates/fantasy-football-2026.json
+
+### 2026-08-10 23:37:17Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 12f3ec15b886f9f696a295b073fd27ff780663b4..2969333de87b7db0343d689c997e9c9c7c9e0880
+- Commits:
+  - c2c8c62 docs: v1 launch mega plan (remaining coding gaps)
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-08-10T12:06:49-05:00
+    - Purpose: Pre-pass planning doc for the remaining work between current state and a
+    - Files:
+      - A docs/V1_LAUNCH_MEGA_PLAN.md
+  - 2969333 fix: touch drag on mobile, security headers, and v1 launch polish
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-08-10T18:37:09-05:00
+    - Purpose: Executes docs/V1_LAUNCH_MEGA_PLAN.md plus the security/standards gaps the
+    - Files:
+      - M .gitignore
+      - M big-board.html
+      - A docs/DOMAIN_AND_ADSENSE_GUIDE.md
+      - A docs/screenshots/after-desktop1280-ff.png
+      - A docs/screenshots/after-desktop1280-nba.png
+      - A docs/screenshots/after-mobile320-ff.png
+      - A docs/screenshots/after-mobile320-nba.png
+      - A docs/screenshots/after-mobile375-ff.png
+      - A docs/screenshots/after-mobile375-nba.png
+      - A docs/screenshots/before-desktop1280-ff.png
+      - A docs/screenshots/before-desktop1280-nba.png
+      - A docs/screenshots/before-mobile320-ff.png
+      - A docs/screenshots/before-mobile320-nba.png
+      - A docs/screenshots/before-mobile375-ff.png
+      - A docs/screenshots/before-mobile375-nba.png
+      - M e2e/README.md
+      - M e2e/server.mjs
+      - M e2e/tests/a11y.spec.ts
+      - A e2e/tests/engine-mobile.spec.ts
+      - A e2e/tests/security.spec.ts
+      - M logging/commit_log.md
+      - M logging/progress_log.md
+      - A site/_headers
+      - M site/build.mjs
+      - A site/favicon.svg
+      - A site/site.webmanifest
+      - M site/src/css/app.css
+      - M site/src/js/views/board.js
+      - A site/src/pages/404.html
+      - M site/src/pages/board.html
+      - M site/src/pages/embed.html
+      - M site/src/pages/index.html
+      - M site/src/pages/sort.html
+
+### 2026-08-10 23:47:12Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 2969333de87b7db0343d689c997e9c9c7c9e0880..147bff4b8c6ca85dd636eb052eaeff6ca553a63b
+- Commits:
+  - 147bff4 docs: record verified Cloudflare _headers merge semantics
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-08-10T18:47:12-05:00
+    - Purpose: The per-path CSP repetition was written defensively against unknown merge
+    - Files:
+      - A docs/screenshots/prod-mobile375-ff.png
+      - M site/_headers

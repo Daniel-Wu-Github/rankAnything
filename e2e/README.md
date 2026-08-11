@@ -6,7 +6,7 @@ Playwright suite over the built static site (`site/dist`, rebuilt by `pretest`).
 cd e2e && npm install && npm test   # xvfb-run; use npm run test:headed with a display
 ```
 
-## Coverage (53 tests)
+## Coverage (54 tests)
 
 | Spec | Guards |
 |---|---|

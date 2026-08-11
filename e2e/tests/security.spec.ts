@@ -51,6 +51,19 @@ test("unknown paths serve the 404 page", async ({ page }) => {
 	await expect(page.locator("h1")).toContainText("Page not found");
 });
 
+test("ad slots are inert by default and only render under ?ads=preview", async ({ page }) => {
+	await page.goto("/t/nba-goats/");
+	await ready(page);
+	// Markup exists (so real ads can drop in later) but must be invisible to
+	// every normal visitor — the preview flag must not leak.
+	await expect(page.locator(".ad-slot").first()).toBeHidden();
+	expect(await page.evaluate(() => document.documentElement.dataset.ads)).toBeUndefined();
+
+	await page.goto("/t/nba-goats/?ads=preview");
+	await ready(page);
+	await expect(page.locator(".ad-slot").first()).toBeVisible();
+});
+
 test("favicon and manifest resolve (no console 404 noise)", async ({ request }) => {
 	expect((await request.get("/favicon.svg")).status()).toBe(200);
 	const manifest = await request.get("/site.webmanifest");

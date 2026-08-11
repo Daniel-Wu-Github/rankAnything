@@ -75,6 +75,67 @@ body {
   padding: 24px 20px 80px;
 }
 
+/* === ad slots ===
+   Hidden unless <html data-ads="on"> — set either by ?ads=preview (a
+   dry-run so the clutter can be judged before committing to ads) or, later,
+   by the real ad bootstrap. Sizes are the actual AdSense units that would
+   run here, so the preview is honest about the space they take:
+   728x90 leaderboard / 320x100 mobile banner / 320x50 sticky anchor. */
+.ad-slot { display: none; }
+
+[data-ads="on"] .ad-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  color: var(--muted);
+  font: 500 10px "DM Mono", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+[data-ads="on"] .ad-leaderboard {
+  width: 100%;
+  max-width: 728px;
+  height: 90px;
+  margin: 0 auto 18px;
+}
+
+[data-ads="on"] .ad-rectangle {
+  width: 100%;
+  max-width: 336px;
+  height: 280px;
+  margin: 22px auto 0;
+}
+
+/* The sticky anchor is the one that actually costs you screen: it never
+   scrolls away. Shown at phone widths, where it hurts most. */
+[data-ads="on"] .ad-anchor {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50px;
+  z-index: 40;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+[data-ads="on"] body { padding-bottom: 50px; }
+
+@media (min-width: 601px) {
+  [data-ads="on"] .ad-anchor { display: none; }
+  [data-ads="on"] body { padding-bottom: 0; }
+}
+
+@media (max-width: 600px) {
+  [data-ads="on"] .ad-leaderboard { max-width: 320px; height: 100px; }
+}
+
 /* === header / toolbar === */
 .masthead {
   display: flex;
