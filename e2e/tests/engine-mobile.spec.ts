@@ -112,13 +112,61 @@ test("interactive controls meet the 44px touch-target minimum", async ({ page })
 	expect(undersized).toEqual([]);
 });
 
-test("attribute cells collapse into labeled key/value rows on phone widths", async ({ page }) => {
+test("rows stay one dense line: secondary columns move into the more-actions sheet", async ({ page }) => {
 	await page.goto(WIDE_TEMPLATE);
 	await ready(page);
-	// Header row is hidden in card mode; labels come from data-label instead.
 	await expect(page.locator(".board-table thead")).toBeHidden();
-	const labels = await page.$$eval("tr.item-row:first-of-type td[data-label]",
-		(tds) => tds.map((td) => td.getAttribute("data-label")));
-	expect(labels).toContain("Position");
-	expect(labels).toContain("Team");
+
+	// The primary enum badge stays inline (worth scanning); the rest do not.
+	await expect(page.locator("tr.item-row").first().locator(".enum-badge")).toBeVisible();
+	const inlineLabels = await page.$$eval("tr.item-row:first-of-type td[data-label]",
+		(tds) => tds.filter((td) => getComputedStyle(td).display !== "none")
+			.map((td) => td.getAttribute("data-label")));
+	expect(inlineLabels).not.toContain("Consensus Rank");
+	expect(inlineLabels).not.toContain("ADP");
+
+	// Rows must stay compact enough to scan. The card layout this replaced fit
+	// only 3 above the fold at this viewport; the dense row fits 5+ (and 6 at
+	// 390px). Floor is set at 5 so a row-height regression fails here.
+	const visible = await page.evaluate(() => [...document.querySelectorAll("tr.item-row")]
+		.filter((r) => { const b = r.getBoundingClientRect(); return b.top >= 0 && b.bottom <= window.innerHeight; }).length);
+	expect(visible).toBeGreaterThanOrEqual(5);
+});
+
+test("the more-actions sheet exposes every attribute plus star/note/tier/delete", async ({ page }) => {
+	await page.goto(WIDE_TEMPLATE);
+	await ready(page);
+	await page.locator("tr.item-row").first().locator(".more-btn").click();
+
+	const sheet = page.locator("#more-dialog");
+	await expect(sheet).toBeVisible();
+	await expect(sheet).toContainText("Position");
+	await expect(sheet).toContainText("Consensus Rank");
+	await expect(sheet).toContainText("ADP");
+	for (const action of ["star", "note", "tier", "delete"]) {
+		await expect(sheet.locator(`button[data-more-action="${action}"]`)).toBeVisible();
+	}
+});
+
+test("the sheet's star and tier actions mutate the board", async ({ page }) => {
+	await page.goto(WIDE_TEMPLATE);
+	await ready(page);
+	const firstRow = page.locator("tr.item-row").first();
+
+	await firstRow.locator(".more-btn").click();
+	await page.locator('button[data-more-action="star"]').click();
+	await expect(firstRow).toHaveClass(/starred/);
+
+	await page.locator("tr.item-row").nth(2).locator(".more-btn").click();
+	await page.locator('button[data-more-action="tier"]').click();
+	await expect(page.locator("tr.tier-row")).toHaveCount(1);
+});
+
+test("desktop keeps every column inline and hides the mobile more button", async ({ page }) => {
+	await page.setViewportSize({ width: 1280, height: 900 });
+	await page.goto(WIDE_TEMPLATE);
+	await ready(page);
+	await expect(page.locator(".board-table thead")).toBeVisible();
+	await expect(page.locator("tr.item-row").first().locator(".more-btn")).toBeHidden();
+	await expect(page.locator("th", { hasText: "ADP" })).toBeVisible();
 });

@@ -87,6 +87,18 @@
       </div>
     </dialog>
 
+    <!-- Mobile "more actions" sheet: holds the per-item detail and secondary
+         actions that are columns/buttons on desktop, so phone rows stay to a
+         single dense line. Mirrors /football/'s pattern. -->
+    <dialog class="note-dialog more-dialog" id="more-dialog">
+      <h3 id="more-title" style="margin:0 0 10px;font-size:15px">Item</h3>
+      <dl class="more-attrs" id="more-attrs"></dl>
+      <div class="more-actions" id="more-actions"></div>
+      <div class="dialog-actions">
+        <button class="btn" id="more-close">Close</button>
+      </div>
+    </dialog>
+
     <div class="toast" id="toast" role="status"></div>
     <input id="csv-input" type="file" accept=".csv" hidden />
 

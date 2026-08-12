@@ -5,7 +5,7 @@ import {
 } from "../engine.js";
 
 export function createBoardView(state, root, options) {
-  const { announce, enumColorMap, onEdit } = options;
+  const { announce, enumColorMap, onEdit, onMore } = options;
   const kbGrab = { id: null, original: null };
 
   function locked() {
@@ -29,6 +29,7 @@ export function createBoardView(state, root, options) {
 
     const header = `
       <tr>
+        <th class="col-more" aria-label="More actions"></th>
         <th class="col-rank">#</th>
         <th class="col-star" aria-label="Starred">★</th>
         <th class="col-name">Name</th>
@@ -62,6 +63,7 @@ export function createBoardView(state, root, options) {
             draggable="${!isLocked}"
             tabindex="${isLocked ? "-1" : "0"}"
             aria-label="${escapeHtml(item.name)}, rank ${item.rank}${isLocked ? "" : ". Press Space to lift, arrow keys to move, Space to drop, Escape to cancel"}">
+          <td class="col-more"><button class="icon-btn more-btn" data-action="more" data-id="${item.id}" aria-label="More actions for ${escapeHtml(item.name)}">⋮</button></td>
           <td class="col-rank">${item.rank}</td>
           <td><button class="icon-btn" data-action="star" data-id="${item.id}" aria-pressed="${item.starred}">${item.starred ? "★" : "☆"}</button></td>
           <td class="col-name">
@@ -238,6 +240,7 @@ export function createBoardView(state, root, options) {
     if (action === "add-tier") dispatch(state, { type: "SET_TIER", payload: id });
     if (action === "remove-tier") dispatch(state, { type: "REMOVE_TIER", payload: id });
     if (action === "note" && onEdit) onEdit(id);
+    if (action === "more" && onMore) onMore(id);
   });
 
   root.addEventListener("input", (event) => {

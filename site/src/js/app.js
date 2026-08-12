@@ -99,7 +99,49 @@ export async function bootBoardApp() {
     dom.noteDialog.showModal();
   }
 
-  const boardView = createBoardView(state, dom.viewRoot, { announce, enumColorMap, onEdit: openNote });
+  // --- mobile "more actions" sheet ---
+  // Everything that is a column or an always-visible button on desktop moves
+  // in here on phones, so a row stays one dense line. Same idea as the frozen
+  // football board's more-actions modal.
+  const moreDialog = document.getElementById("more-dialog");
+  function openMore(id) {
+    const item = state.items.find((candidate) => candidate.id === id);
+    if (!item || !moreDialog) return;
+    document.getElementById("more-title").textContent = `${item.rank}. ${item.name}`;
+    document.getElementById("more-attrs").innerHTML = template.schema.map((field) => {
+      const value = item.attrs[field.key];
+      if (value === "" || value === undefined || value === null) return "";
+      return `<div class="more-attr"><dt>${escapeHtml(field.label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
+    }).join("");
+    const hasTier = item.tiersAbove && item.rank > 1;
+    document.getElementById("more-actions").innerHTML = `
+      <button class="btn" data-more-action="star">${item.starred ? "★ Unstar" : "☆ Star"}</button>
+      <button class="btn" data-more-action="note">${item.note ? "Edit note" : "Add note"}</button>
+      <button class="btn" data-more-action="tier">${hasTier ? "Remove tier break" : "Add tier break above"}</button>
+      <button class="btn danger" data-more-action="delete">Delete</button>`;
+    moreDialog.dataset.itemId = id;
+    moreDialog.showModal();
+  }
+
+  if (moreDialog) {
+    document.getElementById("more-close").addEventListener("click", () => moreDialog.close());
+    document.getElementById("more-actions").addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-more-action]");
+      if (!button) return;
+      const id = moreDialog.dataset.itemId;
+      const item = state.items.find((candidate) => candidate.id === id);
+      const action = button.dataset.moreAction;
+      moreDialog.close();
+      if (action === "star") dispatch(state, { type: "TOGGLE_STAR", payload: id });
+      if (action === "delete") dispatch(state, { type: "REMOVE_ITEM", payload: id });
+      if (action === "tier") {
+        dispatch(state, { type: item && item.tiersAbove ? "REMOVE_TIER" : "SET_TIER", payload: id });
+      }
+      if (action === "note") openNote(id);
+    });
+  }
+
+  const boardView = createBoardView(state, dom.viewRoot, { announce, enumColorMap, onEdit: openNote, onMore: openMore });
   const tiersView = createTiersView(state, dom.viewRoot, { announce, enumColorMap });
 
   const sortableFields = template.schema.filter((field) => field.type === "number");

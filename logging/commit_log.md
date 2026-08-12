@@ -375,3 +375,27 @@ Entries are grouped by branch and extend commit messages with file-level change 
     - Files:
       - A docs/screenshots/prod-mobile375-ff.png
       - M site/_headers
+
+### 2026-08-11 17:10:39Z - Push to origin
+- Remote URL: https://github.com/Daniel-Wu-Github/rankAnything.git
+- Remote ref: refs/heads/main
+- Range: 147bff4b8c6ca85dd636eb052eaeff6ca553a63b..ae5157b37c5a97c55328c1ef11441171340b9287
+- Commits:
+  - ae5157b feat: ad preview mode (?ads=preview) + launch-ready checklist
+    - Author: Daniel-Wu-Github <danielwu1510@tamu.edu>
+    - Commit date: 2026-08-11T12:10:38-05:00
+    - Purpose: Adds inert ad slots to site/'s shells sized to the real AdSense units
+    - Files:
+      - A .claude/notification_log.txt
+      - D docs/DOMAIN_AND_ADSENSE_GUIDE.md
+      - A docs/LAUNCH_READY_CHECKLIST.md
+      - A docs/screenshots/ads-desktop1280-noads.png
+      - A docs/screenshots/ads-desktop1280-withads.png
+      - A docs/screenshots/ads-mobile390-noads.png
+      - A docs/screenshots/ads-mobile390-withads.png
+      - M e2e/README.md
+      - M e2e/tests/security.spec.ts
+      - M logging/commit_log.md
+      - M site/src/css/app.css
+      - M site/src/pages/board.html
+      - M site/src/pages/index.html

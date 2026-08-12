@@ -2,6 +2,26 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 017 - 2026-08-11 - Port /football/'s mobile row pattern into site/'s engine
+
+- Task: user reported the two football boards look different on mobile and suspected the ADP/consensus work broke `site/`'s mobile UI ("i think you broke this after adding consensus rank and adp"), asking which board is official.
+- **Investigated before agreeing — the suspicion was wrong, but the complaint was right.** `git log --all -S "more-btn" -- site/` returns nothing and `git log -S "max-width: 600px" -- site/src/css/app.css` shows only my own commits: the generic engine never had a more-actions modal or *any* mobile breakpoint. Nothing regressed. My total edits to `big-board.html` this cycle were 4 lines (favicon + preconnect), so `/football/` was untouched.
+- Actual root cause: two separate implementations that were never unified. `/football/` got a proper mobile pass in Entries 010-011 (dense rows, ⋮ more-actions modal, right-side drag handle). When I added mobile support to `site/` in Entry 016 I invented a *different* pattern — a card layout with every attribute inline — instead of porting the one already proven in this repo. Adding Consensus Rank + ADP then made it visibly worse, because each schema field became another line per row. Measured: 3 rows above the fold vs `/football/`'s 9.
+- Decisions taken from the user: `/football/` stays the official board for now; the URL stays `/football/` (not `/fantasy/`). The `site/` version remains a secondary template, and `FOOTBALL_ENGINE_MIGRATION_PLAN.md`'s migration stays unexecuted — so the duplication is now a known, deliberate state rather than an accident.
+- What changed: replaced the card layout with `/football/`'s pattern — row is `[⋮] [rank] [★] [name + badge] [⣿ drag]`. Only the primary enum badge stays inline (the one attribute worth scanning); all other schema fields, plus note/tier/delete, moved into a new `#more-dialog` sheet. Star/note/tier/delete all dispatch through the existing reducer, so no new state paths.
+- Rows above the fold: **3 → 5** at 375px (6 at 390px). Not `/football/`'s 9, because `site/`'s toolbar is still fully expanded where `/football/` has a collapsible filters drawer — that drawer is the remaining delta and was left out of scope deliberately.
+- Files edited: site/src/js/views/board.js; site/src/js/app.js; site/src/pages/board.html; site/src/css/app.css; e2e/tests/engine-mobile.spec.ts; logging/progress_log.md.
+- Verification:
+  - Full e2e suite green (57 tests; +3 net over Entry 016's 54).
+  - New specs assert: secondary attributes are NOT inline, the sheet exposes every attribute, sheet star/tier actions actually mutate the board, and **desktop still shows every column and hides the ⋮** (guards against the mobile pattern leaking upward).
+  - Two real failures caught by the new specs before commit: the ⋮ button was 40px wide (under the 44px minimum), and the row-count floor was set from a 390px hand-measurement while the spec runs at 375px. Both fixed; the floor is now an honest 5 with the reasoning in a comment.
+  - Desktop screenshot compared against the pre-change render — 14 rows, all columns, unchanged.
+- Task alignment:
+  - Fulfillment: mobile rows now match the football board's dense pattern, with the ⋮ sheet and right-side handle the user asked for.
+  - Deviation: did not port `/football/`'s collapsible filters drawer, which is the remaining reason it fits more rows. Flagged rather than silently bundled.
+
+---
+
 ## Entry 016 - 2026-08-10 - V1 launch pass: mobile correctness bug, security headers, perf, polish
 
 - Task: execute `docs/V1_LAUNCH_MEGA_PLAN.md` end to end (committed first as a pre-pass), then deploy, then write the domain/AdSense guide. User's brief was explicitly broader than the plan: "if there are other gaps in our website, such as security gaps or header/cdn or other gaps, thats your responsibility... a fully functioning and working website that is professional and secure and meets industry standards."

@@ -705,128 +705,107 @@ body.embed { background: var(--bg); }
   .tier-lane-label { padding: 8px 12px; }
 }
 
-/* Phone: the schema-driven table can hold arbitrarily many columns, so it
-   collapses row->card rather than shrinking columns into unreadable slivers.
-   Attribute cells surface their header via data-label (emitted in board.js).
-   Chosen over horizontal-scroll-with-frozen-column because rows here are
-   read and acted on individually (drag/star/note), not compared side by side. */
+/* Desktop hides the mobile "more" affordance; every field is a column there. */
+.col-more { display: none; }
+
+.more-dialog .more-attrs { margin: 0 0 14px; }
+.more-attr {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+}
+.more-attr dt { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.more-attr dd { margin: 0; font-size: 14px; }
+.more-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.more-actions .btn { min-height: 44px; }
+.btn.danger { color: var(--danger, #f87171); border-color: var(--danger, #f87171); }
+
+/* Phone: keep rows to ONE dense line so the list stays scannable — the same
+   pattern the frozen football board settled on (Entries 010-011). Attribute
+   columns and secondary actions move into the more-actions sheet rather than
+   stacking inline, which is what made the earlier card layout cluttered:
+   every schema field added another visible line per row (fantasy-football has
+   four, so rows were ~4x taller than they needed to be). Row is:
+   [⋮ more] [rank] [★] [name + badge] [⣿ drag]. */
 @media (max-width: 600px) {
   .shell, .board-table { min-width: 0; }
 
   .board-table thead { display: none; }
-
-  .board-table, .board-table tbody, .board-table tr, .board-table td {
-    display: block;
-    width: auto;
-  }
+  .board-table, .board-table tbody, .board-table tr, .board-table td { display: block; width: auto; }
 
   .board-table tr.item-row {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0 6px;
-    padding: 8px 10px;
+    gap: 2px;
+    padding: 2px 6px;
     border-bottom: 1px solid var(--border);
   }
 
-  /* The per-cell bottom border is a table-layout artifact; in card mode the
-     row itself carries the separator. */
-  .board-table td { border-bottom: 0; padding: 2px 0; }
+  .board-table td { border-bottom: 0; padding: 0; }
   .item-row.drop-before { border-top: 2px solid var(--accent); }
   .item-row.drop-after { border-bottom: 2px solid var(--accent); }
   .item-row.drop-before td, .item-row.drop-after td { border: 0; }
 
-  /* Forces the attribute strip onto its own line below name/actions. */
-  .board-table tr.item-row::after {
-    content: "";
-    flex-basis: 100%;
-    height: 0;
-    order: 5;
-  }
+  .col-more { display: block; flex: 0 0 auto; }
 
   .board-table tr.item-row > .col-rank {
-    order: 1;
-    font-size: 15px;
-    min-width: 24px;
+    flex: 0 0 auto;
+    min-width: 22px;
+    text-align: right;
+    font-size: 14px;
   }
 
-  .board-table tr.item-row > td:nth-child(2) { order: 2; } /* star */
+  .board-table tr.item-row > td:nth-child(3) { flex: 0 0 auto; } /* star */
 
   .board-table tr.item-row > .col-name {
-    order: 3;
-    flex: 1 1 30%;
+    flex: 1 1 auto;
     min-width: 0;
-    font-size: 15px;
     display: flex;
     align-items: center;
-    gap: 4px;
-    text-align: left;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+  .board-table tr.item-row > .col-name .item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* The primary enum (position/category) stays inline as a badge — it's the
+     one attribute worth scanning without opening anything. Everything else
+     lives in the sheet. */
+  .board-table tr.item-row > td:has(.enum-badge) { flex: 0 0 auto; display: block; }
+  .board-table tr.item-row > td[data-label]:not(:has(.enum-badge)) { display: none; }
 
   .board-table tr.item-row > .col-actions {
-    order: 4;
+    flex: 0 0 auto;
     display: flex;
     align-items: center;
+    width: auto;
   }
+  /* Note/delete/tier move into the sheet; the handle stays for touch drag. */
+  .col-actions .icon-btn { display: none; }
+  .tier-btn { display: none; }
 
-  /* Attribute cells become a labeled key/value strip under the name. */
-  .board-table tr.item-row > td[data-label] {
-    order: 6;
+  .icon-btn, .drag-handle, .more-btn {
+    min-width: 44px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    margin-right: 12px;
-    font-size: 12px;
-    text-align: left;
+    justify-content: center;
   }
-
-  .board-table tr.item-row > td[data-label]::before {
-    content: attr(data-label) ":";
-    color: var(--muted);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .board-table tr.item-row > td[data-label]:empty { display: none; }
+  .col-actions .drag-handle { display: inline-flex; }
 
   .board-table tr.tier-row { display: block; padding: 0; }
   .board-table tr.tier-row td { display: block; width: auto; }
 
-  /* 44px touch targets (the glyphs stay small; the hit area grows). */
-  .icon-btn, .drag-handle {
-    min-width: 44px;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Tier +/- stays in flow next to the name rather than overlapping it, and
-     is always visible on touch (the desktop hover-to-reveal has no touch
-     equivalent). Full 44px hit area like every other control. */
-  .tier-btn {
-    min-width: 44px;
-    min-height: 44px;
-    width: auto;
-    height: auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.55;
-    flex: 0 0 auto;
-    margin-right: 0;
-    border: 0;          /* the dashed box reads as an error state at this size */
-    background: none;
-    font-size: 16px;
-  }
-
-  .toolbar .btn, .toolbar select, .toolbar input, .filter-chip {
-    min-height: 44px;
-  }
-
+  .toolbar .btn, .toolbar select, .toolbar input, .filter-chip { min-height: 44px; }
   .filter-chip { min-width: 44px; }
-
   .search-input, .sort-select { font-size: 16px; } /* no iOS zoom-on-focus */
 }
 
