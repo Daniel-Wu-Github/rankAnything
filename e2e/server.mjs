@@ -46,6 +46,30 @@ function loadHeaderRules() {
 
 const headerRules = loadHeaderRules();
 
+// Parse dist/_redirects (Pages format: "<from> <to> <status>") so redirects
+// are exercised by the gate rather than only in production.
+function loadRedirects() {
+  const file = join(root, "_redirects");
+  if (!existsSync(file)) return [];
+  return readFileSync(file, "utf8").split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line && !line.startsWith("#"))
+    .map((line) => {
+      const [from, to, status] = line.split(/\s+/);
+      return { from, to, status: Number(status) || 302 };
+    });
+}
+
+const redirectRules = loadRedirects();
+
+function redirectFor(pathname) {
+  for (const rule of redirectRules) {
+    const re = new RegExp("^" + rule.from.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*") + "$");
+    if (re.test(pathname)) return rule;
+  }
+  return null;
+}
+
 function headersFor(pathname) {
   const out = {};
   for (const rule of headerRules) {
@@ -60,6 +84,12 @@ function headersFor(pathname) {
 createServer(async (request, response) => {
   try {
     const url = new URL(request.url ?? "/", "http://localhost");
+    const redirect = redirectFor(url.pathname);
+    if (redirect) {
+      response.writeHead(redirect.status, { location: redirect.to });
+      response.end();
+      return;
+    }
     let path = normalize(url.pathname).replace(/^([.]{2}[/\\])+/, "");
     if (path.endsWith("/")) path += "index.html";
     let file;

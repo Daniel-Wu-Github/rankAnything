@@ -44,7 +44,7 @@ cpSync(join(here, "src/css"), join(dist, "assets/css"), { recursive: true });
 
 // 1b. Root-level static assets (OG share image, favicon, manifest, and the
 // Cloudflare Pages _headers rules) — served at /<name>.
-for (const file of ["og-image.png", "favicon.svg", "site.webmanifest", "_headers"]) {
+for (const file of ["og-image.png", "favicon.svg", "site.webmanifest", "_headers", "_redirects"]) {
   cpSync(join(here, file), join(dist, file));
 }
 

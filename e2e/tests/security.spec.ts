@@ -45,6 +45,16 @@ test("the embed widget stays iframe-able — it exists to be embedded", async ({
 	expect(headers["x-content-type-options"]).toBe("nosniff");
 });
 
+test("the deleted football template redirects to the official board, not a 404", async ({ request }) => {
+	// It was publicly live and indexed before deletion, so a shared link must
+	// land on the board it duplicated rather than dead-end.
+	for (const path of ["/t/fantasy-football-2026/", "/sort/fantasy-football-2026/"]) {
+		const response = await request.get(path, { maxRedirects: 0 });
+		expect(response.status(), `${path} should 301`).toBe(301);
+		expect(response.headers()["location"]).toBe("/football/");
+	}
+});
+
 test("unknown paths serve the 404 page", async ({ page }) => {
 	const response = await page.goto("/this-does-not-exist/");
 	expect(response?.status()).toBe(404);

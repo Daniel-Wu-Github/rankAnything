@@ -1,0 +1,10 @@
+# Cloudflare Pages redirects. Copied into dist/ by site/build.mjs.
+# Format: <from> <to> <status>
+
+# The generic-engine football board was deleted on 2026-08-11 in favour of
+# /football/ as the single official board. It was publicly live and indexed,
+# so any shared link must land somewhere useful rather than on a 404 — send
+# it to the board it was duplicating. 301 so search engines transfer rather
+# than drop it.
+/t/fantasy-football-2026/* /football/ 301
+/sort/fantasy-football-2026/* /football/ 301

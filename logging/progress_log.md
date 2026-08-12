@@ -2,6 +2,20 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 019 - 2026-08-11 - Redirect the deleted football URL; edge-cache finding
+
+- Task: post-deploy verification of Entry 018 surfaced two problems, one of them mine.
+- **Finding 1 (my design error):** deleting the template made `/t/fantasy-football-2026/` return a 404. That URL was publicly live, in the sitemap, and shareable — a 404 dead-ends anyone with an old link and drops whatever search equity it had. Fixed with a new `site/_redirects` (Cloudflare Pages format, copied into `dist/` by `build.mjs`): `/t/fantasy-football-2026/*` and `/sort/fantasy-football-2026/*` → `/football/` as **301**, so the link lands on the board it was duplicating and engines transfer rather than drop it.
+- **Finding 2 (infrastructure, not code):** the live URL still returned **200 with the full deleted board** after the deploy. Investigated rather than assuming propagation lag: `cf-cache-status: HIT`, `age: 3616`, `cache-control: public, s-maxage=604800`. A cache-busted request returned the correct 404, proving the origin was right and the **edge cache was serving a stale copy with a 7-day TTL**. This does not self-heal quickly and needs a manual Cloudflare cache purge — flagged to the user, since it requires dashboard access.
+- `e2e/server.mjs` now parses and applies `dist/_redirects` the same way it already does `_headers`, so redirects are covered by the gate instead of only existing in production. New spec asserts both paths 301 to `/football/`.
+- Files edited: site/_redirects (new); site/build.mjs; e2e/server.mjs; e2e/tests/security.spec.ts; e2e/README.md; logging/progress_log.md.
+- Verification: full e2e suite green, **58/58** (+1). Build clean at 12 templates / 26 indexed pages.
+- Task alignment:
+  - Fulfillment: old football-template links now land on the official board.
+  - Deviation: the stale edge cache cannot be cleared from here — it needs a purge in the Cloudflare dashboard. Stated plainly rather than reported as done.
+
+---
+
 ## Entry 018 - 2026-08-11 - Discard the duplicate football board; /football/ is the only one
 
 - Task: user decision — "keep /football as the official one, discard the others. fix all documentation." Ends the two-football-boards problem surfaced in Entry 017.
