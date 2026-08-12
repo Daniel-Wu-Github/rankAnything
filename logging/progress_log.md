@@ -2,6 +2,38 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 018 - 2026-08-11 - Discard the duplicate football board; /football/ is the only one
+
+- Task: user decision — "keep /football as the official one, discard the others. fix all documentation." Ends the two-football-boards problem surfaced in Entry 017.
+- Deleted: `site/templates/fantasy-football-2026.json` (the duplicate board), `scripts/build-fantasy-football-template.mjs` (existed only to build it), and `site/data/adp-ppr-2026.json` (generated, and now with no consumer). `site/` is back to 12 templates / 26 indexed pages.
+- **Kept deliberately**, with reasoning rather than reflex:
+  - `scripts/fetch-adp.mjs` — a standalone ADP snapshot fetcher, not football-template-specific. If ADP is ever wanted on `/football/` it would arrive as *data* through a refresh script (the `refresh-bigboard-data.mjs` pattern), so this stays useful. It currently has no consumer; that's stated in the docs rather than left for someone to discover.
+  - The generic engine features the deleted template motivated: sort-by-number-field, multi-enum-column rendering, and the ⋮ more-actions sheet. All are template-agnostic and benefit the remaining 12.
+- **Consequence I had to handle, not just note:** after the deletion, *no* remaining template has more than one schema field. Three tests were written against the deleted template's four columns and would have been silently weakened or deleted. Instead they were re-pointed at `movies-2010s` (number field `year`) and their assertions rewritten to be meaningful there:
+  - `engine.spec.ts` sort test: was "consensus vs ADP order differs"; now asserts the sorted column is **actually ascending**, which is a stronger check than the original (it previously only proved the order *changed*).
+  - `engine-mobile.spec.ts`: attribute-hidden and sheet-contents assertions now use `Year`.
+  - `a11y.spec.ts` mobile passes and `home.spec.ts` gallery count (13 → 12).
+  - Honest note: the **multi-enum-column** rendering path (a second enum rendering as a plain column) now has no template exercising it. The code stays because it is generic and correct, but it is untested-by-fixture until some future template has two enum fields. Recorded here rather than pretended otherwise.
+- Documentation corrected across every forward-looking source of truth:
+  - `CLAUDE.md` — project summary now states football and the generic engine are **permanently separate products**; test count 23 → 57; template count stated as 12; added "do not recreate a football template" and corrected the "new capability belongs in `site/`" rule, which was now misleading (football capability belongs nowhere without unfreezing).
+  - `docs/FOOTBALL_ENGINE_MIGRATION_PLAN.md` — marked **CANCELLED** with what that implies, kept for its source research.
+  - `docs/FOOTBALL_V1_LAUNCH_GAPS.md` — the 2026-07-25 "migrate to site/" decision superseded; per-item status restated (#4 ADP discarded but research still valid, #12 modal now out of scope not pending); original text preserved in a collapsed block rather than deleted.
+  - `docs/LAUNCH_READY_CHECKLIST.md` — "Known discrepancy" section replaced with "Settled decisions": URL stays `/football/`, one board only.
+  - `docs/V1_LAUNCH_MEGA_PLAN.md` — status banner marking it complete and partly superseded (13 templates → 12; the card-collapse fix it specified was replaced in Entry 017).
+  - `e2e/README.md` — 13 → 12 templates, and the stale "row→card collapse" description corrected to the dense-row + sheet pattern actually shipped.
+  - Historical `logging/` entries left as written: they were accurate when recorded, and rewriting history to match a later decision would make the log untrustworthy.
+- Files edited: deleted 3 files; CLAUDE.md; docs/{FOOTBALL_ENGINE_MIGRATION_PLAN,FOOTBALL_V1_LAUNCH_GAPS,LAUNCH_READY_CHECKLIST,V1_LAUNCH_MEGA_PLAN}.md; e2e/README.md; e2e/tests/{engine,engine-mobile,a11y,home}.spec.ts; logging/progress_log.md.
+- Verification:
+  - Build: 12 templates → 26 indexed pages, clean.
+  - Full e2e suite green, **57/57** (same count as before — tests were re-pointed, not dropped).
+  - One real failure caught mid-way: the desktop-columns test still asserted an `ADP` header. Fixed to `Year` rather than deleted.
+  - Grepped the whole repo for `fantasy-football-2026`; only historical `logging/` entries reference it, which is intentional.
+- Task alignment:
+  - Fulfillment: one football board, 12 generic templates, and every forward-looking doc now matches reality.
+  - Deviation: kept `scripts/fetch-adp.mjs` rather than deleting it with the rest of the ADP pipeline — flagged above with the reasoning, easy to remove if unwanted.
+
+---
+
 ## Entry 017 - 2026-08-11 - Port /football/'s mobile row pattern into site/'s engine
 
 - Task: user reported the two football boards look different on mobile and suspected the ADP/consensus work broke `site/`'s mobile UI ("i think you broke this after adding consensus rank and adp"), asking which board is official.

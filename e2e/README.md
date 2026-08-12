@@ -10,8 +10,8 @@ cd e2e && npm install && npm test   # xvfb-run; use npm run test:headed with a d
 
 | Spec | Guards |
 |---|---|
-| `engine.spec.ts` | Template load + meta, mouse drag + undo/redo, keyboard-only reorder (Space/arrows/Escape + aria-live), tier break + label + view-switch state preservation, filter lock, CSV round-trip, share-URL round-trip (< 8KB), embed render, PNG download, sort-by-field toggle (consensus vs ADP) locking/unlocking reorder |
-| `engine-mobile.spec.ts` | Mobile gate for the generic engine: touch-drag on the handle reorders **and** a plain body swipe does not (native HTML5 DnD is a mouse-events spec and never fires on touch — the bug this file exists to prevent), zero horizontal scroll across all 13 templates at 320/375/414, 44px touch targets, row→card collapse exposing `data-label` key/value rows |
+| `engine.spec.ts` | Template load + meta, mouse drag + undo/redo, keyboard-only reorder (Space/arrows/Escape + aria-live), tier break + label + view-switch state preservation, filter lock, CSV round-trip, share-URL round-trip (< 8KB), embed render, PNG download, sort-by-field on a schema number field (ascending, and locking/unlocking reorder) |
+| `engine-mobile.spec.ts` | Mobile gate for the generic engine: touch-drag on the handle reorders **and** a plain body swipe does not (native HTML5 DnD is a mouse-events spec and never fires on touch — the bug this file exists to prevent), zero horizontal scroll across all 12 templates at 320/375/414, 44px touch targets, dense single-line rows with secondary attributes in the ⋮ more-actions sheet |
 | `pairwise.spec.ts` | Truthful-oracle full run must produce a correctly sorted ranking (correctness independent of the seeded shuffle), editor handoff preserves order, undo/keyboard choices |
 | `home.spec.ts` | Paste-a-list → board in 2 interactions (bullets/numbers stripped), gallery count + navigation, frozen `/football/` still serves, sitemap/robots index every surface |
 | `bigboard.spec.ts` | P0 on the frozen football board: keyboard reorder = one undo entry, share round-trip with stars/tiers, CSV + PNG downloads (incl. the brand watermark pixels), autosave restore after reload |

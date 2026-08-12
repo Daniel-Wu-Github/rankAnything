@@ -57,7 +57,7 @@ for (const width of [320, 375]) {
 	test(`board at ${width}px has no critical/serious violations`, async ({ page }) => {
 		await page.addInitScript(() => localStorage.clear());
 		await page.setViewportSize({ width, height: 780 });
-		await page.goto("/t/fantasy-football-2026/");
+		await page.goto("/t/movies-2010s/");
 		await ready(page);
 		await gate(page);
 	});

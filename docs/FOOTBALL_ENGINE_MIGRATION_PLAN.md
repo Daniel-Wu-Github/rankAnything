@@ -8,6 +8,29 @@ explicit frozen-file rule in `CLAUDE.md`. Decision made 2026-07-25: migrate
 football's remaining v1 gaps into `site/`'s generic schema-driven engine
 instead of amending the freeze or forking a new single file.
 
+> **STATUS (2026-08-11): CANCELLED — do not execute this plan.**
+> The user decided that `/football/` (`big-board.html`) is the single
+> official football board and that the generic-engine football template is
+> discarded. `site/templates/fantasy-football-2026.json` and its builder
+> script were deleted on 2026-08-11; the ADP data it consumed no longer
+> ships.
+>
+> What this means going forward:
+> - Football's remaining v1 gaps do **not** migrate into `site/`. They are
+>   either done in `big-board.html` already, deferred, or dropped.
+> - `big-board.html` stays frozen, and stays the product. It is no longer
+>   "frozen until the migrated version replaces it" — there is no migrated
+>   version planned.
+> - `site/` remains the generic ranking engine for the 12 non-football
+>   templates and custom boards. That part of Step 1 is unaffected.
+> - The engine features this plan motivated that DID ship are generic and
+>   stay: sort-by-number-field, multi-enum-column rendering, and the mobile
+>   ⋮ more-actions sheet.
+>
+> Kept for the reasoning and the source research (which ADP providers are
+> legitimately usable), not as a roadmap.
+
+
 ---
 
 ## 1. What this plan does and doesn't cover

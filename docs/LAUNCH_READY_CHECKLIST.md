@@ -122,18 +122,25 @@ materially worse, and the mobile row count is still tolerable.
 
 ---
 
-## Known discrepancy to resolve before launch
+## Settled decisions (2026-08-11)
 
-The football board currently lives at **`/football/`**, not `/fantasy`. If
-the intended public URL is `rankanything.net/fantasy`, that's a decision to
-make *before* the domain goes live and links start getting shared — changing
-a URL after it's been shared costs the inbound links.
+Both were open questions in the previous revision of this file; both are now
+closed, and the code matches.
 
-Cheap either way, but it must be deliberate:
-- **Keep `/football/`** — zero work, already deployed and tested.
-- **Move to `/fantasy/`** — build both paths, 301 `/football/` → `/fantasy/`
-  via a `_redirects` file (Cloudflare Pages supports it alongside `_headers`),
-  update the sitemap and the OG `og:url`. ~30 minutes including tests.
+- **The football URL stays `/football/`.** Not `/fantasy/`. No redirect, no
+  `_redirects` file, nothing to do — it is already deployed, tested, in the
+  sitemap and in the OG tags.
+- **`/football/` (`big-board.html`) is the one and only football board.**
+  The generic-engine duplicate (`site/templates/fantasy-football-2026.json`)
+  was deleted, together with `scripts/build-fantasy-football-template.mjs`
+  and the ADP snapshot it consumed. `FOOTBALL_ENGINE_MIGRATION_PLAN.md` is
+  cancelled. `site/` now ships 12 non-football templates plus custom boards.
+
+Consequence worth remembering: **football and the generic engine are now
+permanently separate products** that happen to share a domain and a design
+language. A feature added to `site/` does not reach `/football/`, and
+`big-board.html` stays frozen with no migration planned. That is the
+intended end state, not a temporary situation.
 
 ---
 

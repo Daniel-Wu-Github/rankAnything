@@ -203,29 +203,28 @@ test("image export downloads a PNG", async ({ page }) => {
 	expect(download.suggestedFilename()).toBe("movies-2010s-ranking.png");
 });
 
-test("sort-by-field toggles order between two ranking sources and locks/unlocks reorder", async ({ page }) => {
+test("sort-by-field reorders by a schema number field and locks/unlocks reorder", async ({ page }) => {
 	await page.addInitScript(() => localStorage.clear());
-	await page.goto("/t/fantasy-football-2026/");
+	await page.goto(TEMPLATE);
 	await ready(page);
 
-	// Manual order by default: draggable, and matches Consensus Rank order
-	// (the template's initial item order).
+	// Manual order by default: draggable, in the template's own item order.
 	expect(await page.getAttribute("tr.item-row", "draggable")).toBe("true");
-	const consensusOrder = await rowNames(page);
-	expect(consensusOrder[0]).toBe("Jahmyr Gibbs");
+	const manualOrder = await rowNames(page);
 
-	// Switch to ADP: order changes, reorder locks.
-	await page.selectOption("#sort-select", "adp");
-	const adpOrder = await rowNames(page);
-	expect(adpOrder).not.toEqual(consensusOrder);
+	// Sorting by a number field reorders and locks drag (same gate as filters).
+	await page.selectOption("#sort-select", "year");
+	const sortedOrder = await rowNames(page);
+	expect(sortedOrder).not.toEqual(manualOrder);
 	expect(await page.getAttribute("tr.item-row", "draggable")).toBe("false");
 
-	// Team column (a secondary enum field) renders alongside Position.
-	await expect(page.locator("th", { hasText: "Position" })).toBeVisible();
-	await expect(page.locator("th", { hasText: "Team" })).toBeVisible();
+	// Sort really is ascending by the chosen field, not just "different".
+	const years = await page.$$eval("tr.item-row td.col-num",
+		(tds) => tds.map((td) => Number(td.textContent)).filter((n) => !Number.isNaN(n)));
+	expect(years).toEqual([...years].sort((a, b) => a - b));
 
-	// Back to manual order: unlocks reorder, restores the original order.
+	// Back to manual: unlocks reorder and restores the original order.
 	await page.selectOption("#sort-select", "");
-	expect(await rowNames(page)).toEqual(consensusOrder);
+	expect(await rowNames(page)).toEqual(manualOrder);
 	expect(await page.getAttribute("tr.item-row", "draggable")).toBe("true");
 });

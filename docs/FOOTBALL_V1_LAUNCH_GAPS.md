@@ -6,17 +6,39 @@ Gaps and sentiment captured from a working session after Cloudflare Pages
 deploy went live at `rankanything.pages.dev`. Not a roadmap rewrite — see
 `RANK_ANYTHING_ROADMAP.md` for the two-product strategy this sits under.
 
-**2026-07-25 update — architecture decision:** two items on this list (ADP
-presets, a player detail modal) are new features, not bug fixes, which
-conflicts with `big-board.html`'s explicit frozen-file rule in `CLAUDE.md`
-("bug fixes only, no new features"). Resolved: **football's remaining v1
-gaps will be migrated into `site/`'s generic schema-driven engine** instead
-of built into the frozen file — see `FOOTBALL_ENGINE_MIGRATION_PLAN.md` for
-the migration plan itself. `big-board.html` stays frozen and continues
-serving `/football/` as-is until the migrated version is ready to replace
-it. Items below are written up as originally scoped (against the frozen
-file); read them as "what football needs," now understood to land in
-`site/`, not as edits to `big-board.html`.
+**2026-08-11 update — SUPERSEDES the 2026-07-25 decision below.**
+`/football/` (`big-board.html`) is the **single official football board**.
+The generic-engine football template was deleted along with its builder
+script and the ADP snapshot it consumed, and
+`FOOTBALL_ENGINE_MIGRATION_PLAN.md` is **cancelled**.
+
+Read the items below accordingly:
+- Already **shipped in `big-board.html`** and still standing: mobile UX
+  (#1), OG image (#2), export watermark (#3), real age/team/bye data.
+- **#4 (ADP)** — the build-time fetch pipeline was built, then discarded
+  with the template. The *research* stays valid and is worth keeping:
+  Fantasy Football Calculator is the only free, no-auth, commercially-usable
+  ADP provider; ESPN and Yahoo are permanently ruled out because their
+  `robots.txt` name-blocks Anthropic crawlers. If ADP is ever wanted on
+  `/football/` it must arrive as **data**, via a refresh script like
+  `scripts/refresh-bigboard-data.mjs` — not as new UI. The frozen-file rule
+  still applies.
+- **#12 (player hub modal)** and ADP presets are **not planned**. They were
+  the two items that motivated the migration; with the migration cancelled
+  and the file frozen, they are out of scope rather than pending.
+- **#6/#7 (ads + the privacy/consent compliance gate)** remain live, and now
+  apply to `/football/` and the 12 generic templates.
+
+<details><summary>Original 2026-07-25 decision (superseded — kept for history)</summary>
+
+Two items on this list (ADP presets, a player detail modal) are new
+features, not bug fixes, which conflicts with `big-board.html`'s explicit
+frozen-file rule in `CLAUDE.md`. Resolved: football's remaining v1 gaps will
+be migrated into `site/`'s generic schema-driven engine instead of built
+into the frozen file. Items below are written up as originally scoped
+(against the frozen file).
+
+</details>
 
 ---
 

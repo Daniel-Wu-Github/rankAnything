@@ -5,6 +5,17 @@
 this up in one sitting.
 **Status:** planning only — nothing in this doc has been implemented yet.
 
+> **STATUS (2026-08-11): COMPLETE — and partly superseded.**
+> All gaps in this plan were executed (see `logging/progress_log.md` Entries
+> 016-017). Two things below are now out of date and are left in place only
+> as a record of what was true when the plan was written:
+> - It refers to **13 templates**; there are now **12**. The
+>   `fantasy-football-2026` template was deleted on 2026-08-11 when the user
+>   decided `/football/` is the single official football board.
+> - Gap 1's fix originally shipped as a row→card collapse. That was replaced
+>   in Entry 017 by `/football/`'s dense-row + ⋮-sheet pattern.
+
+
 ---
 
 ## Paste-ready prompt for that session

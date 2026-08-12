@@ -5,11 +5,11 @@
 import { test, expect, type Page } from "@playwright/test";
 
 const TEMPLATE = "/t/nba-goats/";
-const WIDE_TEMPLATE = "/t/fantasy-football-2026/"; // most columns = worst case
+const ATTR_TEMPLATE = "/t/movies-2010s/"; // has a number field -> exercises the attr sheet
 
 // Every shipped template, so a new one can't silently reintroduce overflow.
 const ALL_TEMPLATES = [
-	"fantasy-football-2026", "nba-goats", "movies-2010s", "cereal",
+	"nba-goats", "movies-2010s", "cereal",
 	"albums-90s", "fast-food", "kpop-groups", "marvel-mcu", "nfl-qbs-alltime",
 	"pokemon-gen1", "programming-languages", "sitcoms", "video-game-consoles",
 ];
@@ -99,7 +99,7 @@ test("no horizontal page scroll on any template at 320/375/414", async ({ page }
 
 test("interactive controls meet the 44px touch-target minimum", async ({ page }) => {
 	await page.setViewportSize({ width: 375, height: 780 });
-	await page.goto(WIDE_TEMPLATE);
+	await page.goto(ATTR_TEMPLATE);
 	await ready(page);
 
 	const undersized = await page.$$eval(
@@ -113,17 +113,16 @@ test("interactive controls meet the 44px touch-target minimum", async ({ page })
 });
 
 test("rows stay one dense line: secondary columns move into the more-actions sheet", async ({ page }) => {
-	await page.goto(WIDE_TEMPLATE);
+	await page.goto(ATTR_TEMPLATE);
 	await ready(page);
 	await expect(page.locator(".board-table thead")).toBeHidden();
 
-	// The primary enum badge stays inline (worth scanning); the rest do not.
-	await expect(page.locator("tr.item-row").first().locator(".enum-badge")).toBeVisible();
+	// Non-badge attribute columns (here: Year) are hidden inline and live in
+	// the sheet instead; only a primary enum badge is allowed to stay inline.
 	const inlineLabels = await page.$$eval("tr.item-row:first-of-type td[data-label]",
 		(tds) => tds.filter((td) => getComputedStyle(td).display !== "none")
 			.map((td) => td.getAttribute("data-label")));
-	expect(inlineLabels).not.toContain("Consensus Rank");
-	expect(inlineLabels).not.toContain("ADP");
+	expect(inlineLabels).not.toContain("Year");
 
 	// Rows must stay compact enough to scan. The card layout this replaced fit
 	// only 3 above the fold at this viewport; the dense row fits 5+ (and 6 at
@@ -134,22 +133,20 @@ test("rows stay one dense line: secondary columns move into the more-actions she
 });
 
 test("the more-actions sheet exposes every attribute plus star/note/tier/delete", async ({ page }) => {
-	await page.goto(WIDE_TEMPLATE);
+	await page.goto(ATTR_TEMPLATE);
 	await ready(page);
 	await page.locator("tr.item-row").first().locator(".more-btn").click();
 
 	const sheet = page.locator("#more-dialog");
 	await expect(sheet).toBeVisible();
-	await expect(sheet).toContainText("Position");
-	await expect(sheet).toContainText("Consensus Rank");
-	await expect(sheet).toContainText("ADP");
+	await expect(sheet).toContainText("Year");
 	for (const action of ["star", "note", "tier", "delete"]) {
 		await expect(sheet.locator(`button[data-more-action="${action}"]`)).toBeVisible();
 	}
 });
 
 test("the sheet's star and tier actions mutate the board", async ({ page }) => {
-	await page.goto(WIDE_TEMPLATE);
+	await page.goto(ATTR_TEMPLATE);
 	await ready(page);
 	const firstRow = page.locator("tr.item-row").first();
 
@@ -164,9 +161,9 @@ test("the sheet's star and tier actions mutate the board", async ({ page }) => {
 
 test("desktop keeps every column inline and hides the mobile more button", async ({ page }) => {
 	await page.setViewportSize({ width: 1280, height: 900 });
-	await page.goto(WIDE_TEMPLATE);
+	await page.goto(ATTR_TEMPLATE);
 	await ready(page);
 	await expect(page.locator(".board-table thead")).toBeVisible();
 	await expect(page.locator("tr.item-row").first().locator(".more-btn")).toBeHidden();
-	await expect(page.locator("th", { hasText: "ADP" })).toBeVisible();
+	await expect(page.locator("th", { hasText: "Year" })).toBeVisible();
 });

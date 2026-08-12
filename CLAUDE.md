@@ -6,10 +6,18 @@ These instructions are always-on for Claude Code agents working in this reposito
 
 This repository is **Rank Anything** — a no-sign-up, zero-backend ranking site — plus its origin product, the **fantasy football big board**.
 
-- `big-board.html` — the original single-file football board. **FROZEN**: bug fixes only, no new features, single-file constraint still absolute. It ships verbatim at `/football/`.
-- `site/` — the generic app: schema-driven templates, board/tier/pairwise views, share-by-URL, embeds. Native ES modules, **zero runtime dependencies, no bundler**; `site/build.mjs` (zero-dep node) prerenders `site/dist`.
-- `e2e/` — the 23-test Playwright gate (see `e2e/README.md`). It must be green before any change to `big-board.html` or `site/` merges.
+- `big-board.html` — the original single-file football board. **FROZEN**: bug fixes only, no new features, single-file constraint still absolute. It ships verbatim at `/football/`, and as of 2026-08-11 it is the **single official football board** — there is no second football surface and no migration planned (see below).
+- `site/` — the generic app: schema-driven templates, board/tier/pairwise views, share-by-URL, embeds. Native ES modules, **zero runtime dependencies, no bundler**; `site/build.mjs` (zero-dep node) prerenders `site/dist`. Ships **12 curated non-football templates** plus custom boards.
+- `e2e/` — the 57-test Playwright gate (see `e2e/README.md`). It must be green before any change to `big-board.html` or `site/` merges.
 - `docs/RANK_ANYTHING_ROADMAP.md` — the approved roadmap (P0 → Step 1 shipped; Step 2 social is traction-gated).
+
+**Two separate products, permanently.** Football lives only in
+`big-board.html`; the generic engine lives only in `site/`. They share a
+domain and a design language, nothing else. A feature added to `site/` does
+not reach `/football/`, and football features do not migrate into `site/` —
+`docs/FOOTBALL_ENGINE_MIGRATION_PLAN.md` is **cancelled**, and the
+generic-engine football template was deleted on 2026-08-11. Do not recreate
+a football template in `site/`, and do not propose merging the two.
 
 ## Core Mission
 
@@ -71,7 +79,8 @@ Invoke each via the `Skill` tool (e.g. `Skill(repo-workflow)`), not by reading i
 
 ## What Not to Do
 
-- Do not add features to `big-board.html` — it is frozen; new capability belongs in `site/`.
+- Do not add features to `big-board.html` — it is frozen. Note this no longer means "build it in `site/` instead": football features are simply out of scope now that the migration is cancelled. New *generic* capability belongs in `site/`; new *football* capability belongs nowhere without an explicit decision to unfreeze.
+- Do not recreate a football template under `site/templates/` — it was deliberately deleted (2026-08-11) to end the duplicate-board problem.
 - Do not add a bundler, framework, or npm runtime dependency to `site/` (dev-only tooling in `e2e/` is fine).
 - Do not add a login, registration, or server-side call — Step 2 (social) is gated on the roadmap's traction evidence and is a deliberate architecture change, not a drive-by.
 - Do not add external CSS/JS references beyond the existing CDN libs in `big-board.html` (SortableJS, PapaParse) and Google Fonts.
