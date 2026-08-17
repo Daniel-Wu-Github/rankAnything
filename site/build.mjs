@@ -12,6 +12,16 @@ const repoRoot = join(here, "..");
 const dist = join(here, "dist");
 const SITE_ORIGIN = process.env.SITE_ORIGIN || "https://rankanything.example.com";
 const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+const GA_MEASUREMENT_ID = process.env.GA_MEASUREMENT_ID || "";
+const ANALYTICS = GA_MEASUREMENT_ID
+  ? `<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA_MEASUREMENT_ID}');
+    </script>`
+  : "";
 
 function escapeHtml(value) {
   return String(value)
@@ -82,6 +92,7 @@ for (const template of templates) {
     OG_IMAGE,
     SORT_LINK: `/sort/${template.slug}/`,
     TEMPLATE_JSON: json,
+    ANALYTICS,
   }));
 
   mkdirSync(join(dist, "sort", template.slug), { recursive: true });
@@ -92,6 +103,7 @@ for (const template of templates) {
     OG_IMAGE,
     BOARD_LINK: `/t/${template.slug}/`,
     TEMPLATE_JSON: json,
+    ANALYTICS,
   }));
 
   urls.push(boardUrl, sortUrl);
@@ -106,6 +118,7 @@ writeFileSync(join(dist, "b", "index.html"), stamp(boardShell, {
   OG_IMAGE,
   SORT_LINK: "/",
   TEMPLATE_JSON: safeJson({ slug: "custom", title: "Custom Board", description: "Your own list, ranked.", schema: [], defaultView: "board", items: [] }),
+  ANALYTICS,
 }));
 mkdirSync(join(dist, "embed"), { recursive: true });
 cpSync(join(here, "src/pages/embed.html"), join(dist, "embed/index.html"));
@@ -121,10 +134,12 @@ writeFileSync(join(dist, "index.html"), stamp(homeShell, {
   CANONICAL: `${SITE_ORIGIN}/`,
   OG_IMAGE,
   GALLERY_CARDS: cards,
+  ANALYTICS,
 }));
 
 // 5b. 404 — Cloudflare Pages serves dist/404.html for unmatched paths.
-cpSync(join(here, "src/pages/404.html"), join(dist, "404.html"));
+const notFoundShell = readFileSync(join(here, "src/pages/404.html"), "utf8");
+writeFileSync(join(dist, "404.html"), stamp(notFoundShell, { ANALYTICS }));
 
 // 6. sitemap + robots.
 writeFileSync(join(dist, "sitemap.xml"),
