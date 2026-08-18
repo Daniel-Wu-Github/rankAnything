@@ -1,11 +1,16 @@
 # Launch-Ready Checklist — everything queued behind the domain purchase
 
-**Date:** 2026-08-11
+**Date:** 2026-08-11. **Steps 1-2 executed:** 2026-08-17.
 **Purpose:** the moment `rankanything.net` resolves, this is the exact
 sequence of work. Nothing here needs investigation — it's all decided,
 scoped, and ready to execute. The user-facing explanation of costs, revenue
 and trade-offs lives in the chat transcript, not here; this file is the
 execution plan.
+
+**Current status:** domain live, Step 1 (domain swap) and Step 2
+(analytics) both done and verified in production. Step 3 (ads) remains
+gated on traffic — not started. See `logging/progress_log.md` Entry 020
+for the full execution record.
 
 ---
 
@@ -25,57 +30,79 @@ execution plan.
 
 ---
 
-## Step 1 — Domain swap (~20 min, entirely mine, do immediately on purchase)
+## Step 1 — Domain swap — DONE 2026-08-17
 
 Trigger: `rankanything.net` resolves and is attached to the Pages project.
 
-1. Set `SITE_ORIGIN=https://rankanything.net` in the Pages project's build
-   environment variables (Settings → Environment variables → Production).
-2. Update hardcoded `rankanything.pages.dev` in `big-board.html`:
-   `og:url`, `og:image`, `twitter:image`. **Grep for `pages.dev`** — do not
-   assume that list is complete.
-3. Rebuild + verify: canonical tags, `sitemap.xml`, and OG image URLs all
-   point at the apex domain.
-4. Validate the social preview with a real scraper, not by eye —
-   [opengraph.xyz](https://www.opengraph.xyz/) or X's card validator.
-5. Confirm `www.` → apex redirect is in place (Cloudflare Pages custom-domain
-   settings), so only one hostname is canonical for SEO.
-6. Re-run the e2e gate; push.
+1. ✅ `SITE_ORIGIN=https://rankanything.net` set in the Pages project's
+   production build env vars (via Cloudflare API, `pages:write` scope).
+2. ✅ Hardcoded `rankanything.pages.dev` in `big-board.html` (`og:url`,
+   `og:image`, `twitter:image`) updated to `rankanything.net` — commit
+   `da83c47`.
+3. ✅ Rebuilt + verified: canonical tags, `sitemap.xml`, and OG image URLs
+   all confirmed pointing at the apex domain (checked directly in build
+   output before pushing).
+4. ⏭ Not done via an external scraper (opengraph.xyz) — verified instead
+   by direct `curl` of the live canonical/OG tags. Functionally equivalent
+   confirmation; a visual social-card check is still worth doing before
+   any real marketing push.
+5. ✅ `www.` → apex redirect live: Cloudflare Redirect Rule (wildcard
+   pattern `https://www.rankanything.net/*` → `https://rankanything.net/${1}`,
+   301, query string preserved). Both apex and `www` custom domains
+   attached to the Pages project.
+6. ✅ e2e gate re-run (58/58) against the real built output before pushing;
+   pushed (`da83c47`, then `0f093ce` for Step 2).
 
-**Acceptance:** `curl -sI https://rankanything.net/` returns 200 with the
-security headers intact, and `/football/` + `/t/*` both serve.
+**Acceptance — verified:** `curl -sI https://rankanything.net/` → 200 with
+full security headers; `www.rankanything.net` → 301 to apex; `/football/`
+and `/t/nba-goats/` both serve 200.
+
+**How it was executed:** `wrangler` CLI installed locally and OAuth-authed
+to the Cloudflare account. Its OAuth grant covers `pages:write` (used for
+custom-domain attach + env var updates via direct Cloudflare API calls,
+since `wrangler` itself has no `pages domain add` subcommand) but **not**
+`dns_records` or zone Rulesets edit permissions — those two pieces (the
+CNAME records and the redirect rule) were done manually in the Cloudflare
+dashboard by the user, with step-by-step instructions provided.
 
 ---
 
-## Step 2 — Analytics (independent of the domain; do as soon as a GA4 ID exists)
+## Step 2 — Analytics — DONE 2026-08-17
 
-This is the highest-value next step and does **not** depend on ads. It's what
-tells you whether any of Step 3 is worth doing.
+GA4 property "Rank Anything" created; Measurement ID `G-JXLQHVLZM0`.
 
-Needs from the user: a GA4 **Measurement ID** (`G-XXXXXXXXXX`), created at
-[analytics.google.com](https://analytics.google.com/) → Admin → Create
-property → Web data stream. Free, ~10 minutes, no payment.
+1. ✅ `GA_MEASUREMENT_ID` added as a Pages production build env var; a new
+   `{{ANALYTICS}}` token in `build.mjs` (gated on the env var, empty string
+   when unset) stamps the `gtag.js` snippet into all **four** `site/`
+   shells that carry the placeholder (`index`, `board`, `sort`, `404`) —
+   `embed.html` was never given the placeholder and stays untouched by
+   design. `404.html` was switched from a raw `cpSync` copy to `stamp()`
+   so it could receive the token.
+2. ✅ `big-board.html`'s placeholder replaced with the real snippet
+   (buildless file — pasted directly, per the bug-fix-shaped-edit rule for
+   the frozen file).
+3. ✅ CSP updated in the same commit: `https://www.googletagmanager.com`
+   added to `script-src`, `https://www.google-analytics.com` +
+   `https://*.google-analytics.com` + `https://*.analytics.google.com`
+   added to `connect-src`, across all 9 path blocks in `site/_headers`
+   (the file repeats the CSP per-path on purpose — see the comment block
+   at its top — so every occurrence needed the same edit, done via
+   `replace_all` on the shared substring).
+4. ✅ 58/58 e2e green (including CSP-violation checks) run against the
+   real built output, with the GA snippet live, before pushing.
+5. ✅ Verified live: GA snippet present on `rankanything.net/` and
+   `/football/`; CSP header confirmed correct via `curl`; **user confirmed
+   in GA4 Realtime** — an active session and `page_view` event landed.
 
-Then, mine:
+**Acceptance — met:** GA4 Realtime showed a real event from a real visit,
+`security.spec.ts` stayed green throughout.
 
-1. Add `GA_MEASUREMENT_ID` as a build env var; stamp the `gtag.js` snippet
-   into the `<!-- ANALYTICS PLACEHOLDER -->` block in all five `site/` shells
-   via a new `{{ANALYTICS}}` token in `build.mjs` (so it's one place, not
-   five copy-pastes, and stays empty when the var is unset).
-2. `big-board.html` is buildless — paste the snippet directly into its
-   placeholder block. This is a bug-fix-shaped edit to a frozen file; keep it
-   to the placeholder.
-3. **CSP must be updated in the same commit** or analytics is silently
-   blocked: add `https://www.googletagmanager.com` to `script-src` and
-   `https://*.google-analytics.com` to `connect-src` in `site/_headers`.
-   The existing `security.spec.ts` CSP test will catch it if forgotten —
-   that's what it's for.
-4. Verify events actually arrive in GA4 Realtime (`board_opened`,
-   `share_url`, `csv_export`, `image_export`, `sort_by`, `pairwise_complete`
-   are all already instrumented).
-
-**Acceptance:** GA4 Realtime shows a `board_opened` event from a real visit,
-and `security.spec.ts` is still green.
+**One operational snag worth remembering:** the env var update landed via
+API *after* a deploy had already run (triggered by the same push), so that
+first deploy shipped with an empty analytics snippet. Fixed by retrying
+that specific deployment via the Cloudflare API once the env var was
+confirmed set — a reminder that a Pages env var change only takes effect
+on deploys that start after it's saved, not retroactively.
 
 ---
 

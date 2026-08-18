@@ -1,9 +1,13 @@
 # Custom Domain Decision — Launch Gap #6 (Ads/Monetization)
 
-**Date:** 2026-07-28
-**Status:** DECIDED (not yet purchased). Priority order chosen; no domain
-bought yet. This doc is the reference for whoever executes the purchase +
-wiring.
+**Date:** 2026-07-28. **Executed:** 2026-08-17.
+**Status:** DONE. `rankanything.net` purchased via Cloudflare Registrar,
+attached to the `rankanything` Pages project (apex + `www`, `www`→apex
+301 redirect live), `SITE_ORIGIN` updated, and `big-board.html`'s hardcoded
+`pages.dev` OG/Twitter tags fixed. Live and verified — see
+`docs/LAUNCH_READY_CHECKLIST.md` Step 1 for the executed steps and
+`logging/progress_log.md` Entry 020 for the full record. This doc is now a
+historical record of the decision, not a pending action.
 
 ---
 
@@ -54,17 +58,28 @@ trust bump that isn't worth it before the site has any revenue signal.
 | `rankanything.io` | Available (ruled out — cost) |
 | `rankanything.co` | Available (ruled out — cost + no Cloudflare support) |
 
-## Action items when executing this (not done yet)
+## Action items when executing this — DONE 2026-08-17
 
-1. Buy `rankanything.net` via Cloudflare Registrar (dashboard →
-   Registrar → Register a domain).
-2. Point it at the existing Cloudflare Pages project (same account, so
-   this is a DNS attach, not a migration).
-3. Update `SITE_ORIGIN` per `PUBLISHING.md` build step, and the hardcoded
-   `og:image`/`twitter:image`/canonical URLs in `big-board.html` (currently
-   `rankanything.pages.dev`) to `rankanything.net`.
-4. Re-verify the OG image and social meta tags render correctly at the
-   new domain before applying for AdSense.
+1. ~~Buy `rankanything.net` via Cloudflare Registrar~~ — done, registered
+   2026-08-17, nameservers on Cloudflare, zone active.
+2. ~~Point it at the existing Cloudflare Pages project~~ — done. Apex +
+   `www` both attached as custom domains on the `rankanything` project;
+   `www` redirects to apex via a Cloudflare Redirect Rule (301, wildcard
+   pattern, query string preserved).
+3. ~~Update `SITE_ORIGIN` ... and the hardcoded ... URLs in
+   `big-board.html`~~ — done. `SITE_ORIGIN` set to `https://rankanything.net`
+   in the Pages project's production env vars; `big-board.html`'s
+   `og:url`/`og:image`/`twitter:image` updated from `pages.dev` to
+   `rankanything.net` (commit `da83c47`).
+4. ~~Re-verify the OG image and social meta tags render correctly~~ —
+   verified via `curl` against the live domain: canonical/OG tags on
+   `rankanything.net` all resolve correctly; `/football/`, `/t/*` both
+   serve 200 with security headers intact.
 5. If `.net` ever needs to be dropped for `getrankanything.com` or
    `.xyz`, repeat steps 2-4 with the new domain — no code architecture
    changes required, this is a config/meta-tag change only.
+
+GA4 analytics (a separate, not-originally-listed step) is also done as of
+2026-08-17 — see `logging/progress_log.md` Entry 020. AdSense application
+(the actual reason this domain was bought) remains gated on ~10k monthly
+pageviews per `docs/LAUNCH_READY_CHECKLIST.md` Step 3 — not started.
