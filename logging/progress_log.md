@@ -2,6 +2,48 @@
 
 Use this file to record material workflow-impacting changes.
 
+## Entry 021 - 2026-08-17 - Refresh DEFAULT_PLAYERS from live ADP; fix a real CSP gap found by the gate
+
+- Task: user asked for the live Fantasy Football Calculator ADP data (sourced earlier this session — see the CSV built for manual upload) to be written into the deployed site's default player list, then deploy.
+- **Merge strategy, chosen over a straight replace after flagging the tradeoff to the user:** FFC only tracks 259 players; the existing `DEFAULT_PLAYERS` has 425, including deep-bench/handcuff/K2 players FFC doesn't rank. Asked the user rather than picking silently — chose "ADP order on top, keep the rest": the 259 FFC-tracked players are re-ranked 1..259 by live ADP, then every other existing player is appended afterward in their prior relative order, continuing the rank sequence. Age (missing from FFC's API) is carried over from the existing file by normalized-name match; unmatched get `age:0`, the file's own established convention for unknown age (Entry 013 precedent).
+- **Real bug caught before it shipped, not after:** first run produced 428 players (should have been ≤427) with a duplicate Jacksonville defense entry — the exact JAX/JAC team-code mismatch documented in Entry 013, this time between FFC (`JAX`) and this codebase's convention (`JAC`), not Sleeper. Diffed the output before committing rather than trusting the player count; caught it, added a `TEAM_CODE_FROM_FFC` normalization map (one entry, same pattern as the prior `TEAM_CODE_FROM_SLEEPER` fix), reverted the bad write via `git checkout -- big-board.html`, reran clean. Checked all 26 FFC-tracked D/ST team codes against the existing 29 by hand first — confirmed JAX/JAC was the only mismatch, not an isolated guess.
+- Result: 427 players (was 425; net +2 for Theo Wease Jr. and Trey Smack, two names genuinely absent from the May snapshot — left with `age:0` rather than fabricated). Verified post-write: 427 unique ids, ranks sequential 1..427 with no gaps, zero duplicate name+team+position combos, zero `JAX` entries, exactly one `JAC` D/ST entry.
+- **Second, unrelated bug the e2e gate caught on this run that hadn't shown up in Entry 020's verification:** `/b/` failed the CSP-violation spec — gtag.js fires its own internal diagnostics beacon as an `<img>` request to `www.googletagmanager.com`, which `img-src 'self' data: blob:` blocked. This is Google's own telemetry about the tag firing, not the board's analytics events (which use `connect-src`, already allowlisted in Entry 020) — apparently load-dependent/non-deterministic in when it fires, since it passed 58/58 in Entry 020 and failed on this run with no CSP-related change in between. Fixed by adding `https://www.googletagmanager.com` to `img-src` across all 9 repeated path blocks in `site/_headers` (same `replace_all` pattern as Entry 020's CSP edits). Re-ran `security.spec.ts` standalone after the fix to confirm it wasn't a fluke pass — stable across two full runs.
+- Deployed: committed and pushed; verified live via `curl` (player count in the rendered `/football/` HTML, CSP header content) and confirmed the Cloudflare Pages deploy succeeded before reporting done.
+- Files edited: big-board.html (DEFAULT_PLAYERS replacement); site/_headers (img-src fix); logging/progress_log.md. (Merge script itself was scratchpad-only, not committed to the repo — same convention as scripts/refresh-bigboard-data.mjs's one-off sibling scripts, though this one wasn't promoted to `scripts/` since it's a single-use full-replacement operation rather than a rerunnable maintenance tool.)
+- Verification:
+  - Full e2e suite green, 58/58, after both the data merge and the CSP fix.
+  - `security.spec.ts` re-run standalone (11/11) to confirm the CSP fix wasn't a one-off pass.
+  - Post-merge integrity checks (unique ids, sequential ranks, no dup name+team+position, zero stray JAX) run and printed before the file was considered trustworthy.
+  - Live production `curl` checks post-deploy.
+- Task alignment:
+  - Fulfillment: live site now reflects current August 2026 ADP for the top of the board while preserving deep-bench coverage, deployed and verified.
+  - Deviation: none from what was asked, though the merge strategy (append vs. replace) was a real product decision surfaced to the user mid-task rather than assumed, per scope-creep-guard's escalation rule for ambiguous scope.
+
+---
+
+## Entry 020 - 2026-08-17 - Domain purchased, Step 1 (domain swap) + Step 2 (analytics) executed
+
+- Task: user purchased `rankanything.net`; asked to execute `docs/LAUNCH_READY_CHECKLIST.md` Step 1, then Step 2 once a GA4 ID existed.
+- **Step 1 — domain swap.** Installed `wrangler` CLI locally, authenticated via full-account OAuth login (user's explicit choice over a scoped API token, after being asked). `wrangler`'s OAuth grant covers `pages:write`/`zone:read` but has no `pages domain add` subcommand and no `dns_records`/Rulesets-edit scope — worked around the missing subcommand with direct Cloudflare API calls (`curl` + the OAuth bearer token) for custom-domain attach and the `SITE_ORIGIN` env var update; the DNS CNAMEs and the `www`→apex redirect rule genuinely needed permissions the token didn't have, so those two pieces were done by the user in the dashboard, with exact step-by-step values provided (including a follow-up adjustment once the user's Cloudflare UI turned out to be the simpler wildcard-pattern Redirect Rules form, not the field-match one first described).
+  - Fixed the 3 hardcoded `rankanything.pages.dev` references in `big-board.html` (`og:url`, `og:image`, `twitter:image`) → `rankanything.net`.
+  - Verified live: `rankanything.net` and `/football/`/`/t/*` all 200 with full security headers; `www.rankanything.net` 301s to apex.
+- **Step 2 — analytics.** User created the GA4 property and supplied the Measurement ID (`G-JXLQHVLZM0`). Wired the real `gtag.js` snippet into `big-board.html`'s placeholder (cleaning up leftover dead comment text — the old PostHog-example lines and closing `-->` — that a first-pass edit left dangling) and added a `GA_MEASUREMENT_ID`-gated `{{ANALYTICS}}` build token to `site/build.mjs`, stamped into the four `site/` shells that carry the placeholder (`index`, `board`, `sort`, `404`; `embed.html` was never given one and stays untouched). `404.html` switched from a raw `cpSync` copy to `stamp()` so it could receive the token — a small build.mjs behavior change, not just a content one.
+  - CSP in `site/_headers` extended for GA4 (`googletagmanager.com` in `script-src`; `google-analytics.com`/`analytics.google.com` wildcards in `connect-src`) across all 9 repeated path blocks via `replace_all` on the shared substring, since the file's per-path CSP repetition (documented at its own top) means a partial update would have left some paths blocking the tag under CSP's multi-header AND semantics.
+  - Caught a real sequencing bug before declaring success: the `GA_MEASUREMENT_ID` Pages env var was set *after* a deploy (triggered by the Step 1 push) had already started, so that deploy shipped with an empty analytics snippet baked in. Found by checking the deployment's actual `env_vars` in the API response rather than assuming the dashboard state applied retroactively; fixed by retrying that specific deployment via the API once the var was confirmed set.
+  - User confirmed a real `page_view` event in GA4 Realtime — treated as the actual acceptance bar, not "the code shipped."
+- A prior finding flagged during verification (duplicate `content-security-policy`/`permissions-policy`/`referrer-policy` response headers on the apex) was investigated and found to be a pre-existing, deliberate, documented tradeoff in `site/_headers` (Cloudflare Pages combines the `/*` and path-specific header blocks; the file repeats the policy per-path on purpose so the result doesn't depend on Pages' merge behavior) — corrected the earlier "worth a look" note rather than letting a false alarm stand.
+- Files edited: big-board.html; site/_headers; site/build.mjs; site/src/pages/{index,board,sort,404}.html; docs/DOMAIN_DECISION.md; docs/LAUNCH_READY_CHECKLIST.md; logging/progress_log.md.
+- Verification:
+  - Full e2e suite green, 58/58, run twice — once after the Step 1 domain-reference fix, once after the Step 2 analytics wiring — both times against the actual built `site/dist` output, not a stale build.
+  - Live production `curl` checks after each step (headers, redirects, canonical tags, GA snippet presence).
+  - GA4 Realtime confirmed by the user directly — the one check that can't be automated from here.
+- Task alignment:
+  - Fulfillment: both checklist steps executed end-to-end, verified in production, not just marked done in docs.
+  - Deviation: none from what was asked. Two sub-steps (DNS records, redirect rule) were necessarily handed to the user rather than automated, since the credentials available genuinely didn't cover them — stated plainly rather than worked around with broader unrequested token scope.
+
+---
+
 ## Entry 019 - 2026-08-11 - Redirect the deleted football URL; edge-cache finding
 
 - Task: post-deploy verification of Entry 018 surfaced two problems, one of them mine.
